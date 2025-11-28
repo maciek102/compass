@@ -1,15 +1,15 @@
 source "https://rubygems.org"
 
-ruby "3.2.2"
+ruby "3.3.6"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.1.3"
+gem "rails", "~> 8.1.1"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
-gem "mysql2", '0.5.4'
+gem 'pg', '~> 1.6', '>= 1.6.2'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -80,6 +80,6 @@ gem 'ransack', '~> 4.0'
 gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
 gem 'exception_notification', '~> 4.5'
 gem "sassc-rails"
-gem "devise"
+gem 'devise', '~> 4.9', '>= 4.9.4'
 gem 'mini_magick', '~> 4.5', '>= 4.5.1'
 gem 'dotenv-rails'
