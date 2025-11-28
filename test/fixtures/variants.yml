@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: one
+  sku: MyString
+  ean: MyString
+  price: 9.99
+  stock: 1
+  weight: 9.99
+  custom_attributes: 
+
+two:
+  product: two
+  sku: MyString
+  ean: MyString
+  price: 9.99
+  stock: 1
+  weight: 9.99
+  custom_attributes: 

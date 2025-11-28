@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: MyString
+  parent: one
+  visible: false
+  position: 1
+  description: MyText
+  disabled: false
+
+two:
+  name: MyString
+  slug: MyString
+  parent: two
+  visible: false
+  position: 1
+  description: MyText
+  disabled: false
