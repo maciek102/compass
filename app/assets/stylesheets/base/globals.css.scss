@@ -1,0 +1,17 @@
+@import "base/colors.css.scss";
+
+*{
+  font-family: 'Euclid', sans-serif;
+}
+
+body{
+  background-color: white
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+.display-none{
+  display: none;
+}

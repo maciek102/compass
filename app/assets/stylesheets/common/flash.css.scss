@@ -1,0 +1,81 @@
+@import "base/colors.css.scss";
+
+body#sessions{
+  div.notice, div.alert{
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+  }
+}
+
+.flash-background{
+  padding-bottom: 30px;
+}
+
+div.notice, div.alert{
+  padding: 10px 20px;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  min-width: min-content;
+  max-width: 440px;
+
+  position: fixed;
+  top: 70px;
+  left: 50%; 
+  transform: translateX(-50%); 
+  z-index: 1000;
+
+  .close-cont{
+    padding-left: 20px;
+    a{
+        color: white;
+        &:hover{
+            color: darken(white, 10%);
+        }
+    }
+}
+
+  &.notifications {
+      background-color: #ffb420;
+      .avatar-form {
+          border-radius: 50%;
+          margin: 0
+      }
+      .notification-row {
+          width: 100%;
+      }
+      .date {
+          padding-top: 10px;
+      }
+  }
+
+}
+
+div.notice{ 
+  background-color: #56A061; 
+}
+
+div.alert{ 
+  background-color: #F23838;
+}
+
+@-moz-keyframes fadeOut {
+  from {opacity:1;}
+  to {opacity:0;}
+}
+
+@-webkit-keyframes fadeOut {
+  from {opacity:1;}
+  to {opacity:0;}
+}
+
+@keyframes fadeOut {
+  from {opacity:1;}
+  to {opacity:0;}
+}

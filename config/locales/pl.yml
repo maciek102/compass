@@ -1,0 +1,222 @@
+pl:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "Ten email jest już zajęty"
+              blank: "Email nie może być pusty"
+              invalid: "Email jest nieprawidłowy"
+            name:
+              blank: "Imię i nazwisko nie może być puste"
+            password:
+              blank: "Podaj hasło"
+              too_short: "Hasło jest za krótkie (przynajmniej 8 znaków)"
+              invalid_format: "Hasło musi zawierać przynajmniej 1 cyfrę, 1 dużą literę i 1 znak specjalny"
+            password_confirmation:
+              confirmation: "Podane hasła nie są identyczne"
+
+    models:
+      user:
+        one: "Użytkownik"
+        other: "Użytkownicy"
+
+    attributes:
+      user:
+        email: "Email"
+        password: "Hasło"
+        password_confirmation: "Potwierdź hasło"
+        name: "Imię i nazwisko"
+        phone: "Telefon"
+
+  log_in: Zaloguj się
+
+  roles:
+    admin: Administrator
+  notices:
+    create:
+      success: "%{model} - utworzono pomyślnie."
+    update:
+      success: "%{model} - zaktualizowano pomyślnie."
+    destroy:
+      success: "%{model} - usunięto pomyślnie."
+    reset_password:
+      success: Hasło użytkownika zostało zresetowane i wysłane na adres e-mail.
+
+  date:
+    abbr_day_names:
+    - Pon
+    - Wto
+    - Śro
+    - Czw
+    - Pią
+    - Sob
+    - Nie
+    abbr_month_names:
+    -
+    - sty
+    - lut
+    - mar
+    - kwi
+    - maj
+    - cze
+    - lip
+    - sie
+    - wrz
+    - paź
+    - lis
+    - gru
+    day_names:
+    - niedziela
+    - poniedziałek
+    - wtorek
+    - środa
+    - czwartek
+    - piątek
+    - sobota
+    formats:
+      default: ! '%d-%m-%Y'
+      long: ! '%B %d, %Y'
+      short: ! '%d %b'
+    month_names:
+    -
+    - styczeń
+    - luty
+    - marzec
+    - kwiecień
+    - maj
+    - czerwiec
+    - lipiec
+    - sierpień
+    - wrzesień
+    - październik
+    - listopad
+    - grudzień
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    prompts:
+      day: Dzień
+      hour: Godzina
+      minute: Minuta
+      month: Miesiąc
+      second: Sekundy
+      year: Rok
+  errors:
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: musi zostać zaakceptowane
+      blank: nie może być puste
+      confirmation: nie zgadza się z potwierdzeniem
+      empty: Pole nie może być puste
+      equal_to: musi być równe %{count}
+      even: musi być parzyste
+      exclusion: jest zarezerwowane
+      extension_white_list_error: plik z podanym rozszerzeniem nie może zostać umieszczony
+      greater_than: musi być większe od %{count}
+      greater_than_or_equal_to: musi być większe lub równe %{count}
+      inclusion: nie znajduje się na liście dopuszczalnych wartości
+      invalid: jest nieprawidłowe
+      less_than: musi być mniejsze od %{count}
+      less_than_or_equal_to: musi być mniejsze lub równe %{count}
+      not_a_number: nie jest liczbą
+      not_an_integer: musi być liczbą całkowitą
+      odd: musi być nieparzystea
+      record_invalid: ! 'Negatywne sprawdzenie poprawności: %{errors}'
+      taken: zostało już zajęte
+      too_long: jest za długie (maksymalnie %{count} znaków)
+      too_short: jest za krótkie (przynajmniej %{count} znaków)
+      invalid_password_format: "musi zawierać przynajmniej 1 cyfrę, 1 dużą literę i 1 znak specjalny"
+      wrong_length: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+    template:
+      body: ! 'Błędy dotyczą następujących pól:'
+      header:
+        one: ! '%{model} nie został zachowany z powodu jednego błędu'
+        few: ! '%{model} nie został zachowany z powodu %{count} błędów'
+        other: ! '%{model} nie został zachowany z powodu %{count} błędów'
+        many: ! '%{model} nie został zachowany z powodu %{count} błędów'
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Brak znalezionych elementów "
+          one: " Jest <b>1</b> element"
+          other: " <b>Liczba elementów: %{count}</b>"
+      more_pages:
+        display_entries: "Wyświetlane elementy: <b>%{first}&nbsp;-&nbsp;%{last}</b> z <b>%{total}</b> "
+    select:
+      prompt: Proszę wybrać
+    submit:
+      create: Utwórz
+      submit: Zapisz
+      update: Aktualizuj
+  number:
+    currency:
+      format:
+        delimiter: ! ' '
+        format: ! '%u %n'
+        precision: 2
+        separator: ! ','
+        significant: false
+        strip_insignificant_zeros: true
+        unit: zł
+    format:
+      delimiter: ! ' '
+      precision: 3
+      separator: ! ','
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Miliard
+          million: Milion
+          quadrillion: Biliard
+          thousand: Tysiąc
+          trillion: Bilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: bajt
+            few: bajty
+            many: bajty
+            other: bajty
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ! ' oraz '
+      two_words_connector: ! ' i '
+      words_connector: ! ', '
+  time:
+    am: przed południem
+    formats:
+      default: ! '%a, %d %b %Y %H:%M:%S %z'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
+    pm: po południu
+
+
+views:
+  pagination:
+    last: "Ostatni"
+    next: "Następny"

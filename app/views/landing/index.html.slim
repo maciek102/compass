@@ -1,0 +1,14 @@
+.landing
+  .landing-info
+    .landing-card
+      h1 Landing
+      p.small-text Find me in app/views/landing/index.html.slim
+
+      - if user_signed_in?
+        p.small-text = "You are logged in as #{current_user.email}"
+        = button_to "Wyloguj", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary btn-sm"
+      - else
+        p.small-text You are not logged in.
+        = link_to t(:log_in), new_user_session_path, class: "btn btn-outline-secondary btn-sm"
+
+    

@@ -1,0 +1,10 @@
+= turbo_frame_tag "flash_message" do
+    - if flash[:notice] || flash[:success]
+        .notice data-controller="flash"
+            = flash[:notice] || flash[:success]
+            .close-cont = link_to fa_icon("times"), "#", data: {action: "flash#hideFlash"}, title: t(:close)
+
+    - if flash[:error] || flash[:alert]
+        .alert data-controller="flash"
+            = flash[:error] || flash[:alert]
+            .close-cont = link_to fa_icon("times"), "#", data: {action: "flash#hideFlash"}, title: t(:close)

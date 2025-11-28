@@ -1,0 +1,20 @@
+@import "base/colors.css.scss";
+
+.landing{
+  margin-top: 150px;
+  .landing-info{
+    display: flex;
+    justify-content: center;
+    
+    .landing-card{
+      border: 1px solid grey;
+      text-align: center;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    p.small-text{
+      font-size: 10px;
+    }
+  }
+}
