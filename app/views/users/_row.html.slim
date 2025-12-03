@@ -1,0 +1,8 @@
+tr.table-row
+  td= item.name
+  td= item.email
+  td= item.role_mask
+  td.actions
+    = link_to fa_icon("eye"), user_path(item), class: "btn btn-sm btn-outline-primary", title: "Pokaż"
+    = link_to fa_icon("pen"), edit_user_path(item), class: "btn btn-sm btn-outline-warning", title: "Edytuj"
+    = link_to fa_icon("trash"), item, method: :delete, data: { confirm: "Na pewno?" }, class: "btn btn-sm btn-outline-danger", title: "Usuń"

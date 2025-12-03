@@ -1,0 +1,88 @@
+@import "base/colors.css.scss";
+
+.left-menu {
+  width: 260px;
+  background-color: $left-menu-bg;
+  border-right: 1px solid $main-line;
+  z-index: 1;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  
+
+  // linki menu
+  a.left-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+
+    i {
+      font-size: 22px;
+      text-align: center;
+    }
+
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background-color: lighten($second-color, 5%);
+      text-decoration: none;
+    }
+
+    &.active {
+      background-color: $second-color;
+      color: $first-color;
+      font-weight: 600;
+    }
+  }
+
+  // user display na dole menu
+  .user-display {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 11px;
+    border-top: 1px solid $main-line;
+
+    img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+
+      .name {
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .desc {
+        font-size: 13px;
+        color: lighten($main-text-color, 30%);
+        margin-top: 3px;
+      }
+    }
+
+    .logout{
+      margin-right: 0;
+      margin-left: auto;
+
+      i{
+        color: red;
+        font-size: 20px;
+      }
+    }
+  }
+}

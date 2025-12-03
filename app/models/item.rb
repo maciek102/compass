@@ -28,7 +28,7 @@ class Item < ApplicationRecord
   has_many_attached :images # zdjęcia
 
   # === STATUSY ===
-  enum status: {
+  enum :status, {
     in_stock: 0, # w magazynie, dostępny
     reserved: 1, # zarezerwowany pod zamówienie
     sold: 2, # sprzedany

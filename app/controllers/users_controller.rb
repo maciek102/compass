@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource  # Automatically loads and authorizes the resource
+  load_and_authorize_resource
+
+  def dashboard
+    
+  end
 
   def index
   end

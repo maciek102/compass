@@ -1,0 +1,13 @@
+.user-display
+  = image_tag current_user.avatar_url(:thumb)
+
+  .info
+    .name
+      = current_user.name.presence
+
+    .desc
+      = current_user.email
+      /= current_user.try(:role).presence || "Użytkownik"
+  
+  .logout
+    = link_to fa_icon("sign-out"), destroy_user_session_path, method: :delete

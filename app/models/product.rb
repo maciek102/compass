@@ -39,7 +39,7 @@ class Product < ApplicationRecord
   has_rich_text :main_description # główny, duży opis rich text
 
   # === STATUSY ===
-  enum status: {
+  enum :status, {
     draft: 0, # w trakcie tworzenia
     available: 1, # dostępny w sprzedaży
   }
@@ -60,6 +60,10 @@ class Product < ApplicationRecord
 
 
   # === METODY ===
+  
+  def self.icon
+    "dropbox"
+  end
 
   # Zwraca liczbę wszystkich fizycznych itemów we wszystkich wariantach
   def total_stock

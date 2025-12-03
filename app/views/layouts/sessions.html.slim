@@ -11,9 +11,4 @@ html
   body
     = turbo_frame_tag "modal"
     = render 'flash'
-
-    .content 
-      - if show_left_menu?
-        = render "left_menu"
-      .right-cont 
-        = yield 
+    = yield

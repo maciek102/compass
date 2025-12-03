@@ -39,7 +39,7 @@ class Variant < ApplicationRecord
   validates :price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # === STATUSY ===
-  enum status: {
+  enum :status, {
     draft: 0, # w trakcie tworzenia
     available: 1, # dostępny w sprzedaży
   }
