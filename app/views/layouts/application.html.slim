@@ -16,4 +16,5 @@ html
       - if show_left_menu?
         = render "left_menu"
       .right-cont 
+        = yield :page_header
         = yield 

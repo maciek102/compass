@@ -1,7 +1,7 @@
 tr.table-row
+  td = el.id
   td = el.name
-  td = el.email
-  td = el.role_mask
+  td = el.sku
   td.actions
     = link_to fa_icon("eye"), user_path(el), class: "btn btn-sm btn-outline-primary", title: "Pokaż"
     = link_to fa_icon("pen"), edit_user_path(el), class: "btn btn-sm btn-outline-warning", title: "Edytuj"

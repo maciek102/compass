@@ -1,13 +1,8 @@
 / locals:
-/ collection: lista obiektów
+/ list: lista obiektów
 / custom_dir: opcjonalnie folder z partialami (default: obecna lokalizacja)
 
 - dir = local_assigns.fetch(:custom_dir, controller.controller_path)
 
-.index-table-cont
-  table.index-table
-    thead
-      = render "#{dir}/table_header"
-    tbody
-      - collection.each do |item|
-        = render "#{dir}/row", item: item
+.index-table-cont#index-table-cont
+  = render "table", list: list, custom_dir: dir

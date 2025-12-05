@@ -1,0 +1,14 @@
+- content_for :page_title do
+  | Użytkownicy
+
+- content_for :breadcrumbs do
+  = link_to "Dashboard", root_path
+  |  / Użytkownicy
+
+- content_for :header_actions do
+  = link_to "Dodaj użytkownika", new_user_path, class: "btn btn-primary"
+
+/ - content_for :filters do
+/   = render "users/filters"
+
+= render "page_header_template"

@@ -1,0 +1,14 @@
+.page-header
+  .breadcrumbs
+    = content_for?(:breadcrumbs) ? yield(:breadcrumbs) : ''
+
+  .header-main
+    h1.page-title
+      = content_for?(:page_title) ? yield(:page_title) : ''
+
+    .header-actions
+      = content_for?(:header_actions) ? yield(:header_actions) : ''
+
+  - if content_for?(:filters)
+    .header-filters
+      = yield(:filters)
