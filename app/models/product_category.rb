@@ -41,6 +41,13 @@ class ProductCategory < ApplicationRecord
   # === CALLBACKI ===
   before_validation :generate_slug, if: -> { slug.blank? && name.present? } # generacja slug
 
+
+  # === METODY ===
+  
+  def self.icon
+    "tags"
+  end
+
   private
 
   # generacja slug ("Smartfony i tablety" -> "smartfony-i-tablety")

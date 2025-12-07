@@ -1,7 +1,7 @@
 @import "base/colors.css.scss";
 
 .index-table-cont{
-  border-radius: 12px;
+  border-radius: 8px;
   overflow-y: auto;
   border: 1px solid $main-line;
 }
@@ -34,10 +34,6 @@
         padding: 10px 16px;
         border-bottom: 1px solid $main-line;
         vertical-align: middle;
-
-        i {
-          margin-right: 6px;
-        }
       }
 
       &:nth-child(even) {
@@ -58,40 +54,6 @@
       .actions {
         display: flex;
         gap: 6px;
-
-        a {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 4px 8px;
-          border-radius: 6px;
-          text-decoration: none;
-          font-size: 13px;
-          transition: background-color 0.2s ease, color 0.2s ease;
-
-          &:hover {
-            background-color: lighten($second-color, 15%);
-          }
-
-          // &.btn-outline-primary {
-          //   color: $first-color;
-          //   border: 1px solid $second-color;
-          // }
-
-          // &.btn-outline-warning {
-          //   color: $warning-color;
-          //   border: 1px solid $warning-color;
-          // }
-
-          // &.btn-outline-danger {
-          //   color: $danger-color;
-          //   border: 1px solid $danger-color;
-          // }
-
-          i {
-            margin-right: 4px;
-          }
-        }
       }
     }
   }

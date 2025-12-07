@@ -1,6 +1,9 @@
 .left-menu 
 
-  = render "application/left_menus/admin_left_links"
+  / użycie LeftMenuBuilder do renderowania menu, zależne od usera i opcjonalnego kontekstu z kontrolera
+  - builder = Views::LeftMenuBuilder.new(user: current_user, context: @left_menu_context ? @left_menu_context : nil)
+  - builder.build.each do |item|
+    = left_menu_link(text: item[:text],url: item[:url],icon: item[:icon],active: current_page?(item[:url]))
 
   / wyświeltenie usera
   = render "user_display"

@@ -1,12 +1,12 @@
 - content_for :page_title do
-  | Użytkownicy
+  | Produkty
 
 - content_for :breadcrumbs do
   = link_to "Dashboard", root_path
-  |  / Użytkownicy
+  |  / Produkty
 
 - content_for :header_actions do
-  = link_to "Dodaj użytkownika", new_user_path, class: "base-button"
+  = link_to "Dodaj produkt", new_product_path, class: "base-button"
 
 / - content_for :filters do
 /   = render "users/filters"

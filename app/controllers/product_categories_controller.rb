@@ -1,4 +1,7 @@
 class ProductCategoriesController < ApplicationController
+  load_and_authorize_resource
+  before_action :set_left_menu_context # ustawieneie kontekstu buildera menu
+
   def index
   end
 
@@ -18,5 +21,11 @@ class ProductCategoriesController < ApplicationController
   end
 
   def destroy
+  end
+
+  private
+
+  def set_left_menu_context
+    @left_menu_context = :products
   end
 end
