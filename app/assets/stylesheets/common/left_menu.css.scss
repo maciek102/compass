@@ -58,6 +58,20 @@
       object-fit: cover;
     }
 
+    .avatar-placeholder {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e53935;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
     .info {
       display: flex;
       flex-direction: column;

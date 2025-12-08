@@ -2,7 +2,7 @@
 / list: lista obiektów
 / custom_dir: opcjonalnie folder z partialami (default: obecna lokalizacja)
 
-- dir = local_assigns.fetch(:custom_dir, controller.controller_path)
+- dir = local_assigns.fetch(:custom_dir, "")
 
 .index-table-cont#index-table-cont
   = render "table", list: list, custom_dir: dir

@@ -11,4 +11,19 @@ module ApplicationHelper
     end
   end
 
+  # generuje link do dodania zagnieżdżonych pól formularza (nested fields)
+  def link_to_add_fields(name, f, association, klass = "", options={})
+    new_object = f.object.send(association).klass.new
+    id = new_object.object_id
+    partial_name = association.to_s.singularize + "_fields"
+    partial_name = options[:partial_name] if options[:partial_name]
+    fields = f.fields_for(association, new_object, child_index: id) do |builder|
+      render(partial_name, f: builder, options: options)
+    end
+    link_to(name, '#', class: "add_fields #{klass}", data: {id: id, fields: fields.gsub("\n", ""), controller: "nested", action: "nested#addNewRow"}, title: name)
+  end
+
+  def not_standard_url(url)
+    url ? {url: url} : {}
+  end
 end

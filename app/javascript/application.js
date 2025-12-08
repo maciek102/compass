@@ -4,6 +4,7 @@ import "controllers"
 import "bootstrap"
 import "jquery"
 import "jquery_ujs"
+import 'chosen-jquery'
 import "@popperjs/core"
 import 'select2'
 import "trix"

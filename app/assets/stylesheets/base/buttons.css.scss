@@ -54,4 +54,22 @@
       color: $first-color;
     }
   }
+
+  &.yellow {
+    background-color: lighten(#f1c40f, 20%);
+    color: #856404;
+    &:hover {
+      background-color: darken(lighten(#f1c40f, 20%), 10%);
+      color: #856404;
+    }
+  }
+
+  &.red {
+    background-color: lighten(#e74c3c, 30%);
+    color: #721c24;
+    &:hover {
+      background-color: darken(lighten(#e74c3c, 30%), 10%);
+      color: #721c24;
+    }
+  }
 }

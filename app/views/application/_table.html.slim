@@ -1,8 +1,8 @@
-- dir = local_assigns.fetch(:custom_dir, controller.controller_path)
+- custom_dir = local_assigns.fetch(:custom_dir, "")
 
 table.index-table
   thead
-    = render "#{custom_dir}/table_header"
+    = render "#{custom_dir}table_header"
   tbody
     - list.each do |el|
-      = render "#{custom_dir}/row", el: el
+      = render "#{custom_dir}row", el: el

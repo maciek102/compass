@@ -20,8 +20,9 @@ class ProductCategory < ApplicationRecord
   include Destroyable
 
   # relacja hierarchiczna
-  belongs_to :parent_category, class_name: "ProductCategory", foreign_key: "product_category_id", optional: true
+  belongs_to :parent, class_name: "ProductCategory", foreign_key: "product_category_id", optional: true
   has_many :subcategories, class_name: "ProductCategory", foreign_key: "product_category_id", dependent: :destroy
+  accepts_nested_attributes_for :subcategories, allow_destroy: true
 
   # === RELACJE ===
   # produkty należące do kategorii
@@ -48,10 +49,42 @@ class ProductCategory < ApplicationRecord
     "tags"
   end
 
+  def self.roots
+    where(parent_id: nil)
+  end
+
+  def is_root?
+    parent.nil?
+  end
+
+  def self.leafs
+    where.not(id: ProductCategory.select(:parent_id).distinct)
+  end
+
+  def is_leaf?
+    subcategories.empty?
+  end
+
+  def full_name
+    parent ? "#{parent.full_name} > #{name}" : name
+  end
+
+  def subtree_ids
+    [id] + subcategories.flat_map(&:subtree_ids)
+  end
+
+  def self.quick_search
+    :name_cont
+  end
+
   private
 
   # generacja slug ("Smartfony i tablety" -> "smartfony-i-tablety")
   def generate_slug
     self.slug = name.parameterize
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "description", "disabled", "id", "name", "position", "product_category_id", "slug", "updated_at", "visible"]
   end
 end
