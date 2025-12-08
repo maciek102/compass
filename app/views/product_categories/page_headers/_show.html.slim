@@ -9,6 +9,7 @@
   = @product_category.name
 
 - content_for :header_actions do
+  = link_to "Dodaj podkategorię", new_product_category_path(parent_id: @product_category.id), class: "base-button yellow"
   = link_to "Wróć", product_categories_path, class: "base-button"
 
 

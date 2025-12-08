@@ -12,5 +12,4 @@
           = yield(:filters)
 
     .right
-      .header-actions
-        = content_for?(:header_actions) ? yield(:header_actions) : ''
+      = content_for?(:header_actions) ? yield(:header_actions) : ''

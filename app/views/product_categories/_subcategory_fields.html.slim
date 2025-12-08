@@ -5,4 +5,4 @@
         
   .col.dest.centered-nested
     = f.input :_destroy, as: :hidden
-    = link_to fa_icon("trash-alt", type: :regular), '#', data: { controller: "nested", action: "nested#removeRow" }, class: "remove_fields dest-nested-button", title: "Usuń"
+    = link_to fa_icon("trash", type: :regular), '#', data: { controller: "nested", action: "nested#removeRow" }, class: "remove_fields dest-nested-button", title: "Usuń"

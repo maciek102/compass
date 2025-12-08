@@ -1,0 +1,22 @@
+.show-container
+  .title
+    = @product_category.name
+
+  - if @product_category.parent.present?
+    .parent
+      | Kategoria nadrzędna: 
+      = link_to @product_category.parent.name, product_category_path(@product_category.parent), class: "link"
+
+  - if @product_category.description.present?
+    .description
+      = @product_category.description
+
+  .info
+    = category_info_row("Widoczna dla klientów", yes_no(@product_category.visible?))
+    = category_info_row("Wyłączona", yes_no(@product_category.disabled?))
+    = category_info_row("Pozycja", @product_category.position)
+    = category_info_row("Slug", @product_category.slug)
+
+  .actions
+    = link_to "Edytuj", edit_product_category_path(@product_category), class: "action-button yellow"
+    = link_to "Usuń", product_category_path(@product_category), method: :delete, data: { confirm: "Na pewno?" }, class: "action-button red"

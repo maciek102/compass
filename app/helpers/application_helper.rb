@@ -26,4 +26,16 @@ module ApplicationHelper
   def not_standard_url(url)
     url ? {url: url} : {}
   end
+
+  # funkcja tworząca wiersz do widoków show do kontenera .info
+  def category_info_row(label, value)
+    content_tag(:div, class: "info-row") do
+      concat(content_tag(:div, "#{label}:", class: "info-label"))
+      concat(content_tag(:div, value, class: "info-value"))
+    end
+  end
+
+  def yes_no(boolean)
+    boolean ? "Tak" : "Nie"
+  end
 end

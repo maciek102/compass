@@ -18,6 +18,7 @@ class ProductCategoriesController < ApplicationController
   end
 
   def new
+    @product_category.product_category_id = params[:parent_id] if params[:parent_id].present?
   end
 
   def edit
