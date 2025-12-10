@@ -1,2 +1,8 @@
-h1 Products#show
-p Find me in app/views/products/show.html.slim
+= render "products/page_headers/show"
+
+.row
+  .col-lg-6
+    = render "products/show/main_info"
+
+br
+= render "index_table", list: @variants, custom_dir: "variants/", title: "Warianty", button: { text: "Dodaj wariant", link: new_product_variant_path(@product) }

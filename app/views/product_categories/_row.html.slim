@@ -1,8 +1,9 @@
 tr.table-row
-  td = "##{el.id}"
+  td = el.code
   td = el.name
   td = el.subcategories.count
+  td = el.products.count
   td.actions
     = link_to fa_icon("arrow-right"), product_category_path(el), class: "action-button", title: "Pokaż"
-    = link_to fa_icon("edit"), edit_product_category_path(el), class: "action-button yellow", title: "Edytuj"
-    = link_to fa_icon("trash"), el, method: :delete, data: { confirm: "Na pewno?" }, class: "action-button red", title: "Usuń"
+    = resource_edit_link(el)
+    = resource_destroy_link(el)

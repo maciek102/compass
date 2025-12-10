@@ -39,10 +39,10 @@ class Variant < ApplicationRecord
   validates :price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # === STATUSY ===
-  enum :status, {
-    draft: 0, # w trakcie tworzenia
-    available: 1, # dostępny w sprzedaży
-  }
+  # enum :status, {
+  #   draft: 0, # w trakcie tworzenia
+  #   available: 1, # dostępny w sprzedaży
+  # }
 
   # === SCOPE ===
   scope :active, -> { where(disabled: false) } # niezarchiwizowane
@@ -51,7 +51,7 @@ class Variant < ApplicationRecord
 
   # === CALLBACKI ===
   before_validation :assign_default_name, if: -> { name.blank? }
-
+  after_save :generate_sku, if: -> { sku.blank? }
 
 
   # === METODY ===
@@ -67,6 +67,15 @@ class Variant < ApplicationRecord
   end
 
   private
+
+  def generate_sku
+    return if sku.present?
+    
+    prod_sku = product&.sku || SecureRandom.alphanumeric(3).upcase
+    base = "#{prod_sku}/#{100 + id}"
+    
+    self.update_column(:sku, base)
+  end
 
   def assign_default_name
     self.name ||= "V #{sku || SecureRandom.hex(3)}"

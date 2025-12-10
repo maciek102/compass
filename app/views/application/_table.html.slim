@@ -6,3 +6,6 @@ table.index-table
   tbody
     - list.each do |el|
       = render "#{custom_dir}row", el: el
+
+- unless defined?(no_pages) && no_pages
+  = render 'pagination', list: list

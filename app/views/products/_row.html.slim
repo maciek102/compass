@@ -1,8 +1,9 @@
 tr.table-row
-  td = el.id
-  td = el.name
   td = el.sku
+  td = el.name
+  td = el.status.humanize
+  td = el.category&.name
   td.actions
     = link_to fa_icon("arrow-right"), product_path(el), class: "action-button", title: "Pokaż"
-    = link_to fa_icon("pen"), edit_product_path(el), class: "btn btn-sm btn-outline-warning", title: "Edytuj"
-    = link_to fa_icon("trash"), el, method: :delete, data: { confirm: "Na pewno?" }, class: "btn btn-sm btn-outline-danger", title: "Usuń"
+    = resource_edit_link(el)
+    = resource_destroy_link(el)

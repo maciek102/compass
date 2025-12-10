@@ -1,0 +1,38 @@
+.form-card
+  = simple_form_for([@product, @variant]) do |f|
+    = f.error_notification
+
+    .form-grid
+
+      .form-section
+        .title Dane podstawowe
+        = f.input :name, label: "Nazwa wariantu"
+        = f.input :sku, label: "SKU (generowane automatycznie)"
+
+      .form-section
+        .title Ceny i magazyn
+        = f.input :price, label: "Cena", input_html: { step: 0.01 }
+        = f.input :stock, label: "Stan magazynowy"
+        = f.input :weight, label: "Waga (kg)", input_html: { step: 0.01 }
+
+      .form-section
+        .title Dodatkowe
+        = f.input :ean, label: "EAN"
+        = f.input :location, label: "Lokalizacja magazynu"
+        = f.input :note, as: :text, label: "Notatki wewnętrzne", input_html: { rows: 3 }
+
+      .form-section
+        .title Niestandardowe atrybuty
+        .custom-attributes-wrapper data-controller="custom-attributes"
+          .attributes-list data-custom-attributes-target="list"
+            - (@variant.custom_attributes || {}).each do |key, value|
+              .attribute-row
+                = text_field_tag "variant[custom_attributes_keys][]", key, placeholder: "Klucz", class: "form-control"
+                = text_field_tag "variant[custom_attributes_values][]", value, placeholder: "Wartość", class: "form-control"
+                button.remove-attribute type="button" data-action="click->custom-attributes#remove" ×
+          
+          button.base-button.secondary type="button" data-action="click->custom-attributes#add"
+            | + Dodaj atrybut
+
+    .form-actions
+      = f.submit "Zapisz", class: "base-button"

@@ -1,0 +1,36 @@
+.form-card
+  = simple_form_for(@product) do |f|
+    = f.error_notification
+
+    .form-grid
+
+      .form-section
+        .title Dane podstawowe
+
+        = f.input :name, label: "Nazwa produktu"
+
+        = f.input :sku, label: "SKU (generowane automatycznie)"
+
+        = f.input :product_category_id,
+          label: "Kategoria", collection: ProductCategory.all.map { |pc| [pc.full_name, pc.id] }, include_blank: "Wybierz kategorię", input_html: { data: { controller: "chosen" } }
+
+      .form-section
+        .title Status
+
+        = f.input :status, as: :select, collection: Product.statuses.map { |k, v| [k.humanize, k] }, include_blank: "Wybierz status", label: "Status"
+
+      .form-section
+        .title Opis
+
+        = f.input :description, as: :text, label: "Opis", input_html: { rows: 4 }
+
+        = f.input :notes, as: :text, label: "Notatki (tylko dla wewnętrznego użytku)", input_html: { rows: 3 }
+
+      .form-section
+        .title Dane systemowe
+
+        = f.input :slug, label: "Slug"
+        = f.input :code, label: "Kod produktu (generowany automatycznie)"
+        
+    .form-actions
+      = f.submit "Zapisz", class: "base-button"

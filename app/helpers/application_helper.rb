@@ -38,4 +38,34 @@ module ApplicationHelper
   def yes_no(boolean)
     boolean ? "Tak" : "Nie"
   end
+
+  # link do edycji zasobu np. w tabelach
+  def resource_edit_link(resource, text = nil)
+    link_to fa_icon("edit", text: text), edit_polymorphic_path(resource), class: "action-button yellow", title: "Edytuj #{resource.class.model_name.human.downcase}"
+  end
+
+  # link do usunięcia / dezaktywacji zasobu np. w tabelach
+  def resource_destroy_link(resource, text = nil)
+    if can?(:destroy, resource)
+      if resource.try(:active?)
+        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?" }, class: "action-button red", title: t(:destroy), remote: true
+      elsif resource.respond_to? :active?
+        link_to fa_icon("check"), url_for([resource,enable_me: true]), method: :delete, data: { confirm: "Jesteś pewien, że chcesz przywrócić?" }, class: "action-button", title: t(:renew)
+      else
+        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?" }, class: "action-button red", title: t(:destroy)
+      end
+    end
+  end
+
+  # switch do przełączania trybów widoku tabeli (TableViewMode)
+  def view_mode_switcher(view_modes, base_path)
+    content_tag :div, class: "view-switcher" do
+      view_modes.available_modes.map do |mode|
+        link_to base_path.call(view: mode), class: "view-switcher-button #{'active' if view_modes.current?(mode)}" do
+          view_modes.label_for(mode)
+        end
+      end.join.html_safe
+    end
+  end
+
 end

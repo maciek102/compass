@@ -69,7 +69,7 @@
   color: #333;
 }
 
-.form-card form input,
+.form-card form input:not([type="submit"]),
 .form-card form textarea,
 .form-card form select {
   width: 100%;

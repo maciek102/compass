@@ -9,6 +9,7 @@
 # - name:string -> nazwa kategorii
 # - description:text -> opis kategorii
 # - slug:string -> unikalny, przyjazny URL, np. "elektronika"
+# - code:string -> unikalny kod kategorii, np. "ELE", "SMA1"
 # - position:integer -> kolejność wyświetlania
 # - product_category_id:bigint -> referencja do rodzica dla podkategorii
 # - visible:boolean -> czy kategoria jest widoczna dla użytkowników
@@ -34,13 +35,15 @@ class ProductCategory < ApplicationRecord
   # === WALIDACJE ===
   validates :name, presence: true
   validates :slug, uniqueness: true, allow_blank: true
+  validates :code, uniqueness: true
 
   # === SCOPE ===
   scope :active, -> { where(disabled: false) } # niezarchiwizowane
   scope :visible, -> { where(visible: true, disabled: false) }
 
   # === CALLBACKI ===
-  before_validation :generate_slug, if: -> { slug.blank? && name.present? } # generacja slug
+  before_validation :generate_slug, if: -> { name.present? }
+  after_save :generate_code, if: -> { code.blank? }
 
 
   # === METODY ===
@@ -50,7 +53,7 @@ class ProductCategory < ApplicationRecord
   end
 
   def self.roots
-    where(parent_id: nil)
+    where(product_category_id: nil)
   end
 
   def is_root?
@@ -58,7 +61,7 @@ class ProductCategory < ApplicationRecord
   end
 
   def self.leafs
-    where.not(id: ProductCategory.select(:parent_id).distinct)
+    where.not(id: ProductCategory.select(:product_category_id).distinct)
   end
 
   def is_leaf?
@@ -82,6 +85,20 @@ class ProductCategory < ApplicationRecord
   # generacja slug ("Smartfony i tablety" -> "smartfony-i-tablety")
   def generate_slug
     self.slug = name.parameterize
+  end
+
+  # generacja unikalnego kodu kategorii ("ELE", "SMA1", etc.)
+  def generate_code
+    return if code.present?
+
+    clean_name = name.to_s.strip
+    clean_name = clean_name.parameterize(preserve_case: true, separator: '')
+    
+    base = clean_name.upcase[0,3]
+    base = SecureRandom.alphanumeric(3).upcase if base.blank? || base.length < 3
+    base = "#{base[0,3]}#{id}"
+
+    self.update_column(:code, base)
   end
 
   def self.ransackable_attributes(auth_object = nil)

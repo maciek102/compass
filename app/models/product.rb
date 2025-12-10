@@ -14,6 +14,7 @@
 # - main_description:rich_text -> główny duży opis
 # - notes:text -> notatki wewnętrzne
 # - sku:string -> kod globalny produktu (opcjonalny, warianty mogą mieć własne)
+# - code:string -> unikalny kod produktu
 # - slug:string -> przyjazny adres URL
 # - product_category_id:bigint -> kategoria
 # - status:integer -> stan publikacji / widoczności
@@ -27,7 +28,7 @@ class Product < ApplicationRecord
 
   # === RELACJE ===
   # kategoria produktu
-  belongs_to :product_category
+  belongs_to :category, class_name: "ProductCategory", foreign_key: "product_category_id"
 
   # warianty produktu
   has_many :variants, dependent: :destroy
@@ -47,6 +48,7 @@ class Product < ApplicationRecord
   # === WALIDACJE ===
   validates :name, presence: true
   validates :slug, uniqueness: true, allow_blank: true
+  validates :code, uniqueness: true, allow_blank: true
   validates :sku, uniqueness: true, allow_blank: true
 
   # === SCOPE ===
@@ -55,8 +57,10 @@ class Product < ApplicationRecord
   scope :with_category, ->(category_id) { where(product_category_id: category_id) }
 
   # === CALLBACKI ===
-  before_validation :generate_slug, if: -> { slug.blank? && name.present? }
-
+  before_validation :generate_slug, if: -> { name.present? }
+  before_validation :set_default_status, if: -> { status.nil? }
+  after_save :generate_code, if: -> { code.blank? }
+  after_save :generate_sku, if: -> { sku.blank? }
 
 
   # === METODY ===
@@ -70,10 +74,47 @@ class Product < ApplicationRecord
     variants.sum { |v| v.stock.to_i }
   end
 
+  # ransack
+  def self.quick_search
+    :name_or_sku_cont
+  end
+
   private
 
   # generuje slug ("Smartfony i tablety" -> "smartfony-i-tablety")
   def generate_slug
     self.slug = name.parameterize
+  end
+
+  # generacja unikalnego kodu produktu ("ELE", "SMA1", etc.)
+  def generate_code
+    return if code.present?
+    clean_name = name.to_s.strip.parameterize(preserve_case: true, separator: '').upcase
+    base = clean_name[0,3].presence || SecureRandom.alphanumeric(3).upcase
+    self.update_column(:code, "#{base}#{id}")
+  end
+
+  def generate_sku
+    return if sku.present?
+    
+    cat_code = category&.code.to_s.strip.upcase
+    cat_code = cat_code.parameterize(preserve_case: true, separator: '')
+    cat_code = "XXX" if cat_code.blank?
+    prod_code = code || SecureRandom.alphanumeric(3).upcase
+    base = "##{cat_code}/#{prod_code}"
+    
+    self.update_column(:sku, base)
+  end
+  
+  def set_default_status
+    self.status ||= :draft
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "description", "disabled", "id", "name", "notes", "product_category_id", "sku", "slug", "status", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["category", "gallery_attachments", "gallery_blobs", "main_image_attachment", "main_image_blob", "private_images_attachments", "private_images_blobs", "rich_text_main_description", "variants"]
   end
 end

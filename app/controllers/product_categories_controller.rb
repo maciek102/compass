@@ -5,7 +5,10 @@ class ProductCategoriesController < ApplicationController
   def index
     @search_url = product_categories_path
 
-    @search = ProductCategory.all.ransack(params[:q])
+    # ustawienie trybów tabeli
+    scoped = set_view_mode_scope
+
+    @search = scoped.includes(:subcategories, :products).ransack(params[:q])
     @list = @product_categories = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -15,6 +18,8 @@ class ProductCategoriesController < ApplicationController
   end
 
   def show
+    @subcategories = @product_category.subcategories.page(params[:subcategories_page])
+    @products = @product_category.products.page(params[:products_page])
   end
 
   def new
@@ -52,6 +57,18 @@ class ProductCategoriesController < ApplicationController
     @left_menu_context = :products
   end
 
+  def set_view_mode_scope
+    @view_modes = Views::TableViewMode.new(
+      params[:view],
+      default: :roots,
+      modes: {
+        roots: { label: "Główne", scope: ->(scope) { scope.roots } },
+        all: { label: "Wszystkie", scope: ->(scope) { scope.all } }
+      }
+    )
+    @view_modes.apply(ProductCategory)
+  end
+
   def product_category_params
     params.require(:product_category).permit(
       :name,
@@ -62,6 +79,7 @@ class ProductCategoriesController < ApplicationController
       :product_category_id,
       :position,
       :main_image,
+      :code,
       private_images: [],
       subcategories_attributes: [
         :id,

@@ -1,0 +1,16 @@
+.show-container
+  .title
+    = @product.name
+
+  .info
+    = category_info_row("SKU", @product.sku)
+    = category_info_row("Status", @product.status.humanize)
+    = category_info_row("Kategoria", (@product.category ? link_to(@product.category.name, product_category_path(@product.category), class: "link") : "Brak"))
+    = category_info_row("Opis", @product.description.present? ? simple_format(@product.description) : "Brak opisu")
+    = category_info_row("Notatki", @product.notes.present? ? simple_format(@product.notes) : "Brak notatek")
+    = category_info_row("Slug", @product.slug)
+    
+
+  .actions
+    = resource_edit_link(@product, "Edytuj")
+    = resource_destroy_link(@product, "Usuń")

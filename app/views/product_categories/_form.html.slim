@@ -31,7 +31,8 @@
 
         = f.input :description, as: :text, label: "Opis", input_html: { rows: 4 }
         = f.input :position, label: "Pozycja wyświetlania"
-        = f.input :slug, label: "Slug", input_html: { disabled: true }
+        = f.input :slug, label: "Slug (generowany automatycznie)"
+        = f.input :code, label: "Kod kategorii (generowany automatycznie)"
 
     .form-actions
       = f.submit "Zapisz", class: "base-button"

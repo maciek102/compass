@@ -4,5 +4,5 @@ tr.table-row
   td = el.role_mask
   td.actions
     = link_to fa_icon("arrow-right"), user_path(el), class: "action-button", title: "Pokaż"
-    = link_to fa_icon("edit"), edit_user_path(el), class: "action-button", title: "Edytuj"
-    = link_to fa_icon("trash"), el, method: :delete, data: { confirm: "Na pewno?" }, class: "action-button", title: "Usuń"
+    = resource_edit_link(el)
+    = resource_destroy_link(el)

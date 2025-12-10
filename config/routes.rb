@@ -13,8 +13,11 @@ Rails.application.routes.draw do
   end
 
   resources :product_categories
-  resources :products
-  resources :variants
+
+  resources :products, shallow: true do
+    resources :variants
+  end
+
   resources :items
 
   # Defines the root path route ("/")

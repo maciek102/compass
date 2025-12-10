@@ -1,0 +1,7 @@
+tr.table-row
+  td = el.sku
+  td = el.name
+  td.actions
+    = link_to fa_icon("arrow-right"), variant_path(el), class: "action-button", title: "Pokaż"
+    = resource_edit_link(el)
+    = resource_destroy_link(el)

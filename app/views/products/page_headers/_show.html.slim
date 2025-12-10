@@ -1,0 +1,16 @@
+- content_for :page_title do
+  = @product.name
+
+- content_for :breadcrumbs do
+  = link_to "Dashboard", root_path
+  = " / "
+  = link_to "Produkty", products_path
+  = " / "
+  = @product.name
+
+- content_for :header_actions do
+  = link_to "Wróć", products_path, class: "base-button"
+
+
+- content_for :page_header do
+  = render "page_header_template"
