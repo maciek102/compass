@@ -2,7 +2,7 @@
   | Użytkownicy
 
 - content_for :breadcrumbs do
-  = link_to "Dashboard", root_path
+  = link_to "Dashboard", dashboard_user_path(current_user)
   |  / Użytkownicy
 
 - content_for :header_actions do

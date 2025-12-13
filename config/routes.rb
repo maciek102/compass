@@ -20,6 +20,11 @@ Rails.application.routes.draw do
 
   resources :items
 
-  # Defines the root path route ("/")
-  root 'users#dashboard'
+  authenticated :user do
+    root to: 'users#dashboard', as: :authenticated_root
+  end
+
+  unauthenticated do
+    root to: 'landing#index', as: :unauthenticated_root
+  end
 end
