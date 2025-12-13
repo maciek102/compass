@@ -1,0 +1,5 @@
+.title = "Aktywne filtry: "
+- filters.each do |key, value|
+  .filter
+    = link_to fa_icon("times-circle"), remove_product_filter_link(key), class: "remove-filter", remote: true
+    = display_filters_value(key, value)

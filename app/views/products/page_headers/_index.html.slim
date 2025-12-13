@@ -10,7 +10,11 @@
   = link_to "Dodaj produkt", new_product_path, class: "base-button"
 
 - content_for :filters do
-  = render "filters"
+  = render "products/filters"
+
+- content_for :advanced_filters do
+  = render "products/advanced_filters"
 
 - content_for :page_header do
-  = render "page_header_template"
+  div data-controller="toggle-hidden"
+    = render "page_header_template"

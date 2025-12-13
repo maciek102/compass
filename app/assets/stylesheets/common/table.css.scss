@@ -59,11 +59,11 @@
       }
 
       &:nth-child(even) {
-        background-color: lighten($left-menu-bg, 5%);
+        background-color: darken(white, 2%);
       }
 
       &:hover {
-        background-color: lighten($second-color, 20%);
+        background-color: darken(white, 10%);
         transition: background-color 0.3s ease;
       }
 

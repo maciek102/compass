@@ -9,9 +9,14 @@ body{
 }
 
 .hidden{
-  visibility: hidden;
+  display: none;
 }
 
-.display-none{
-  display: none;
+.flexbox {
+  display: flex;
+  gap: 8px;
+
+  &.centered{
+    align-items: center;
+  }
 }

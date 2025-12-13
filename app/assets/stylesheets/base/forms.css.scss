@@ -69,23 +69,28 @@
   color: #333;
 }
 
-.form-card form input:not([type="submit"]),
-.form-card form textarea,
-.form-card form select {
+input:not([type="submit"]),
+textarea,
+select {
   width: 100%;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #d0d0d0;
   background: white;
-  margin-top: 4px !important;
-  margin-bottom: 14px !important;
   font-size: 14px;
   transition: all 0.2s ease;
 }
 
-.form-card input:focus,
-.form-card textarea:focus,
-.form-card select:focus {
+.form-card form input:not([type="submit"]),
+.form-card form textarea,
+.form-card form select {
+  margin-top: 4px !important;
+  margin-bottom: 14px !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
   border-color: #8ab4f8;
   box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.25);
   outline: none;

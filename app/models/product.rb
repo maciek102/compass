@@ -39,11 +39,17 @@ class Product < ApplicationRecord
 
   has_rich_text :main_description # główny, duży opis rich text
 
-  # === STATUSY ===
+  # === KOLEKCJE ===
+  # statusy
   enum :status, {
     draft: 0, # w trakcie tworzenia
     available: 1, # dostępny w sprzedaży
   }
+
+  # filtry
+  PRODUCTS_FILTERS = [
+    :name_cont
+  ]
 
   # === WALIDACJE ===
   validates :name, presence: true
@@ -111,7 +117,7 @@ class Product < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "description", "disabled", "id", "name", "notes", "product_category_id", "sku", "slug", "status", "updated_at"]
+    ["created_at", "description", "disabled", "id", "name", "notes", "product_category_id", "sku", "slug", "status", "updated_at", "code"]
   end
 
   def self.ransackable_associations(auth_object = nil)

@@ -84,4 +84,18 @@ class User < ApplicationRecord
     "users"
   end
 
+  def self.quick_search
+    :name_or_email_cont
+  end
+
+  private
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "disabled", "email", "encrypted_password", "id", "id_value", "name", "remember_created_at", "reset_password_sent_at", "reset_password_token", "role_mask", "unconfirmed_email", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["avatar_attachment", "avatar_blob"]
+  end
+
 end

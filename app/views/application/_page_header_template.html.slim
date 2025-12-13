@@ -13,3 +13,6 @@
 
     .right
       = content_for?(:header_actions) ? yield(:header_actions) : ''
+
+  - if content_for?(:advanced_filters)
+    = yield(:advanced_filters)
