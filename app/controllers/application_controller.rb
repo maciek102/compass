@@ -26,10 +26,29 @@ class ApplicationController < ActionController::Base
     true
   end
 
+  def flash_message(model, action)
+    I18n.t("notices.#{action}.success", model: model.model_name.human)
+  end
+
+  protected
+
+  def set_locale
+    if params[:locale]
+      cookies[:locale] = params[:locale]
+      I18n.locale = params[:locale]
+    elsif cookies[:locale]
+      I18n.locale = cookies[:locale]
+    else
+      I18n.locale = I18n.default_locale
+    end
+  end
+
   private
 
   def layout_by_resource
-    if user_signed_in?
+    if turbo_frame_request?
+      false
+    elsif user_signed_in?
       'application'
     else
       'sessions'

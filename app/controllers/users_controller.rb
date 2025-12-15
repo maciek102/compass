@@ -24,16 +24,23 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User updated successfully.'
-    else
-      render :edit
+    respond_to do |format|
+      if @user.update(user_params)
+        @list = @users = User.all.page(params[:page])
+
+        flash[:notice] = flash_message(User, :update)
+
+        format.turbo_stream
+        format.html { redirect_to users_path, notice: flash[:notice] }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role_mask)
   end
 end

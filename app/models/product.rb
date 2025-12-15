@@ -75,6 +75,14 @@ class Product < ApplicationRecord
     "dropbox"
   end
 
+  def self.for_user(user)
+    if user.is?(:admin)
+      all
+    else
+      none
+    end
+  end
+
   # Zwraca liczbę wszystkich fizycznych itemów we wszystkich wariantach
   def total_stock
     variants.sum { |v| v.stock.to_i }

@@ -1,0 +1,10 @@
+- custom_dir = local_assigns.fetch(:custom_dir, "")
+- title = local_assigns.fetch(:title, I18n.t(:form))
+
+= turbo_frame_tag "modal" do
+  .modal-overlay data-controller="modals" data-action="click->modals#closeByOverlay"
+    .modal-form-card
+      .modal-form-header
+        h4.page-title.mb-0 = title
+        = link_to fa_icon('times'), "#", class: "close-link", data: { controller: "modals", action: "modals#close" }
+      = render "#{custom_dir}form"

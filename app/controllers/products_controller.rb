@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
   def index
     @search_url = products_path
 
-    @search = Product.all.ransack(params[:q])
+    @search = Product.for_user(current_user).ransack(params[:q])
     @list = @products = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -35,10 +35,17 @@ class ProductsController < ApplicationController
   end
 
   def update
-    if @product.update(product_params)
-      redirect_to @product, notice: "Produkt został zaktualizowany."
-    else
-      render :edit
+    respond_to do |format|
+      if @product.update(product_params)
+        @list = @products = Product.for_user(current_user).page(params[:page])
+
+        flash[:notice] = flash_message(Product, :update)
+
+        format.turbo_stream
+        format.html { redirect_to products_path, notice: flash[:notice] }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 

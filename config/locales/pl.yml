@@ -31,9 +31,11 @@ pl:
         phone: "Telefon"
 
   log_in: Zaloguj się
+  form: Formularz
 
   roles:
     admin: Administrator
+
   notices:
     create:
       success: "%{model} - utworzono pomyślnie."

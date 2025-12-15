@@ -1,0 +1,15 @@
+/.form-card
+= simple_form_for(@user, html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-grid
+
+    .form-section
+      .title Dane podstawowe
+
+      = f.input :email, label: "Email"
+      = f.input :name, label: "Nazwa"
+      = f.input :role_mask, label: "Rola"
+      
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

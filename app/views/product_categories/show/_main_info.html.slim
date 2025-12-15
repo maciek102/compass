@@ -14,5 +14,5 @@
     = category_info_row("Slug", @product_category.slug)
 
   .actions
-    = resource_edit_link(@product_category, "Edytuj")
+    = resource_turbo_edit_link(@product_category, "Edytuj")
     = resource_destroy_link(@product_category, "Usuń")

@@ -39,10 +39,19 @@ class ProductCategoriesController < ApplicationController
   end
 
   def update
-    if @product_category.update(product_category_params)
-      redirect_to @product_category, notice: "Kategoria została zaktualizowana."
-    else
-      render :edit
+    respond_to do |format|
+      if @product_category.update(product_category_params)
+
+        scoped = set_view_mode_scope # konieczne extra params w linku do edit, dzięki temu zapamiętujemy tryb widoku kategorii
+        @list = @product_categories = scoped.includes(:subcategories, :products).page(params[:page])
+
+        flash[:notice] = flash_message(ProductCategory, :update)
+
+        format.turbo_stream
+        format.html { redirect_to product_categories_path, notice: flash[:notice] }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 

@@ -3,6 +3,6 @@ tr.table-row data-url=user_path(el)
   td = el.email
   td = el.role_mask
   td.actions
-    = link_to fa_icon("arrow-right"), user_path(el), class: "action-button", title: "Pokaż"
-    = resource_edit_link(el)
+    = resource_show_link(el)
+    = resource_turbo_edit_link(el)
     = resource_destroy_link(el)

@@ -4,6 +4,6 @@ tr.table-row data-url=product_path(el)
   td = el.status.humanize
   td = el.category&.name
   td.actions
-    = link_to fa_icon("arrow-right"), product_path(el), class: "action-button", title: "Pokaż"
-    = resource_edit_link(el)
+    = resource_show_link(el)
+    = resource_turbo_edit_link(el)
     = resource_destroy_link(el)

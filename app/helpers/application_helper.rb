@@ -39,20 +39,35 @@ module ApplicationHelper
     boolean ? "Tak" : "Nie"
   end
 
+  # link do widoku show zasobu
+  # extra params np: extra_params: { from: "orders", view: params[:view] }
+  def resource_show_link(resource, text = nil, extra_params: {})
+    link_to fa_icon("arrow-right", text: text), polymorphic_path(resource, extra_params), class: "action-button", title: "Pokaż", data: { turbo: "false" }
+  end
+
   # link do edycji zasobu np. w tabelach
-  def resource_edit_link(resource, text = nil)
-    link_to fa_icon("edit", text: text), edit_polymorphic_path(resource), class: "action-button yellow", title: "Edytuj #{resource.class.model_name.human.downcase}"
+  # extra params np: extra_params: { from: "orders", view: params[:view] }
+  def resource_edit_link(resource, text = nil, extra_params: {})
+    link_to fa_icon("edit", text: text), edit_polymorphic_path(resource, extra_params), class: "action-button yellow", title: "Edytuj #{resource.class.model_name.human.downcase}", data: { turbo: "false" }
+  end
+
+  # link do edycji zasobu np. w tabelach, używający turbo
+  # extra params np: extra_params: { from: "orders", view: params[:view] }
+  def resource_turbo_edit_link(resource, text = nil, extra_params: {})
+    link_to edit_polymorphic_path(resource, extra_params), class: "action-button yellow", title: "Edytuj #{resource.class.model_name.human.downcase}", data: { turbo_frame: "modal" } do
+      fa_icon("edit", text: text)
+    end
   end
 
   # link do usunięcia / dezaktywacji zasobu np. w tabelach
   def resource_destroy_link(resource, text = nil)
     if can?(:destroy, resource)
       if resource.try(:active?)
-        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?" }, class: "action-button red", title: t(:destroy), remote: true
+        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?", turbo: false }, class: "action-button red", title: t(:destroy), remote: true
       elsif resource.respond_to? :active?
-        link_to fa_icon("check"), url_for([resource,enable_me: true]), method: :delete, data: { confirm: "Jesteś pewien, że chcesz przywrócić?" }, class: "action-button", title: t(:renew)
+        link_to fa_icon("check"), url_for([resource,enable_me: true]), method: :delete, data: { confirm: "Jesteś pewien, że chcesz przywrócić?", turbo: false }, class: "action-button", title: t(:renew)
       else
-        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?" }, class: "action-button red", title: t(:destroy)
+        link_to fa_icon("trash", text: text), resource, method: :delete, data: { confirm: "Jesteś tego pewien?", turbo: false }, class: "action-button red", title: t(:destroy)
       end
     end
   end

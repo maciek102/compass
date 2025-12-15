@@ -1,0 +1,3 @@
+<%= turbo_stream.replace('users-turbo-table', partial: 'users/turbo/table_turbo', locals: { list: @users }) %>
+<%= turbo_stream.replace("flash_message", partial: "application/flash") %>
+<%= turbo_stream.replace('modal', partial: 'shared/empty_modal') %>

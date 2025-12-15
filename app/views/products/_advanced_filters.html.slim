@@ -1,4 +1,4 @@
-.advanced-filters-cont data-toggle-hidden-target="target"
+.advanced-filters-cont.hidden data-toggle-hidden-target="target"
     = search_form_for @search, { remote: true, html: { data: { controller: "instant-search" } }}.merge(not_standard_url(@search_url)) do |f|
         .selected-filters
             = render "products/selected_filters", filters: (params[:q] || {}).reject { |k, v| v.blank? }

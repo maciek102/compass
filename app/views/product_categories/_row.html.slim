@@ -4,6 +4,6 @@ tr.table-row data-url=product_category_path(el)
   td = el.subcategories.count
   td = el.products.count
   td.actions
-    = link_to fa_icon("arrow-right"), product_category_path(el), class: "action-button", title: "Pokaż"
-    = resource_edit_link(el)
+    = resource_show_link(el)
+    = resource_turbo_edit_link(el, extra_params: { view: params[:view] })
     = resource_destroy_link(el)
