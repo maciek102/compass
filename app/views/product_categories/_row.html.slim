@@ -1,9 +1,12 @@
-tr.table-row data-url=product_category_path(el)
+tr.table-row id="category-row-#{el.id}" data-url=product_category_path(el)
   td = el.code
-  td = el.name
-  td = el.subcategories.count
-  td = el.products.count
+  td.bold = el.name
+  td 
+    = "#{el.subcategories.count} (#{el.total_subcategories_count}) "
+    = resource_show_link(el, extra_params: {tab: "subcategories"})
+  td 
+    = "#{el.products.count} (#{el.total_products_count}) "
+    = resource_show_link(el, extra_params: {tab: "products"})
   td.actions
-    = resource_show_link(el)
-    = resource_turbo_edit_link(el, extra_params: { view: params[:view] })
+    = resource_turbo_edit_link(el, extra_params: { view: params[:view], subcategory_view: params[:action] == "show" ? true : false })
     = resource_destroy_link(el)

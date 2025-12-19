@@ -55,6 +55,10 @@ class Variant < ApplicationRecord
 
 
   # === METODY ===
+   
+  def self.icon
+    "cube"
+  end
 
   # faktyczna ilość dostępna
   def total_stock

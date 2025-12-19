@@ -1,0 +1,14 @@
+/ Tabela wariantów produktu renderowana nested pod wierszem produktu
+/ locals: variants - kolekcja wariantów do wyświetlenia
+
+table.index-table
+  tbody
+    - variants.each do |el|
+      tr.table-row.nested-row data-url=variant_path(el)
+        td colspan=2
+        td = el.sku
+        td.bold = el.name
+        td = number_to_currency(el.price)
+        td.actions
+          = resource_turbo_edit_link(el)
+          = resource_destroy_link(el)

@@ -69,7 +69,8 @@ module Views
 
     def products_context
       [
-        { text: "Lista produktów", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Warianty", url: Rails.application.routes.url_helpers.variants_path, icon: Variant.icon },
         { text: "Kategorie", url: Rails.application.routes.url_helpers.product_categories_path, icon: ProductCategory.icon }
       ]
     end

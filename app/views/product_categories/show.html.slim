@@ -1,11 +1,7 @@
 = render "product_categories/page_headers/show"
 
-.row
-  .col-lg-6
-    = render "product_categories/show/main_info"
+#tabs
+  = render "product_categories/tabs"
 
-  .col-lg-6
-    = render "index_table", list: @subcategories, title: "Podkategorie", button: { text: "Dodaj podkategorię", link: new_product_category_path(parent_id: @product_category.id) }
-
-br
-= render "index_table", list: @products, custom_dir: "products/", title: "Produkty", button: { text: "Dodaj produkt", link: new_product_path(product_category_id: @product_category.id) }
+#tabs-content 
+  = render "product_categories/tabs/#{@tab}"

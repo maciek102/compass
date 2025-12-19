@@ -8,7 +8,7 @@ class ProductCategoriesController < ApplicationController
     # ustawienie trybów tabeli
     scoped = set_view_mode_scope
 
-    @search = scoped.includes(:subcategories, :products).ransack(params[:q])
+    @search = scoped.includes(:subcategories, :products).with_aggregated_counts.ransack(params[:q])
     @list = @product_categories = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -18,8 +18,18 @@ class ProductCategoriesController < ApplicationController
   end
 
   def show
-    @subcategories = @product_category.subcategories.page(params[:subcategories_page])
-    @products = @product_category.products.page(params[:products_page])
+    @tab = params[:tab] || "main"
+
+    if @tab == "subcategories"
+      @subcategories = @product_category.subcategories.includes(:subcategories, :products).with_aggregated_counts.page(params[:subcategories_page])
+    elsif @tab == "products"
+      @products = @product_category.products.page(params[:products_page])
+    end
+
+    respond_to do |f|
+      f.html
+      f.js
+    end
   end
 
   def new
@@ -31,10 +41,19 @@ class ProductCategoriesController < ApplicationController
 
   def create
     @product_category = ProductCategory.new(product_category_params)
-    if @product_category.save
-      redirect_to @product_category, notice: "Kategoria została utworzona."
-    else
-      render :new
+
+    respond_to do |format|
+      if @product_category.save
+
+        set_turbo_list_after_commit # ustawienie listy kategorii do renderowania w widokach
+
+        flash[:notice] = flash_message(ProductCategory, :create)
+
+        format.turbo_stream
+        format.html { redirect_to @product_category, notice: flash[:notice] }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -42,8 +61,7 @@ class ProductCategoriesController < ApplicationController
     respond_to do |format|
       if @product_category.update(product_category_params)
 
-        scoped = set_view_mode_scope # konieczne extra params w linku do edit, dzięki temu zapamiętujemy tryb widoku kategorii
-        @list = @product_categories = scoped.includes(:subcategories, :products).page(params[:page])
+        set_turbo_list_after_commit # ustawienie listy kategorii do renderowania w widokach
 
         flash[:notice] = flash_message(ProductCategory, :update)
 
@@ -64,6 +82,19 @@ class ProductCategoriesController < ApplicationController
 
   def set_left_menu_context
     @left_menu_context = :products
+  end
+
+  # ustawnianie listy kategorii po akcji create/update do renderowania turbo stream w widokach
+  def set_turbo_list_after_commit
+    # sprawdzamy czy edytujemy z widoku show (podkategorie) czy z index (wszystkie kategorie)
+    if params[:subcategory_view].present? && params[:subcategory_view] == "true"
+      parent_category = @product_category.parent
+      @list = @product_categories = parent_category.subcategories.page(params[:page])
+      @parent_category = parent_category
+    else
+      scoped = set_view_mode_scope # konieczne extra params w linku do edit, dzięki temu zapamiętujemy tryb widoku kategorii
+      @list = @product_categories = scoped.includes(:subcategories, :products).page(params[:page])
+    end
   end
 
   def set_view_mode_scope

@@ -5,7 +5,10 @@ class ProductsController < ApplicationController
   def index
     @search_url = products_path
 
-    @search = Product.for_user(current_user).ransack(params[:q])
+    # ustawienie trybów tabeli
+    scoped = set_view_mode_scope
+
+    @search = scoped.for_user(current_user).includes(:variants).ransack(params[:q])
     @list = @products = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -15,7 +18,16 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @variants = @product.variants.page(params[:variants_page])
+    @tab = params[:tab] || "main"
+
+    if @tab == "variants"
+      @variants = @product.variants.page(params[:variants_page])
+    end
+
+    respond_to do |f|
+      f.html
+      f.js
+    end
   end
 
   def new
@@ -37,10 +49,7 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-        @list = @products = Product.for_user(current_user).page(params[:page])
-
         flash[:notice] = flash_message(Product, :update)
-
         format.turbo_stream
         format.html { redirect_to products_path, notice: flash[:notice] }
       else
@@ -54,10 +63,33 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: "Produkt został usunięty."
   end
 
+  def toggle_variants
+    @variants = @product.variants
+
+    respond_to do |f|
+      f.js
+    end
+  end
+
   private
 
   def set_left_menu_context
     @left_menu_context = :products
+  end
+
+  def set_view_mode_scope
+    @view_modes = Views::TableViewMode.new(
+      params[:view],
+      default: :list,
+      modes: {
+        list: { label: "Lista", scope: ->(scope) { scope } },
+        groups: { label: "Grupy", scope: ->(scope) { scope } }
+      }
+    )
+
+    @expand_variants = @view_modes.current?(:groups)
+    
+    @view_modes.apply(Product)
   end
 
   def product_params

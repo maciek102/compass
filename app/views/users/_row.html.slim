@@ -1,4 +1,4 @@
-tr.table-row data-url=user_path(el)
+tr.table-row id="user-row-#{el.id}" data-url=user_path(el)
   td = el.name
   td = el.email
   td = el.role_mask

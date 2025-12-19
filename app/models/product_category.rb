@@ -76,6 +76,98 @@ class ProductCategory < ApplicationRecord
     [id] + subcategories.flat_map(&:subtree_ids)
   end
 
+  # Liczy wszystkie zagnieżdżone podkategorie i produkty w jednym zapytaniu (rekurencyjne CTE).
+  # Korzysta z prezaładowanych kolumn (with_aggregated_counts) jeśli są dostępne, aby nie odpalać dodatkowego SQL.
+  def aggregated_counts
+    # Jeśli mamy preloaded columns ze scope'a - użyj ich
+    if has_attribute?(:subcategories_count) && has_attribute?(:products_count)
+      return {
+        subcategories_count: self[:subcategories_count].to_i,
+        products_count: self[:products_count].to_i
+      }
+    end
+
+    # Fallback - wykonaj zapytanie
+    @aggregated_counts ||= begin
+      sql = <<~SQL
+        WITH RECURSIVE category_tree AS (
+          SELECT id FROM product_categories WHERE id = ?
+          UNION ALL
+          SELECT pc.id
+          FROM product_categories pc
+          JOIN category_tree ct ON pc.product_category_id = ct.id
+        )
+        SELECT
+          COUNT(DISTINCT ct.id) - 1 AS subcategories_count,
+          COUNT(p.id) AS products_count
+        FROM category_tree ct
+        LEFT JOIN products p ON p.product_category_id = ct.id
+      SQL
+
+      row = ApplicationRecord.connection.select_one(
+        ApplicationRecord.sanitize_sql_array([sql, id])
+      )
+
+      {
+        subcategories_count: row["subcategories_count"].to_i,
+        products_count: row["products_count"].to_i
+      }
+    end
+  end
+
+  # Preloaduje liczniki dla wielu kategorii naraz
+  scope :with_aggregated_counts, -> {
+    # Tworzymy pomocniczą tabelę z licznikami dla każdej kategorii
+    subquery = <<~SQL
+      SELECT
+        pc_outer.id,
+        (
+          WITH RECURSIVE category_tree AS (
+            SELECT id FROM product_categories WHERE id = pc_outer.id
+            UNION ALL
+            SELECT pc_inner.id
+            FROM product_categories pc_inner
+            JOIN category_tree ct ON pc_inner.product_category_id = ct.id
+          )
+          SELECT COUNT(*) - 1 FROM category_tree
+        ) AS subcategories_count,
+        (
+          WITH RECURSIVE category_tree AS (
+            SELECT id FROM product_categories WHERE id = pc_outer.id
+            UNION ALL
+            SELECT pc_inner.id
+            FROM product_categories pc_inner
+            JOIN category_tree ct ON pc_inner.product_category_id = ct.id
+          )
+          SELECT COUNT(*)
+          FROM products p
+          JOIN category_tree ct ON p.product_category_id = ct.id
+        ) AS products_count
+      FROM product_categories pc_outer
+    SQL
+
+    joins("LEFT JOIN (#{subquery}) counts ON counts.id = product_categories.id")
+      .select("product_categories.*, counts.subcategories_count, counts.products_count")
+  }
+
+  # Liczba bezpośrednich dzieci (preloadowane przez includes)
+  def direct_subcategories_count
+    subcategories.size
+  end
+
+  # Liczba bezpośrednich produktów (preloadowane przez includes)
+  def direct_products_count
+    products.size
+  end
+
+  def total_subcategories_count
+    aggregated_counts[:subcategories_count]
+  end
+
+  def total_products_count
+    aggregated_counts[:products_count]
+  end
+
   def self.quick_search
     :name_cont
   end
@@ -87,7 +179,7 @@ class ProductCategory < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  # generacja unikalnego kodu kategorii ("ELE", "SMA1", etc.)
+  # generacja unikalnego kodu kategorii ("ELE1", "SMA2", etc.)
   def generate_code
     return if code.present?
 

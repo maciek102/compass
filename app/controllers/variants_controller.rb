@@ -1,8 +1,18 @@
 class VariantsController < ApplicationController
   before_action :set_product, only: %i[ new create ]
   load_and_authorize_resource :variant
+  before_action :set_left_menu_context # ustawieneie kontekstu buildera menu
   
   def index
+    @search_url = variants_path
+
+    @search = Variant.includes(:product).ransack(params[:q])
+    @list = @variants = @search.result(distinct: true).page(params[:page])
+
+    respond_to do |f|
+      f.html
+      f.js {render "application/index"}
+    end
   end
 
   def show
@@ -38,6 +48,10 @@ class VariantsController < ApplicationController
 
   def set_product
     @product = @variant&.product || Product.find(params[:product_id])
+  end
+
+  def set_left_menu_context
+    @left_menu_context = :products
   end
 
   def variant_params

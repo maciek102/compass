@@ -15,8 +15,14 @@ Rails.application.routes.draw do
   resources :product_categories
 
   resources :products, shallow: true do
-    resources :variants
+    resources :variants, only: %i[ new create ]
+    
+    member do
+      get :toggle_variants
+    end
   end
+
+  resources :variants, only: %i[ index show edit update destroy ]
 
   resources :items
 
@@ -26,5 +32,9 @@ Rails.application.routes.draw do
 
   unauthenticated do
     root to: 'landing#index', as: :unauthenticated_root
+  end
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 end

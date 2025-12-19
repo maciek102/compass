@@ -1,0 +1,4 @@
+.tabs 
+  = link_to "Informacje", product_category_path(@product_category, tab: "main"), remote: true, class: "tab #{'active' if @tab == 'main'}"
+  = link_to "Podkategorie", product_category_path(@product_category, tab: "subcategories"), remote: true, class: "tab #{'active' if @tab == 'subcategories'}"
+  = link_to "Produkty", product_category_path(@product_category, tab: "products"), remote: true, class: "tab #{'active' if @tab == 'products'}"

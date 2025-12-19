@@ -56,9 +56,13 @@
         padding: 10px 16px;
         border-bottom: 1px solid $main-line;
         vertical-align: middle;
+
+        &.bold{
+          font-weight: 600;
+        }
       }
 
-      &:nth-child(even) {
+      &:nth-child(even of .table-row) {
         background-color: darken(white, 2%);
       }
 
@@ -76,6 +80,16 @@
       .actions {
         display: flex;
         gap: 6px;
+      }
+
+      &.nested-row {
+        background-color: darken(white, 1%);
+        border-left: 5px solid $main-line;
+
+        &:hover {
+          background-color: darken(white, 10%);
+          transition: background-color 0.3s ease;
+        }
       }
     }
   }

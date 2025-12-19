@@ -1,2 +1,6 @@
 = render "products/page_headers/index"
-= render "products/turbo/table_turbo", list: @products
+
+/ przełączanie widoków (scope) tabeli
+= view_mode_switcher(@view_modes, ->(extra) { url_for(params.permit!.merge(extra)) })
+
+= render "index_table", list: @products

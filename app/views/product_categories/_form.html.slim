@@ -34,7 +34,10 @@
       = f.input :slug, label: "Slug (generowany automatycznie)"
       = f.input :code, label: "Kod kategorii (generowany automatycznie)"
 
-  = hidden_field_tag :view, params[:view]
+  / używane w przypadku powrotu do index z zapamiętanym trybem widoku
+  = hidden_field_tag :view, params[:view] 
+  / używane do rozróżnienia czy edytujemy z widoku show (podkategorie) czy z index (wszystkie kategorie)
+  = hidden_field_tag :subcategory_view, params[:subcategory_view]
 
   .form-actions
     = f.submit "Zapisz", class: "base-button"

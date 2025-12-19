@@ -1,0 +1,3 @@
+.tabs 
+  = link_to "Informacje", product_path(@product, tab: "main"), remote: true, class: "tab #{'active' if @tab == 'main'}"
+  = link_to "Warianty", product_path(@product, tab: "variants"), remote: true, class: "tab #{'active' if @tab == 'variants'}"

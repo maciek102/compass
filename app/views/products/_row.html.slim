@@ -1,9 +1,24 @@
-tr.table-row data-url=product_path(el)
+- expand_variants = @expand_variants || false
+- nested_row_classes = ["nested-row"]
+- nested_row_classes << "hidden" unless expand_variants
+- toggle_icon = expand_variants ? "arrow-up" : "arrow-down"
+
+tr.table-row id="product-row-#{el.id}" data-url=product_path(el)
   td = el.sku
-  td = el.name
+  td.bold = el.name
   td = el.status.humanize
   td = el.category&.name
+  td 
+    = "#{el.variants.count} "
+    / przycisk do rozwijania/zamykania widoku wariantów produktu
+    = link_to fa_icon(toggle_icon), toggle_variants_product_path(el), remote: true, class: "action-button", id: "toggle-variants-#{el.id}"
   td.actions
-    = resource_show_link(el)
     = resource_turbo_edit_link(el)
     = resource_destroy_link(el)
+
+
+/ renderowanie wariantów produktu w linii pod produktem
+tr class=nested_row_classes.join(" ") id="product-#{el.id}-nested-variants"
+  td colspan=6
+    - if expand_variants
+      = render partial: 'variants/nested_row', locals: { variants: el.variants }
