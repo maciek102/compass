@@ -83,4 +83,5 @@ gem 'exception_notification', '~> 4.5'
 gem "sassc-rails"
 gem 'devise', '~> 4.9', '>= 4.9.4'
 gem 'mini_magick', '~> 4.5', '>= 4.5.1'
-gem 'dotenv-rails'
+gem 'dotenv-rails', '~> 3.2'
+gem 'request_store', '~> 1.7'

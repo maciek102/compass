@@ -22,6 +22,10 @@ class ProductsController < ApplicationController
 
     if @tab == "variants"
       @variants = @product.variants.page(params[:variants_page])
+    elsif @tab == "history"
+      @search_url = product_path(@product, tab: "history")
+      @search = @product.logs.ransack(params[:q])
+      @list = @logs = @search.result.recent.page(params[:logs_page])
     end
 
     respond_to do |f|

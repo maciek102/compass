@@ -1,3 +1,4 @@
 .tabs 
-  = link_to "Informacje", product_path(@product, tab: "main"), remote: true, class: "tab #{'active' if @tab == 'main'}"
-  = link_to "Warianty", product_path(@product, tab: "variants"), remote: true, class: "tab #{'active' if @tab == 'variants'}"
+  = render "shared/tab", text: "Informacje", icon: info_icon, path: product_path(@product, tab: "main"), active_tab: "main"
+  = render "shared/tab", text: "Warianty", icon: Variant.icon, path: product_path(@product, tab: "variants"), active_tab: "variants"
+  = render "shared/tab", text: "Historia", icon: history_icon, path: product_path(@product, tab: "history"), active_tab: "history"

@@ -1,0 +1,16 @@
+.logs-cont{
+  .filters{
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    input, select {
+      max-width: 200px;
+    }
+
+    .log-label{
+      color: grey
+    }
+  }
+}

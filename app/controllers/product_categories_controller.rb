@@ -24,6 +24,10 @@ class ProductCategoriesController < ApplicationController
       @subcategories = @product_category.subcategories.includes(:subcategories, :products).with_aggregated_counts.page(params[:subcategories_page])
     elsif @tab == "products"
       @products = @product_category.products.page(params[:products_page])
+    elsif @tab == "history"
+      @search_url = product_category_path(@product_category, tab: "history")
+      @search = @product_category.logs.ransack(params[:q])
+      @list = @logs = @search.result.recent.page(params[:logs_page])
     end
 
     respond_to do |f|

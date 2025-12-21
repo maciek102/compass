@@ -46,6 +46,13 @@ pl:
     reset_password:
       success: Hasło użytkownika zostało zresetowane i wysłane na adres e-mail.
 
+  log_actions:
+    create: Utworzenie
+    update: Modyfikacja
+    destroy: Usunięcie
+    status: Zmiana statusu
+    assign: Przypisanie
+
   date:
     abbr_day_names:
     - Pon

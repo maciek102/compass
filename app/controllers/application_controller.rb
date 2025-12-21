@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   helper_method :show_left_menu?
 
   layout :layout_by_resource
+  
+  before_action :store_current_user
 
   if Rails.env.production?
     rescue_from ActionController::RoutingError, ::AbstractController::ActionNotFound, ActiveRecord::RecordNotFound do |exception|
@@ -44,6 +46,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def store_current_user
+    RequestStore.store[:current_user] = current_user
+  end
 
   def layout_by_resource
     if turbo_frame_request?

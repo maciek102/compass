@@ -132,9 +132,9 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    dotenv (3.1.7)
-    dotenv-rails (3.1.7)
-      dotenv (= 3.1.7)
+    dotenv (3.2.0)
+    dotenv-rails (3.2.0)
+      dotenv (= 3.2.0)
       railties (>= 6.1)
     drb (2.2.1)
     erubi (1.13.1)
@@ -279,6 +279,8 @@ GEM
     regexp_parser (2.10.0)
     reline (0.6.0)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -360,7 +362,7 @@ DEPENDENCIES
   chosen-rails (~> 1.10)
   debug
   devise (~> 4.9, >= 4.9.4)
-  dotenv-rails
+  dotenv-rails (~> 3.2)
   exception_notification (~> 4.5)
   font-awesome-rails
   importmap-rails
@@ -375,6 +377,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 8.1.1)
   ransack (~> 4.0)
+  request_store (~> 1.7)
   sassc-rails
   select2-rails (~> 4.0, >= 4.0.13)
   selenium-webdriver

@@ -25,6 +25,9 @@ class User < ApplicationRecord
   }.freeze
 
   after_create :auto_set_role
+  after_update :log_update
+  after_create :log_creation
+  before_destroy :log_destruction
 
 
 
@@ -89,6 +92,40 @@ class User < ApplicationRecord
   end
 
   private
+
+  # === LOGOWANIE ===
+
+  def log_creation
+    Log.created!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Użytkownik #{name} (#{email}) został utworzony"
+    )
+  end
+
+  def log_update
+    if saved_changes.present?
+      changes_hash = saved_changes.except(:updated_at)
+      Log.updated!(
+        loggable: self,
+        user: current_user_from_context,
+        message: "Użytkownik #{name} (#{email}) został zmieniony",
+        details: changes_hash
+      )
+    end
+  end
+
+  def log_destruction
+    Log.destroyed!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Użytkownik #{name} (#{email}) został usunięty"
+    )
+  end
+
+  def current_user_from_context
+    RequestStore.store[:current_user]
+  end
 
   def self.ransackable_attributes(auth_object = nil)
     ["confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "disabled", "email", "encrypted_password", "id", "id_value", "name", "remember_created_at", "reset_password_sent_at", "reset_password_token", "role_mask", "unconfirmed_email", "updated_at"]

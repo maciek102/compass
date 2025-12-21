@@ -83,4 +83,12 @@ module ApplicationHelper
     end
   end
 
+  def show_datetime(date)
+    date.present? ? date.strftime("%d.%m.%Y %H:%M") : "-"
+  end
+
+  def show_date(date)
+    date.present? ? date.strftime("%d.%m.%Y") : "-"
+  end
+
 end

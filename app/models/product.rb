@@ -32,6 +32,8 @@ class Product < ApplicationRecord
 
   # warianty produktu
   has_many :variants, dependent: :destroy
+  # historia zmian
+  has_many :logs, as: :loggable, dependent: :destroy
 
   has_one_attached :main_image # główne zdjęcie
   has_many_attached :gallery # dodatkowe zdjęcia
@@ -67,6 +69,9 @@ class Product < ApplicationRecord
   before_validation :set_default_status, if: -> { status.nil? }
   after_save :generate_code, if: -> { code.blank? }
   after_save :generate_sku, if: -> { sku.blank? }
+  after_create :log_creation
+  after_update :log_update
+  before_destroy :log_destruction
 
 
   # === METODY ===
@@ -94,6 +99,40 @@ class Product < ApplicationRecord
   end
 
   private
+
+  # === LOGOWANIE ===
+
+  def log_creation
+    Log.created!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Produkt #{name} został utworzony"
+    )
+  end
+
+  def log_update
+    if saved_changes.present?
+      changes_hash = saved_changes.except(:updated_at)
+      Log.updated!(
+        loggable: self,
+        user: current_user_from_context,
+        message: "Produkt #{name} został zmieniony",
+        details: changes_hash
+      )
+    end
+  end
+
+  def log_destruction
+    Log.destroyed!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Produkt #{name} został usunięty"
+    )
+  end
+
+  def current_user_from_context
+    RequestStore.store[:current_user]
+  end
 
   # generuje slug ("Smartfony i tablety" -> "smartfony-i-tablety")
   def generate_slug

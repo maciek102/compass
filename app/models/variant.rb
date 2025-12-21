@@ -52,6 +52,9 @@ class Variant < ApplicationRecord
   # === CALLBACKI ===
   before_validation :assign_default_name, if: -> { name.blank? }
   after_save :generate_sku, if: -> { sku.blank? }
+  after_create :log_creation
+  after_update :log_update
+  before_destroy :log_destruction
 
 
   # === METODY ===
@@ -71,6 +74,40 @@ class Variant < ApplicationRecord
   end
 
   private
+
+  # === LOGOWANIE ===
+
+  def log_creation
+    Log.created!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Wariant #{name} został utworzony"
+    )
+  end
+
+  def log_update
+    if saved_changes.present?
+      changes_hash = saved_changes.except(:updated_at)
+      Log.updated!(
+        loggable: self,
+        user: current_user_from_context,
+        message: "Wariant #{name} został zmieniony",
+        details: changes_hash
+      )
+    end
+  end
+
+  def log_destruction
+    Log.destroyed!(
+      loggable: self,
+      user: current_user_from_context,
+      message: "Wariant #{name} został usunięty"
+    )
+  end
+
+  def current_user_from_context
+    RequestStore.store[:current_user]
+  end
 
   def generate_sku
     return if sku.present?

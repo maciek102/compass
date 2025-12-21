@@ -1,0 +1,14 @@
+= search_form_for @search, { remote: true, html: { data: { controller: "instant-search" } }}.merge(not_standard_url(@search_url)) do |f|
+  .filters
+    div
+      .log-label = "Treść / Użytkownik"
+      = f.search_field((@search.klass.try(:quick_search) || :name_cont),placeholder: "🔍 Szukaj...", data: { action: "input->instant-search#submitWithDebounce" })
+    div
+      .log-label = "Akcje"  
+      = f.select :action_eq, collection: Log.actions.keys.map { |action| [I18n.t("log_actions.#{action}"), action] }, include_blank: "Wszystkie akcje", data: { action: "change->instant-search#submit" }
+    div
+      .log-label = "Data od"
+      = f.datetime_local_field :created_at_gteq, as: :date_picker, label: "Data od", data: { action: "change->instant-search#submit" }
+    div 
+      .log-label = "Data do"
+      = f.datetime_local_field :created_at_lteq, as: :date_picker, label: "Data do", data: { action: "change->instant-search#submit" }

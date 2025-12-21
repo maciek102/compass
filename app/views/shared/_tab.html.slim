@@ -1,0 +1,3 @@
+= link_to path, remote: true, class: "tab #{'active' if @tab == active_tab}" do 
+  = fa_icon(icon) if defined?(icon) && icon.present?
+  = text if defined?(text) && text.present?

@@ -1,0 +1,12 @@
+tr.table-row 
+  td = el.author_name
+  td = el.action_title
+  td
+    = el.message if el.message.present?
+    - if el.details.present?
+      ul.log-details
+        - el.details.each do |key, value|
+          li
+            == "#{key.to_s.humanize}: "
+            == format_log_detail(value)
+  td = show_datetime(el.created_at)
