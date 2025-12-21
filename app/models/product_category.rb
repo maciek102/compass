@@ -19,6 +19,7 @@
 
 class ProductCategory < ApplicationRecord
   include Destroyable
+  include Loggable
 
   # relacja hierarchiczna
   belongs_to :parent, class_name: "ProductCategory", foreign_key: "product_category_id", optional: true
@@ -46,10 +47,7 @@ class ProductCategory < ApplicationRecord
   # === CALLBACKI ===
   before_validation :generate_slug, if: -> { name.present? }
   after_save :generate_code, if: -> { code.blank? }
-  
-  after_create :log_creation
-  after_update :log_update
-  before_destroy :log_destruction
+
 
 
   # === METODY ===
@@ -179,39 +177,6 @@ class ProductCategory < ApplicationRecord
   end
 
   private
-
-  # logowanie zmian
-  def log_creation
-    Log.created!(
-      loggable: self,
-      user: current_user_from_context,
-      message: "Kategoria #{name} została utworzona"
-    )
-  end
-
-  def log_update
-    if saved_changes.present?
-      changes_hash = saved_changes.except(:updated_at)
-      Log.updated!(
-        loggable: self,
-        user: current_user_from_context,
-        message: "Kategoria #{name} została zmieniona",
-        details: changes_hash
-      )
-    end
-  end
-
-  def log_destruction
-    Log.destroyed!(
-      loggable: self,
-      user: current_user_from_context,
-      message: "Kategoria #{name} została usunięta"
-    )
-  end
-
-  def current_user_from_context
-    RequestStore.store[:current_user]
-  end
 
   # generacja slug ("Smartfony i tablety" -> "smartfony-i-tablety")
   def generate_slug
