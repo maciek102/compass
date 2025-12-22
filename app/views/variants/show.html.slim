@@ -1,2 +1,7 @@
-h1 Variants#show
-p Find me in app/views/variants/show.html.slim
+= render "variants/page_headers/show"
+
+#tabs
+  = render "variants/tabs"
+
+#tabs-content 
+  = render "variants/tabs/#{@tab}"

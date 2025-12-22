@@ -2,7 +2,7 @@ tr.table-row id="user-row-#{el.id}" data-url=user_path(el)
   td = el.name
   td = el.email
   td = el.role_mask
-  td.actions
-    = resource_show_link(el)
-    = resource_turbo_edit_link(el)
-    = resource_destroy_link(el)
+  td
+    .actions
+      = resource_turbo_edit_link(el)
+      = resource_destroy_link(el)

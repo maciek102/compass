@@ -31,6 +31,8 @@ class Variant < ApplicationRecord
   has_many :items, dependent: :destroy
   # ruchy magazynowe
   has_many :stock_movements, dependent: :destroy
+  # historia zmian
+  has_many :logs, as: :loggable, dependent: :destroy
 
   has_many_attached :images # zdjęcie
 
@@ -80,6 +82,10 @@ class Variant < ApplicationRecord
     !disabled && total_stock > 0
   end
 
+  def self.quick_search
+    :name_or_sku_or_product_name_cont
+  end
+
   private
 
   def generate_sku
@@ -97,5 +103,13 @@ class Variant < ApplicationRecord
 
   def set_default_stock
     self.stock ||= 0
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "custom_attributes", "disabled", "ean", "id", "location", "name", "note", "price", "product_id", "sku", "stock", "updated_at", "weight"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["items", "product", "stock_movements"]
   end
 end

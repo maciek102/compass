@@ -1,0 +1,18 @@
+tr.table-row id="item-row-#{el.id}" data-url=item_path(el)
+  td= el.serial_number
+  td
+    = link_to el.variant.product.name, product_path(el.variant.product)
+    = " / "
+    = link_to el.variant.name, variant_path(el.variant)
+  td= el.status.humanize
+  td
+    - if el.in_stock?
+      = "W magazynie"
+    - elsif el.reserved?
+      = "Zarezerwowany"
+    - elsif el.returned?
+      = "Zwrócony"
+    - else
+      = "Nieznany stan"
+  td
+    = resource_turbo_edit_link(el)

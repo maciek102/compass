@@ -16,6 +16,27 @@ class VariantsController < ApplicationController
   end
 
   def show
+    @tab = params[:tab] || "main"
+
+    case @tab
+    when "main"
+      
+    when "items"
+      @items = @variant.items.page(params[:page])
+    when "operations"
+      @search_url = variant_path(@variant, tab: "operations")
+      @search = @variant.stock_movements.ransack(params[:q])
+      @list = @stock_movements = @search.result.page(params[:operations_page])
+    when "history"
+      @search_url = variant_path(@variant, tab: "history")
+      @search = @variant.logs.ransack(params[:q])
+      @list = @logs = @search.result.recent.page(params[:logs_page])
+    end
+
+    respond_to do |f|
+      f.html
+      f.js
+    end
   end
 
   def new

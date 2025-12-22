@@ -2,7 +2,7 @@ module Views
   # generator lewego menu na podstawie roli usera i opcjonalnego kontekstu
   # menu główne - podstawowe menu zależne od roli usera
   # menu kontekstowe - dodatkowe menu zależne od kontekstu (np. produkty - lista produktów + kategorie)
-  # dostępne konteksty - :products
+  # dostępne konteksty - :products, :warehouse
   class LeftMenuBuilder
     attr_reader :user, :context # automatyczny getter
 
@@ -79,7 +79,7 @@ module Views
 
     def warehouse_context
       [
-        { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
+        { text: "Operacje", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
       ]
     end
     

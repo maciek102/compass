@@ -1,10 +1,14 @@
-tr.table-row
+tr.table-row data-url=variant_path(el)
   td = el.sku
-  td = el.name
   td 
-    = el.stock
-    = link_to fa_icon("plus"), receive_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Przyjmij na magazyn"
-  td.actions
-    = link_to fa_icon("arrow-right"), variant_path(el), class: "action-button", title: "Pokaż"
-    = resource_edit_link(el)
-    = resource_destroy_link(el)
+    = "#{el.product.name} / "
+    strong = el.name
+  td = el.stock
+  td
+    .actions
+      = link_to fa_icon("plus", text: "Przyjmij"), receive_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Przyjmij na magazyn"
+      = link_to fa_icon("minus", text: "Wydaj"), issue_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Wydaj z magazynu"
+  td
+    .actions
+      = resource_edit_link(el)
+      = resource_destroy_link(el)

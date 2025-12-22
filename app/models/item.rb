@@ -63,10 +63,16 @@ class Item < ApplicationRecord
     in_stock? || reserved? || returned?
   end
 
+  def self.icon
+    "square"
+  end
+
   private
 
   def generate_default_serial_number
-    self.serial_number = "#{variant.sku}-#{100 + id}"
+    return if id.nil? || variant.nil?
+    serial_number = "#{variant.sku}-#{100 + id}"
+    self.update_column(:serial_number, serial_number)
   end
 
   def set_default_status
