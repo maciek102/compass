@@ -47,6 +47,7 @@ class Item < ApplicationRecord
 
   # === CALLBACKI ===
   before_validation :set_default_status, if: -> { status.blank? }
+  after_save :generate_default_serial_number, if: -> { serial_number.blank? }
 
 
 
@@ -62,14 +63,11 @@ class Item < ApplicationRecord
     in_stock? || reserved? || returned?
   end
 
-  # krótki opis
-  def label
-    serial_number.present? ?
-      "#{variant.name} (SN #{serial_number})" :
-      "#{variant.name} ##{id}"
-  end
-
   private
+
+  def generate_default_serial_number
+    self.serial_number = "#{variant.sku}-#{100 + id}"
+  end
 
   def set_default_status
     self.status ||= :in_stock

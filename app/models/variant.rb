@@ -27,9 +27,10 @@ class Variant < ApplicationRecord
 
   # === RELACJE ===
   belongs_to :product
-
   # itemy fizyczne
   has_many :items, dependent: :destroy
+  # ruchy magazynowe
+  has_many :stock_movements, dependent: :destroy
 
   has_many_attached :images # zdjęcie
 
@@ -52,6 +53,7 @@ class Variant < ApplicationRecord
 
   # === CALLBACKI ===
   before_validation :assign_default_name, if: -> { name.blank? }
+  before_validation :set_default_stock, if: -> { stock.nil? }
   after_save :generate_sku, if: -> { sku.blank? }
 
 
@@ -63,8 +65,14 @@ class Variant < ApplicationRecord
   end
 
   # faktyczna ilość dostępna
-  def total_stock
-    items.count || stock.to_i
+  def current_stock
+    stock || 0
+  end
+
+  # przeliczenie stanu magazynowego na podstawie ruchów magazynowych
+  def recalculate_stock!
+    total = stock_movements.sum("quantity * direction")
+    update_column(:stock, total)
   end
 
   # czy można kupić?
@@ -84,6 +92,10 @@ class Variant < ApplicationRecord
   end
 
   def assign_default_name
-    self.name ||= "V #{sku || SecureRandom.hex(3)}"
+    self.name ||= "V #{sku || product.variants.count + 1}"
+  end
+
+  def set_default_stock
+    self.stock ||= 0
   end
 end

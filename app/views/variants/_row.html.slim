@@ -1,6 +1,9 @@
 tr.table-row
   td = el.sku
   td = el.name
+  td 
+    = el.stock
+    = link_to fa_icon("plus"), receive_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Przyjmij na magazyn"
   td.actions
     = link_to fa_icon("arrow-right"), variant_path(el), class: "action-button", title: "Pokaż"
     = resource_edit_link(el)

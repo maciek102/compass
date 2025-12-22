@@ -39,7 +39,8 @@ module Views
     def admin_menu
       [
         { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: "home" },
-        { text: "Produkty",   url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Magazyn", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
       ]
     end
@@ -63,6 +64,7 @@ module Views
     def contextual_menu_links(ctx)
       case ctx.to_sym
       when :products then products_context
+      when :warehouse then warehouse_context
       else []
       end
     end
@@ -74,5 +76,12 @@ module Views
         { text: "Kategorie", url: Rails.application.routes.url_helpers.product_categories_path, icon: ProductCategory.icon }
       ]
     end
+
+    def warehouse_context
+      [
+        { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
+      ]
+    end
+    
   end
 end

@@ -70,6 +70,7 @@ class Product < ApplicationRecord
   before_validation :set_default_status, if: -> { status.nil? }
   after_save :generate_code, if: -> { code.blank? }
   after_save :generate_sku, if: -> { sku.blank? }
+  after_create :create_default_variant # tworzenie domyślnego wariantu w przypadku braku
 
 
 
@@ -126,6 +127,13 @@ class Product < ApplicationRecord
   
   def set_default_status
     self.status ||= :draft
+  end
+
+  # tworzenie domyślnego wariantu po utworzeniu produktu (jeśli nie istnieje)
+  def create_default_variant
+    return if variants.exists?
+
+    variants.create!
   end
 
   def self.ransackable_attributes(auth_object = nil)
