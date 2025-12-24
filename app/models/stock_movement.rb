@@ -23,6 +23,10 @@ class StockMovement < ApplicationRecord
   belongs_to :variant
   belongs_to :user, optional: true
 
+  # posiada wiele powiązanych itemów
+  has_many :stock_movement_items, dependent: :destroy
+  has_many :items, through: :stock_movement_items
+
   has_many_attached :attachments # załączniki
 
   # === KIERUNEK RUCHU ===
@@ -33,14 +37,9 @@ class StockMovement < ApplicationRecord
 
   # === TYPY RUCHÓW ===
   enum :movement_type, {
-    delivery: "delivery",               # dostawa
-    return: "return",                   # zwrot
-    sale: "sale",                       # sprzedaż
-    damage: "damage",                   # uszkodzenie
-    loss: "loss",                       # strata
-    inventory_surplus: "inventory_plus",# nadwyżka
-    inventory_shortage: "inventory_minus", # niedobór
-    correction: "correction"            # korekta ręczna
+    delivery: "delivery", # dostawa
+    return: "return", # zwrot
+    sale: "sale", # sprzedaż
   }
 
   # === WALIDACJE ===

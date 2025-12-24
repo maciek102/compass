@@ -13,6 +13,7 @@
 # - serial_number:string -> numer seryjny (opcjonalny)
 # - batch:string -> numer partii (opcjonalny)
 # - expires_at:datetime -> data ważności (opcjonalnie)
+# - received_at:datetime -> WAŻNE!!! - data przyjęcia na magazyn, główne kryterium strategii wyboru produktów ItemPicker
 # - status:integer -> status itemu
 # - custom_attributes:jsonb -> dodatkowe informacje
 # - disabled:boolean -> soft-delete
@@ -24,6 +25,10 @@ class Item < ApplicationRecord
 
   # === RELACJE ===
   belongs_to :variant # należy do wariantu
+
+  # posiada wiele operacji magazynowych
+  has_many :stock_movement_items
+  has_many :stock_movements, through: :stock_movement_items
 
   has_many_attached :images # zdjęcia
 
@@ -47,6 +52,7 @@ class Item < ApplicationRecord
 
   # === CALLBACKI ===
   before_validation :set_default_status, if: -> { status.blank? }
+  before_validation :set_default_received_at, if: -> { received_at.blank? }
   after_save :generate_default_serial_number, if: -> { serial_number.blank? }
 
 
@@ -77,5 +83,10 @@ class Item < ApplicationRecord
 
   def set_default_status
     self.status ||= :in_stock
+  end
+
+  # ustawienie daty przyjęcia na magazyn
+  def set_default_received_at
+    self.received_at ||= Time.current
   end
 end

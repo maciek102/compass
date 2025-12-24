@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  stock_movement: one
+  item: one
+
+two:
+  stock_movement: two
+  item: two

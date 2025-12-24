@@ -22,7 +22,7 @@ module Stock
 
       ActiveRecord::Base.transaction do
         # 1. Tworzymy stock movement
-        Stock::Move.call(
+        movement = Stock::Move.call(
           variant: variant,
           quantity: quantity,
           direction: :in,
@@ -32,7 +32,7 @@ module Stock
         )
 
         # 2. Generujemy fizyczne itemy
-        create_items
+        create_items(movement)
       end
     end
 
@@ -45,12 +45,14 @@ module Stock
       raise Error, "Variant disabled" if variant.disabled?
     end
 
-    def create_items
+    def create_items(movement)
       quantity.times do
-        variant.items.create!(
+        item = variant.items.create!(
           status: :in_stock
           # opcjonalnie: serial_number, batch, expires_at, custom_attributes
         )
+
+        movement.items << item
       end
     end
   end
