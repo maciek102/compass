@@ -1,0 +1,12 @@
+.show-container
+  .title
+    = @stock_movement.title
+
+  .info
+    = category_info_row("SKU", @stock_movement.variant.sku)
+    = category_info_row("Produkt", "#{@stock_movement.variant.product.name} / #{@stock_movement.variant.name}")
+    = category_info_row("Kierunek", @stock_movement.direction.humanize)
+    = category_info_row("Ilość", @stock_movement.quantity)
+    = category_info_row("Użytkownik", @stock_movement.user.name) if @stock_movement.user.present?
+    = category_info_row("Data utworzenia", show_datetime(@stock_movement.created_at))
+    = category_info_row("Notatki", @stock_movement.note.present? ? simple_format(@stock_movement.note) : "Brak notatek")

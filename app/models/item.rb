@@ -73,13 +73,14 @@ class Item < ApplicationRecord
     "square"
   end
 
-  private
-
+  # generacja domyślnego numeru seryjnego
   def generate_default_serial_number
     return if id.nil? || variant.nil?
     serial_number = "#{variant.sku}-#{100 + id}"
     self.update_column(:serial_number, serial_number)
   end
+
+  private
 
   def set_default_status
     self.status ||= :in_stock

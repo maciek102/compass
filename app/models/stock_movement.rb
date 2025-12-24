@@ -66,6 +66,11 @@ class StockMovement < ApplicationRecord
     "database"
   end
 
+  # tytuł do wyświetlenia
+  def title
+    "##{id}"
+  end
+
   private
 
   # nie pozwalamy zejść poniżej zera

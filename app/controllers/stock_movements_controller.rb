@@ -18,6 +18,16 @@ class StockMovementsController < ApplicationController
   end
 
   def show
+    @tab = params[:tab] || "main"
+
+    if @tab == "items"
+      @items = @stock_movement.items.page(params[:page])
+    end
+
+    respond_to do |f|
+      f.html
+      f.js
+    end
   end
 
   def receive
