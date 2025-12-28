@@ -22,24 +22,22 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :variants, only: %i[ index show edit update destroy ] do
-
-    resource :stock_movements, only: [] do
-      member do
-        get :receive
-        post :create_receive
-        get :issue
-        post :create_issue
-        get :adjust
-        post :create_adjust
-      end
-    end
-
-  end
+  resources :variants, only: %i[ index show edit update destroy ]
 
   resources :items
 
-  resources :stock_movements, only: %i[ index show ]
+  resources :stock_operations
+
+  resources :stock_movements, only: %i[ index show ] do
+    collection do
+      get :receive
+      post :create_receive
+      get :issue
+      post :create_issue
+      get :adjust
+      post :create_adjust
+    end
+  end
 
   authenticated :user do
     root to: 'users#dashboard', as: :authenticated_root

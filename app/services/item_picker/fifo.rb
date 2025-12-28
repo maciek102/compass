@@ -4,7 +4,7 @@ module ItemPicker
 
     def pick(quantity:)
       scope
-        .order(created_at: :asc).limit(quantity)
+        .order(received_at: :asc).limit(quantity)
     end
 
   end

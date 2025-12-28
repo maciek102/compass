@@ -1,15 +1,15 @@
 / locals: 
 / list: lista obiektów
 / custom_dir: opcjonalnie folder z partialami (default: obecna lokalizacja)
-/ custom_turbo_id: nazwa/id turbo_frame (opcjonalnie)
+/ turbo_id: nazwa/id turbo_frame (opcjonalnie)
 
 - custom_dir = local_assigns.fetch(:custom_dir, "")
-- custom_turbo_id = local_assigns.fetch(:custom_turbo_id, "table-body")
+- turbo_id = local_assigns.fetch(:turbo_id, "table-body")
 
 table.index-table data-controller="click-row" data-action="click->click-row#navigate"
   thead
     = render "#{custom_dir}table_header"
-  tbody id=custom_turbo_id
+  tbody id=turbo_id
     - list.each do |el|
       = render "#{custom_dir}row", el: el
 

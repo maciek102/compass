@@ -1,8 +1,9 @@
-= simple_form_for(@stock_movement, url: create_receive_variant_stock_movements_path(@variant), html: { data: { turbo_frame: "modal" } }) do |f|
+= simple_form_for(@stock_movement, url: create_receive_stock_movements_path, html: { data: { turbo_frame: "modal" } }) do |f|
   
   .form-grid
     .form-section
-      = f.input :quantity, label: 'Ilość do przyjęcia'
+      = f.input :stock_operation_id, as: :hidden, input_html: { value: @stock_operation.id }
+      = f.input :quantity, label: 'Ilość do przyjęcia', input_html: { value: @stock_operation.quantity }
       = f.input :note, label: 'Notatka', as: :text
       = f.input :documents, as: :file, label: 'Dokumenty', input_html: { multiple: true }
       

@@ -3,4 +3,4 @@
 / przełączanie widoków (scope) tabeli
 = view_mode_switcher(@view_modes, ->(extra) { url_for(params.permit!.merge(extra)) })
 
-= render "index_table", list: @product_categories, custom_turbo_id: "categories-table-body"
+= render "index_table", list: @product_categories, turbo_id: "categories-table-body"

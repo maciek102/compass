@@ -1,0 +1,11 @@
+tr.table-row data-url=stock_operation_path(el)
+  td = el.title
+  td 
+    strong = el.variant.product.name
+    = " / #{el.variant.name}"
+    div = el.variant.sku
+  td = el.status.humanize
+  td = el.direction.humanize
+  td = el.quantity
+  td = el.user.name if el.user.present?
+  td = show_datetime(el.created_at)

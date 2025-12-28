@@ -1,7 +1,6 @@
 class StockMovementsController < ApplicationController
-  load_and_authorize_resource :variant, except: %i[index show]
-  load_and_authorize_resource :stock_movement, through: :variant, except: %i[index show]
-  load_and_authorize_resource only: %i[index show]
+  load_and_authorize_resource
+  before_action :set_stock_operation, only: %i[ receive issue adjust ]
 
   before_action :set_left_menu_context, only: %i[index show] # ustawieneie kontekstu buildera menu
 
@@ -31,44 +30,40 @@ class StockMovementsController < ApplicationController
   end
 
   def receive
-    @stock_movement = StockMovement.new(variant: @variant)
+    @stock_movement = StockMovement.new(stock_operation: @stock_operation)
   end
 
   def create_receive
+    @stock_movement = StockMovement.new(stock_movement_params)
     create_movement(:receive)
   end
 
   def issue
-    @stock_movement = StockMovement.new(variant: @variant)
+    @stock_movement = StockMovement.new(stock_operation: @stock_operation)
   end
 
   def create_issue
+    @stock_movement = StockMovement.new(stock_movement_params)
     create_movement(:issue)
   end
 
   def adjust
-    @stock_movement = StockMovement.new(variant: @variant)
+    @stock_movement = StockMovement.new(stock_operation: @stock_operation)
   end
 
   def create_adjust
+    @stock_movement = StockMovement.new(stock_movement_params)
     create_movement(:adjust)
   end
 
   private
 
-  def set_variant
-    @variant = Variant.find(params[:variant_id])
-  end
-
   def create_movement(type)
-    service_class = case type
-                    when :receive then Stock::Receive
-                    when :issue then Stock::Issue
-                    when :adjust then Stock::Adjust
-                    end
-
-    service_class.call(
-      variant: @variant,
+    @stock_operation = @stock_movement.stock_operation
+    
+    Stock::Operations::Process.call(
+      action: type,
+      stock_operation: @stock_operation,
       quantity: stock_movement_params[:quantity],
       user: current_user,
       note: stock_movement_params[:note]
@@ -79,17 +74,21 @@ class StockMovementsController < ApplicationController
       format.turbo_stream
       format.html { redirect_to variant_path(@variant), notice: flash[:notice] }
     end
-  rescue Stock::Move::Error => e
+  rescue Stock::Operations::Process::Error => e
     flash.now[:alert] = e.message
     render type
   end
 
   def stock_movement_params
-    params.require(:stock_movement).permit(:quantity, :note, :documents)
+    params.require(:stock_movement).permit(:quantity, :note, :documents, :stock_operation_id)
   end
 
   def set_left_menu_context
     @left_menu_context = :warehouse
+  end
+
+  def set_stock_operation
+    @stock_operation = StockOperation.find(params[:stock_operation_id])
   end
 
 end

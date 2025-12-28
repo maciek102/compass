@@ -30,7 +30,7 @@ class Variant < ApplicationRecord
   # itemy fizyczne
   has_many :items, dependent: :destroy
   # ruchy magazynowe
-  has_many :stock_movements, dependent: :destroy
+  has_many :stock_operations, dependent: :destroy
   # historia zmian
   has_many :logs, as: :loggable, dependent: :destroy
 
@@ -73,7 +73,7 @@ class Variant < ApplicationRecord
 
   # przeliczenie stanu magazynowego na podstawie ruchów magazynowych
   def recalculate_stock!
-    total = stock_movements.sum("quantity * direction")
+    total = stock_operations.joins(:stock_movements).sum("stock_movements.quantity * stock_movements.direction")
     update_column(:stock, total)
   end
 

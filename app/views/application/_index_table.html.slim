@@ -4,13 +4,13 @@
 / no_pages: brak paginacji (default: false)
 / title: tytuł tabeli
 / button: { text: "...", link: _path, class: "...", data_attrs: {...} }
-/ custom_turbo_id: nazwa/id turbo_frame (opcjonalnie)
+/ turbo_id: nazwa/id turbo_frame (opcjonalnie)
 
 - custom_dir = local_assigns.fetch(:custom_dir, "")
 - no_pages = local_assigns.fetch(:no_pages, false)
 - title = local_assigns.fetch(:title, "")
 - button = local_assigns.fetch(:button, nil)
-- custom_turbo_id = local_assigns.fetch(:custom_turbo_id, nil)
+- turbo_id = local_assigns.fetch(:turbo_id, nil)
 
 .index-table-cont#index-table-cont
   - if title.present? || button
@@ -18,4 +18,4 @@
       .title = title unless title.blank?
       .table-button = link_to button[:text] || "Dodaj nowy", button[:link], class: button[:class] || "base-button", data: button[:data_attrs] || {} unless button.nil?
 
-  = render "table", list: list, custom_dir: custom_dir, no_pages: no_pages, custom_turbo_id: custom_turbo_id
+  = render "table", list: list, custom_dir: custom_dir, no_pages: no_pages, turbo_id: turbo_id

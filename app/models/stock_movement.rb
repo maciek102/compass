@@ -11,7 +11,7 @@
 # Stan = suma wszystkich ruchów
 # 
 # Atrybuty:
-# - variant_id:bigint -> wariant produktu
+# - stock_operation_id:bigint -> operacja magazynowa
 # - quantity:integer -> ilość (zawsze dodatnia)
 # - movement_type:string -> typ ruchu (delivery, sale, correction, etc.)
 # - direction:integer -> 1 (przyjęcie) lub -1 (wydanie)
@@ -20,7 +20,7 @@
 
 class StockMovement < ApplicationRecord
   # === RELACJE ===
-  belongs_to :variant
+  belongs_to :stock_operation
   belongs_to :user, optional: true
 
   # posiada wiele powiązanych itemów
@@ -56,6 +56,10 @@ class StockMovement < ApplicationRecord
 
 
   # === METODY ===
+   
+  def variant
+    stock_operation.variant
+  end
 
   # wartość ruchu z uwzględnieniem kierunku
   def signed_quantity
@@ -63,7 +67,7 @@ class StockMovement < ApplicationRecord
   end
 
   def self.icon
-    "database"
+    "exchange"
   end
 
   # tytuł do wyświetlenia

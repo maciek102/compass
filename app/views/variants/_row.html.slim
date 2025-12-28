@@ -6,8 +6,7 @@ tr.table-row data-url=variant_path(el)
   td = el.stock
   td
     .actions
-      = link_to fa_icon("plus", text: "Przyjmij"), receive_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Przyjmij na magazyn"
-      = link_to fa_icon("minus", text: "Wydaj"), issue_variant_stock_movements_path(el), data: { turbo_frame: "modal" }, class: "action-button", title: "Wydaj z magazynu"
+      = link_to fa_icon("plus", text: "Operacja"), new_stock_operation_path(variant_id: el.id), data: { turbo_frame: "modal" }, class: "action-button", title: "Operacja"
   td
     .actions
       = resource_edit_link(el)

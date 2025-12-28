@@ -40,7 +40,7 @@ module Views
       [
         { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: "home" },
         { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
-        { text: "Magazyn", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon },
+        { text: "Magazyn", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
       ]
     end
@@ -79,7 +79,8 @@ module Views
 
     def warehouse_context
       [
-        { text: "Operacje", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
+        { text: "Operacje", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
+        { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
       ]
     end
     

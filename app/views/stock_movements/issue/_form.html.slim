@@ -1,0 +1,14 @@
+= simple_form_for(@stock_movement, url: create_issue_variant_stock_movements_path(@variant), html: { data: { turbo_frame: "modal" } }) do |f|
+  
+  .form-grid
+    .form-section
+      = f.input :quantity, label: 'Ilość do wydania'
+      = f.input :note, label: 'Notatka', as: :text
+      = f.input :documents, as: :file, label: 'Dokumenty', input_html: { multiple: true }
+
+    .form-section
+      .title Egzemplarze
+      
+      
+  .form-actions
+    = f.submit 'Wydaj z magazynu', class: 'base-button'
