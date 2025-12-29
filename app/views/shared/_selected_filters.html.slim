@@ -1,0 +1,20 @@
+/ === Partial: Selected Filters ===
+/ Wyświetla aktywne filtry z możliwością ich usuwania
+/ 
+/ Parametry:
+/   - service: instancja FiltersDisplayService
+/   - icon: nazwa ikony FontAwesome (opcjonalnie, domyślnie "times-circle")
+
+- icon ||= "times-circle"
+- filters = service.active_filters
+- return if filters.blank?
+
+.selected-filters
+  .title = fa_icon("filter", text: "Aktywne filtry:")
+  
+  .filters-list
+    - filters.each do |key, value|
+      .filter-item
+        = link_to service.remove_filter_link(key), class: "remove-filter", title: "Usuń filtr", remote: true, method: :get do
+          = fa_icon(icon)
+        = service.display_value(key, value)

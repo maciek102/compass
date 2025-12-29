@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   load_and_authorize_resource
   before_action :set_left_menu_context # ustawieneie kontekstu buildera menu
+  before_action :set_filters, only: %i[index]
   
   def index
     @search_url = products_path
@@ -94,6 +95,10 @@ class ProductsController < ApplicationController
     @expand_variants = @view_modes.current?(:groups)
     
     @view_modes.apply(Product)
+  end
+
+  def set_filters
+    @filters_service = Views::FiltersDisplayService.new(Product, params)
   end
 
   def product_params

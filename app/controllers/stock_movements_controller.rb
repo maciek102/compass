@@ -21,6 +21,10 @@ class StockMovementsController < ApplicationController
 
     if @tab == "items"
       @items = @stock_movement.items.page(params[:page])
+    elsif @tab == "history"
+      @search_url = stock_movement_path(@stock_movement, tab: "history")
+      @search = @stock_movement.logs.ransack(params[:q])
+      @list = @logs = @search.result.recent.page(params[:logs_page])
     end
 
     respond_to do |f|

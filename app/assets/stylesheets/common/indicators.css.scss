@@ -1,0 +1,27 @@
+@import "base/colors.css.scss";
+
+.status-indicator {
+  font-size: 12px;
+  //font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  background-color: $first-color;
+}
+
+.direction-indicator {
+  font-size: 12px;
+  //font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  background-color: $first-color;
+
+  &.in {
+    background-color: #0F4C81;
+  }
+
+  &.out {
+    background-color: #CA8A04;
+  }
+}

@@ -1,3 +1,7 @@
 $('#index-table-cont').html('<%= j render "table", list: @list %>');
 
+<% if defined?(@filters_service) && @filters_service.present? %>
+  $('#selected-filters-cont').html('<%= j render "shared/selected_filters", service: @filters_service %>');
+<% end %>
+
 $('body').scrollTop(0);

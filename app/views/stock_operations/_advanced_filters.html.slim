@@ -1,0 +1,24 @@
+.advanced-filters-cont.hidden data-toggle-hidden-target="target"
+  = search_form_for @search, { remote: true, html: { data: { controller: "instant-search" } }}.merge(not_standard_url(@search_url)) do |f|
+    = render 'shared/selected_filters_cont', service: @filters_service
+    .grid
+      .column 
+        = f.search_field :id_eq, { placeholder: "ID" }
+      .column
+        = f.select :status_eq, options_for_select(StockOperation.statuses.map { |k, v| [k.humanize, k] }, params[:q].try(:[], :status_eq)), { include_blank: "Status" }, { data: { controller: "choosen select", action: "change->select#submit", select_target: "select" } }
+      .column
+        = f.select :direction_eq, options_for_select(StockOperation.directions.map { |k, v| [k.humanize, k] }, params[:q].try(:[], :direction_eq)), { include_blank: "Kierunek" }, { data: { controller: "choosen select", action: "change->select#submit", select_target: "select" } }
+      .column 
+        = f.date_field :created_at_cont, { placeholder: "Data" }
+    .grid 
+      .column
+        = f.search_field :variant_sku_cont, { placeholder: "SKU" } 
+      .column
+        = f.search_field :variant_name_or_variant_product_name_cont, { placeholder: "Produkt / Wariant" } 
+      
+    = button_tag class: "base-button", type: "submit" do
+      = fa_icon("filter")
+      = "Zastosuj filtry"
+    
+    span.close-button data-action="click->toggle-hidden#toggle" role="button"
+      = fa_icon("times-circle", text: "Zamknij")

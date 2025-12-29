@@ -29,8 +29,8 @@ class ProductCategory < ApplicationRecord
   # === RELACJE ===
   # produkty należące do kategorii
   has_many :products, dependent: :destroy
-  # historia zmian
-  has_many :logs, as: :loggable, dependent: :destroy
+  
+  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
 
   has_one_attached :main_image # główne zdjęcie kategorii
   has_many_attached :private_images # zdjęcia robocze / prywatne

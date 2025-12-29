@@ -3,13 +3,11 @@
   .col-lg-4
     .show-container
       .title
-        = @stock_operation.title
+        = @stock_operation.short_title
 
       .info
-        = category_info_row("Status", @stock_operation.status.humanize)
-        = category_info_row("SKU", @stock_operation.variant.sku)
-        = category_info_row("Produkt", "#{@stock_operation.variant.product.name} / #{@stock_operation.variant.name}")
-        = category_info_row("Kierunek", @stock_operation.direction.humanize)
+        = category_info_row("Status", status_label(@stock_operation.status.humanize, style: @stock_operation.status_color))
+        = category_info_row("Kierunek", direction_label(@stock_operation.direction))
         = category_info_row("Ilość", @stock_operation.quantity)
         = category_info_row("Użytkownik", @stock_operation.user.name) if @stock_operation.user.present?
         = category_info_row("Data utworzenia", show_datetime(@stock_operation.created_at))
@@ -17,7 +15,20 @@
       
       .actions 
         - if Stock::Operations::Process.new(stock_operation: @stock_operation, quantity: @stock_operation.quantity, action: @stock_operation.direction.to_sym).can_execute?
-          = link_to fa_icon(StockMovement.icon, text: "Wykonaj"), send("#{@stock_operation.direction}_stock_movements_path", stock_operation_id: @stock_operation.id), data: { turbo_frame: "modal" }, class: "base-button", title: "Dodaj ruch magazynowy"
+        = link_to fa_icon(StockMovement.icon, text: "Wykonaj"), send("#{@stock_operation.direction}_stock_movements_path", stock_operation_id: @stock_operation.id), data: { turbo_frame: "modal" }, class: "base-button", title: "Dodaj ruch magazynowy"
+  
+  .col-lg-4
+    .show-container
+      .title 
+        = "#{@stock_operation.variant.product.name} / #{@stock_operation.variant.name}"
+      .info
+        = category_info_row("Stan magazynowy", @stock_operation.variant.current_stock)
+        = category_info_row("SKU", @stock_operation.variant.sku)
+        = category_info_row("Kategoria", (@stock_operation.variant.product.category ? link_to(@stock_operation.variant.product.category.name, product_category_path(@stock_operation.variant.product.category), class: "link") : "Brak"))
+        
 
-  .col-lg-8 
-    = render "index_table", list: @stock_movements, custom_dir: "stock_movements/", title: "Ruchy magazynowe"
+
+  .col-lg-4 
+
+br
+= render "index_table", list: @stock_movements, custom_dir: "stock_movements/", title: "Ruchy magazynowe"

@@ -7,7 +7,7 @@ module Stock
 
       # Wywołanie serwisu:
       # Stock::Receive.call(variant: variant, quantity: 10, user: current_user, note: "Dostawa FV/12/2025")
-      def self.call(stock_operation:, quantity:, user: nil, note: nil)
+      def self.call(stock_operation:, quantity:, user: nil, note: nil, **args)
         new(stock_operation: stock_operation, quantity: quantity, user: user, note: note).call
       end
 

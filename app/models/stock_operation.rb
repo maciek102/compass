@@ -1,4 +1,6 @@
 class StockOperation < ApplicationRecord
+  include Loggable
+
   belongs_to :variant
   belongs_to :user, optional: true
 
@@ -15,6 +17,14 @@ class StockOperation < ApplicationRecord
     cancelled: "cancelled"
   }
 
+  FILTERS = [
+    :id_eq,
+    :variant_sku_cont,
+    :status_eq,
+    :direction_eq,
+    :code_cont
+  ].freeze
+
   validates :direction, presence: true
   validates :status, presence: true
   validates :quantity, numericality: { greater_than: 0 }
@@ -30,7 +40,26 @@ class StockOperation < ApplicationRecord
 
   # tytuł do wyświetlenia
   def title
+    "##{id} - #{variant.product.name} / #{variant.name}"
+  end
+
+  def short_title
     "##{id}"
+  end
+
+  def status_color
+    color = case status
+    when "open"
+      "gray"
+    when "completed"
+      "green"
+    when "cancelled"
+      "red"
+    else
+      "yellow"
+    end
+
+    "background-color: #{color};"
   end
 
   def completed_quantity
@@ -63,9 +92,21 @@ class StockOperation < ApplicationRecord
     raise Error, "Quantity exceeds required amount" if quantity > remaining_quantity
   end
 
+  def self.quick_search
+    :variant_sku_or_variant_name_or_variant_product_name_cont
+  end
+
   private
 
   def set_default_status
     self.status ||= :open
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["completed_at", "created_at", "direction", "id", "note", "quantity", "status", "updated_at", "user_id", "variant_id"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["stock_movements", "user", "variant"]
   end
 end

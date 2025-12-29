@@ -2,6 +2,7 @@ class StockOperationsController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_left_menu_context, only: %i[index show]
+  before_action :set_filters, only: %i[index]
 
   def index
     @search_url = stock_operations_path
@@ -68,5 +69,9 @@ class StockOperationsController < ApplicationController
 
   def set_left_menu_context
     @left_menu_context = :warehouse
+  end
+
+  def set_filters
+    @filters_service = Views::FiltersDisplayService.new(StockOperation, params)
   end
 end

@@ -1,7 +1,6 @@
 .advanced-filters-cont.hidden data-toggle-hidden-target="target"
     = search_form_for @search, { remote: true, html: { data: { controller: "instant-search" } }}.merge(not_standard_url(@search_url)) do |f|
-        .selected-filters
-            = render "products/selected_filters", filters: (params[:q] || {}).reject { |k, v| v.blank? }
+        = render 'shared/selected_filters_cont', service: @filters_service
         .grid
             .column 
                 = f.search_field :name_cont, { placeholder: "Nazwa produktu" }
@@ -12,9 +11,9 @@
                 = f.search_field :code_cont, { placeholder: "Kod produktu" }
                 = f.select :status_eq, options_for_select(Product.statuses.map { |k, v| [k.humanize, k] }, params[:q].try(:[], :status_eq)), { include_blank: "Status" }, { data: { controller: "choosen select", action: "change->select#submit", select_target: "select" } }
 
-        = button_tag class: "btn btn-primary", type: "submit" do
+        = button_tag class: "base-button", type: "submit" do
             = fa_icon("filter")
             = "Zastosuj filtry"
         
-        span.advanced-filters-btn data-action="click->toggle-hidden#toggle" role="button"
+        span.close-button data-action="click->toggle-hidden#toggle" role="button"
             = fa_icon("times-circle", text: "Zamknij")

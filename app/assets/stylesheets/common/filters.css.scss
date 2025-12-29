@@ -1,0 +1,42 @@
+@import "base/colors.css.scss";
+
+.selected-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+
+  .title {
+    font-weight: 600;
+    font-size: 14px;
+    align-self: center;
+  }
+
+  .filters-list {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+
+    .filter-item {
+      background-color: $second-color;
+      color: $first-color;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .remove-filter {
+        cursor: pointer;
+
+        i { color: $first-color; }
+
+        &:hover {
+          i { color: darken($first-color, 15%); }
+        }
+      }
+    }
+  }
+}

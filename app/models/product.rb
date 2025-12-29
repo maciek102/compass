@@ -50,9 +50,13 @@ class Product < ApplicationRecord
   }
 
   # filtry
-  PRODUCTS_FILTERS = [
-    :name_cont
-  ]
+  FILTERS = [
+    :name_cont,
+    :code_cont,
+    :sku_cont,
+    :status_eq,
+    :product_category_id_eq
+  ].freeze
 
   # === WALIDACJE ===
   validates :name, presence: true

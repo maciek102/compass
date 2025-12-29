@@ -9,12 +9,12 @@
 - content_for :header_actions do
   = link_to "Dodaj operację", new_stock_operation_path, class: "base-button", data: { turbo_frame: "modal" }
 
-/- content_for :filters do
-  = render "stock_movements/filters"
+- content_for :filters do
+  = render "stock_operations/filters"
 
-/- content_for :advanced_filters do
-  = render "stock_movements/advanced_filters"
+- content_for :advanced_filters do
+  = render "stock_operations/advanced_filters"
 
 - content_for :page_header do
-  /div data-controller="toggle-hidden"
-  = render "page_header_template"
+  div data-controller="toggle-hidden"
+    = render "page_header_template"

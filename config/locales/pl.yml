@@ -52,6 +52,11 @@ pl:
     destroy: Usunięcie
     status: Zmiana statusu
     assign: Przypisanie
+  
+  directions:
+    in: Przyjęcie
+    out: Wydanie
+    unknown: Nieznany
 
   date:
     abbr_day_names:
