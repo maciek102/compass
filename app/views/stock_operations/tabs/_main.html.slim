@@ -16,7 +16,8 @@
         = category_info_row("Notatki", @stock_operation.note.present? ? simple_format(@stock_operation.note) : "Brak notatek")
       
       .actions 
-        = link_to fa_icon(StockMovement.icon, text: "Wykonaj"), receive_stock_movements_path(stock_operation_id: @stock_operation.id), data: { turbo_frame: "modal" }, class: "base-button", title: "Dodaj ruch magazynowy"
+        - if Stock::Operations::Process.new(stock_operation: @stock_operation, quantity: @stock_operation.quantity, action: @stock_operation.direction.to_sym).can_execute?
+          = link_to fa_icon(StockMovement.icon, text: "Wykonaj"), send("#{@stock_operation.direction}_stock_movements_path", stock_operation_id: @stock_operation.id), data: { turbo_frame: "modal" }, class: "base-button", title: "Dodaj ruch magazynowy"
 
   .col-lg-8 
     = render "index_table", list: @stock_movements, custom_dir: "stock_movements/", title: "Ruchy magazynowe"

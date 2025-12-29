@@ -3,6 +3,8 @@ module ItemPicker
 
   # Podstawowa klasa bazowa dla wszystkich strategii wyboru itemów
   class Base
+    Result = Struct.new(:available_items, :selected_items, :selected_ids)
+
     def initialize(scope:)
       @scope = scope
     end

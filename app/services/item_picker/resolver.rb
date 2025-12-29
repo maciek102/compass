@@ -6,11 +6,11 @@ module ItemPicker
 
       case strategy.to_sym
       when :fifo
-        FIFO.new(scope: scope)
+        ItemPicker::Fifo.new(scope: scope)
       when :fefo
-        FEFO.new(scope: scope)
+        ItemPicker::Fefo.new(scope: scope)
       when :manual
-        Manual.new(scope: scope, item_ids: options.fetch(:item_ids))
+        ItemPicker::Manual.new(scope: scope, item_ids: options.fetch(:item_ids))
       else
         raise ArgumentError, "Unknown picker strategy: #{strategy}"
       end

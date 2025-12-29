@@ -5,8 +5,8 @@ class StockOperation < ApplicationRecord
   has_many :stock_movements, dependent: :destroy
 
   enum :direction, {
-    incoming: "incoming",
-    outgoing: "outgoing"
+    receive: "receive",
+    issue: "issue"
   }
 
   enum :status, {

@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       post :create_issue
       get :adjust
       post :create_adjust
+
+      post :prepare_items
     end
   end
 

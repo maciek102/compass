@@ -1,6 +1,6 @@
 module ItemPicker
   # Strategia wyboru itemów oparta na zasadzie LIFO (Last In, First Out), czyli najpierw te, które zostały dodane najpóźniej
-  class LIFO < Base
+  class Lifo < Base
 
     def pick(quantity:)
       scope

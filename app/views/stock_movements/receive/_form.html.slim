@@ -1,11 +1,21 @@
 = simple_form_for(@stock_movement, url: create_receive_stock_movements_path, html: { data: { turbo_frame: "modal" } }) do |f|
   
-  .form-grid
+  .form-grid data-controller="items-picker" data-stock-operation-id=@stock_operation.id
     .form-section
       = f.input :stock_operation_id, as: :hidden, input_html: { value: @stock_operation.id }
-      = f.input :quantity, label: 'Ilość do przyjęcia', input_html: { value: @stock_operation.quantity }
+      = f.input :quantity, label: 'Ilość do przyjęcia', input_html: { value: @stock_operation.remaining_quantity, min: 1, max: @stock_operation.remaining_quantity, data: { items_picker_target: "quantity", action: "change->items-picker#update" }  }
+      .field
+        = label_tag :strategy, "Strategia wyboru"
+        = select_tag :strategy, options_for_select(%w[fifo fefo manual]), data: { items_picker_target: "strategy", action: "change->items-picker#update" }
       = f.input :note, label: 'Notatka', as: :text
       = f.input :documents, as: :file, label: 'Dokumenty', input_html: { multiple: true }
+
+    .form-section 
+      #selected-items data-items-picker-target="items"
+        - if @selected_items.present?
+          - @selected_items.each do |item|
+            = check_box_tag "stock_movement[item_ids][]", item.id, true, id: dom_id(item)
+            = label_tag dom_id(item), item.serial_number || item.id
       
   .form-actions
     = f.submit 'Przyjmij na magazyn', class: 'base-button'

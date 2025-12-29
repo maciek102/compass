@@ -4,15 +4,15 @@ module Stock
     class Issue
       class Error < StandardError; end
 
-      def self.call(stock_operation:, quantity:, picker:, user: nil, note: nil)
-        new(stock_operation: stock_operation, quantity: quantity, picker: picker, user: user, note: note).call
+      def self.call(stock_operation:, quantity:, item_ids: [], user: nil, note: nil)
+        new(stock_operation: stock_operation, quantity: quantity, item_ids: item_ids, user: user, note: note).call
       end
 
-      def initialize(stock_operation:, quantity:, picker:, user: nil, note: nil)
+      def initialize(stock_operation:, quantity:, item_ids: [], user: nil, note: nil)
         @stock_operation = stock_operation
         @variant = stock_operation.variant
         @quantity = quantity.to_i
-        @picker = picker
+        @item_ids = item_ids
         @user = user
         @note = note
       end
@@ -20,7 +20,7 @@ module Stock
       def call
         validate!
 
-        @items = picker.pick(quantity: quantity)
+        @items = Item.where(id: item_ids)
 
         validate_items!
 
@@ -30,7 +30,7 @@ module Stock
             stock_operation: stock_operation,
             quantity: quantity,
             direction: :out,
-            movement_type: "issue",
+            movement_type: "sale",
             user: user,
             note: note
           )
@@ -43,7 +43,7 @@ module Stock
 
       private
 
-      attr_reader :stock_operation, :variant, :quantity, :picker, :user, :note, :items
+      attr_reader :stock_operation, :variant, :quantity, :item_ids, :user, :note, :items
 
       def validate!
         raise Error, "Quantity must be positive" if quantity <= 0
@@ -56,7 +56,7 @@ module Stock
 
       def issue_items(movement)
         items.each do |item|
-          item.update!(status: :issued)
+          item.update!(status: :sold)
           movement.items << item
         end
       end

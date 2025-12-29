@@ -1,6 +1,6 @@
 module ItemPicker
   # Strategia wyboru itemów oparta na zasadzie FEFO (First Expired, First Out), czyli najpierw te, które mają najwcześniejszą datę ważności
-  class FEFO < Base
+  class Fefo < Base
 
     def pick(quantity:)
       scope

@@ -10,6 +10,7 @@ module Stock
       def initialize(
         stock_operation:,
         quantity:,
+        item_ids: [],
         action:, # :receive, :issue, :adjust
         user: nil,
         note: nil,
@@ -17,6 +18,7 @@ module Stock
       )
         @stock_operation = stock_operation
         @quantity = quantity.to_i
+        @item_ids = item_ids
         @action = action.to_sym
         @user = user
         @note = note
@@ -33,10 +35,34 @@ module Stock
         end
       end
 
+      # sprawdzenie możliwości wykonania operacji
+      def can_execute?
+        return false unless stock_operation.open?
+        return false if stock_operation.variant.disabled?
+        return false if quantity.to_i <= 0
+        return false if quantity.to_i <= stock_operation.remaining_quantity
+
+        case action
+        when :receive
+          true # zawsze można przyjąć, jeżeli powyższe warunki spełnione
+        when :issue
+          # sprawdzamy czy jest wystarczająco fizycznych itemów do wydania
+          # picker.present? && picker.pick(quantity: quantity).size >= quantity
+        when :adjust
+          true # można zawsze zrobić korektę w ramach remaining_quantity
+        else
+          false
+        end
+
+        true
+        
+      end
+
       private
 
-      attr_reader :stock_operation, :quantity, :action, :user, :note, :picker
+      attr_reader :stock_operation, :quantity, :item_ids, :action, :user, :note, :picker
 
+      # wykonanie odpowiedniej akcji na magazynie
       def execute_action
         service_class = {
           receive: Stock::Movements::Receive,
@@ -49,11 +75,13 @@ module Stock
         service_class.call(
           stock_operation: stock_operation,
           quantity: quantity,
+          item_ids: item_ids,
           user: user,
           note: note
         )
       end
 
+      # zmiana statusu - zakończenie operacji jeśli ilość pozostała do wykonania wynosi 0
       def finalize_operation_if_needed
         if stock_operation.remaining_quantity <= 0
           stock_operation.update!(
@@ -63,6 +91,8 @@ module Stock
         end
       end
 
+      # === WALIDACJE ===
+      
       def validate_operation!
         raise Error, "StockOperation is not open" unless stock_operation.open?
         raise Error, "Variant disabled" if stock_operation.variant.disabled?
