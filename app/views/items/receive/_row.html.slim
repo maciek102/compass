@@ -1,0 +1,8 @@
+tr.table-row
+  td
+    - serial_num = el.generate_proposed_serial_number
+    = text_field_tag "proposed_serial_numbers[#{el.serial_number_offset}]", nil, class: "form-control", placeholder: serial_num
+  td
+    strong = el.variant.product.name
+    = " / "
+    = el.variant.name

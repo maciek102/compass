@@ -21,6 +21,33 @@ pl:
       user:
         one: "Użytkownik"
         other: "Użytkownicy"
+      organization:
+        one: "Organizacja"
+        other: "Organizacje"
+      product_category:
+        one: "Kategoria produktu"
+        other: "Kategorie produktów"
+      product:
+        one: "Produkt"
+        other: "Produkty"
+      variant:
+        one: "Wariant"
+        other: "Warianty"
+      item:
+        one: "Egzemplarz"
+        other: "Egzemplarze"
+      stock_operation:
+        one: "Operacja magazynowa"
+        other: "Operacje magazynowe"
+      stock_movement:
+        one: "Ruch magazynowy"
+        other: "Ruchy magazynowe"
+      stock_movement_item:
+        one: "Pozycja ruchu"
+        other: "Pozycje ruchu"
+      log:
+        one: "Log"
+        other: "Logi"
 
     attributes:
       user:
@@ -29,12 +56,183 @@ pl:
         password_confirmation: "Potwierdź hasło"
         name: "Imię i nazwisko"
         phone: "Telefon"
+        role_mask: "Role"
+        is_superadmin: "Super administrator"
+        disabled: "Wyłączony"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      organization:
+        name: "Nazwa"
+        description: "Opis"
+        disabled: "Wyłączona"
+        launched: "Uruchomiona"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      product_category:
+        name: "Nazwa"
+        description: "Opis"
+        slug: "Slug"
+        code: "Kod"
+        position: "Pozycja"
+        visible: "Widoczna"
+        disabled: "Wyłączona"
+        parent: "Kategoria nadrzędna"
+        product_category_id: "Kategoria nadrzędna"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      product:
+        name: "Nazwa"
+        description: "Opis"
+        main_description: "Pełny opis"
+        notes: "Notatki"
+        sku: "SKU"
+        code: "Kod"
+        slug: "Slug"
+        status: "Status"
+        disabled: "Wyłączony"
+        category: "Kategoria"
+        product_category_id: "Kategoria"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        main_image: "Zdjęcie główne"
+        gallery: "Galeria"
+        private_images: "Zdjęcia prywatne"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      variant:
+        name: "Nazwa"
+        sku: "SKU"
+        ean: "EAN"
+        price: "Cena"
+        stock: "Stan magazynowy"
+        weight: "Waga"
+        location: "Lokalizacja"
+        note: "Notatka"
+        custom_attributes: "Atrybuty"
+        disabled: "Wyłączony"
+        product: "Produkt"
+        product_id: "Produkt"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        images: "Zdjęcia"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      item:
+        serial_number: "Numer seryjny"
+        lot_number: "Numer partii"
+        status: "Status"
+        received_at: "Data przyjęcia"
+        location: "Lokalizacja"
+        notes: "Notatki"
+        disabled: "Wyłączony"
+        variant: "Wariant"
+        variant_id: "Wariant"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        images: "Zdjęcia"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      stock_operation:
+        quantity: "Ilość"
+        direction: "Kierunek"
+        status: "Status"
+        note: "Notatka"
+        completed_at: "Data zakończenia"
+        variant: "Wariant"
+        variant_id: "Wariant"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      stock_movement:
+        quantity: "Ilość"
+        direction: "Kierunek"
+        movement_type: "Typ ruchu"
+        note: "Notatka"
+        stock_operation: "Operacja magazynowa"
+        stock_operation_id: "Operacja magazynowa"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        organization: "Organizacja"
+        organization_id: "Organizacja"
+        id_by_org: "ID organizacyjne"
+        documents: "Dokumenty"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      stock_movement_item:
+        item: "Egzemplarz"
+        item_id: "Egzemplarz"
+        stock_movement: "Ruch magazynowy"
+        stock_movement_id: "Ruch magazynowy"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+      
+      log:
+        action: "Akcja"
+        message: "Wiadomość"
+        details: "Szczegóły"
+        loggable: "Obiekt"
+        loggable_type: "Typ obiektu"
+        loggable_id: "ID obiektu"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
 
   log_in: Zaloguj się
   form: Formularz
 
   roles:
     admin: Administrator
+
+  # Statusy produktów i wariantów
+  product_statuses:
+    draft: "Wersja robocza"
+    available: "Dostępny"
+
+  # Statusy egzemplarzy (Items)
+  item_statuses:
+    in_stock: "W magazynie"
+    reserved: "Zarezerwowany"
+    sold: "Sprzedany"
+    returned: "Zwrócony"
+    damaged: "Uszkodzony"
+
+  # Statusy operacji magazynowych
+  stock_operation_statuses:
+    pending: "Oczekująca"
+    in_progress: "W trakcie"
+    completed: "Zakończona"
+    cancelled: "Anulowana"
+
+  # Typy ruchów magazynowych
+  movement_types:
+    delivery: "Dostawa"
+    sale: "Sprzedaż"
+    return: "Zwrot"
+    adjustment: "Korekta"
+    transfer: "Przesunięcie"
+    loss: "Ubytek"
+    damage: "Uszkodzenie"
 
   notices:
     create:

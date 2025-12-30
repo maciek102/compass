@@ -9,12 +9,12 @@ module Stock
 
       def initialize(
         stock_operation:,
+        action:, # :receive, :issue, :adjust
         quantity:,
         item_ids: [],
-        action:, # :receive, :issue, :adjust
+        serial_numbers: {},
         user: nil,
-        note: nil,
-        picker: nil
+        note: nil
       )
         @stock_operation = stock_operation
         @quantity = quantity.to_i
@@ -22,7 +22,7 @@ module Stock
         @action = action.to_sym
         @user = user
         @note = note
-        @picker = picker
+        @serial_numbers = serial_numbers
       end
 
       def call
@@ -48,6 +48,7 @@ module Stock
         when :issue
           # sprawdzamy czy jest wystarczająco fizycznych itemów do wydania
           # picker.present? && picker.pick(quantity: quantity).size >= quantity
+          true
         when :adjust
           true # można zawsze zrobić korektę w ramach remaining_quantity
         else
@@ -60,7 +61,7 @@ module Stock
 
       private
 
-      attr_reader :stock_operation, :quantity, :item_ids, :action, :user, :note, :picker
+      attr_reader :stock_operation, :quantity, :item_ids, :action, :user, :note, :picker, :serial_numbers
 
       # wykonanie odpowiedniej akcji na magazynie
       def execute_action
@@ -77,7 +78,8 @@ module Stock
           quantity: quantity,
           item_ids: item_ids,
           user: user,
-          note: note
+          note: note,
+          serial_numbers: serial_numbers
         )
       end
 

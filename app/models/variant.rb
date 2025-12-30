@@ -101,9 +101,16 @@ class Variant < ApplicationRecord
     return if sku.present?
     
     prod_sku = product&.sku || SecureRandom.alphanumeric(3).upcase
-    base = "#{prod_sku}/#{100 + (id_by_org || id)}"
+    candidate = "#{prod_sku}/#{100 + (id_by_org || id)}"
     
-    self.update_column(:sku, base)
+    # Sprawdzenie czy SKU już istnieje i wygenerowanie kolejnego
+    counter = 0
+    while Variant.where(organization_id: organization_id).where(sku: candidate).where.not(id: id).exists?
+      counter += 1
+      candidate = "#{prod_sku}/#{100 + (id_by_org || id) + counter}"
+    end
+    
+    self.update_column(:sku, candidate)
   end
 
   def assign_default_name

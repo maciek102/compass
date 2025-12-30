@@ -7,16 +7,17 @@ module Stock
 
       # Wywołanie serwisu:
       # Stock::Receive.call(variant: variant, quantity: 10, user: current_user, note: "Dostawa FV/12/2025")
-      def self.call(stock_operation:, quantity:, user: nil, note: nil, **args)
-        new(stock_operation: stock_operation, quantity: quantity, user: user, note: note).call
+      def self.call(stock_operation:, quantity:, user: nil, note: nil, serial_numbers: {}, **args)
+        new(stock_operation: stock_operation, quantity: quantity, user: user, note: note, serial_numbers: serial_numbers).call
       end
 
-      def initialize(stock_operation:, quantity:, user: nil, note: nil)
+      def initialize(stock_operation:, quantity:, user: nil, note: nil, serial_numbers: {})
         @stock_operation = stock_operation
         @variant = stock_operation.variant
         @quantity = quantity.to_i
         @user = user
         @note = note
+        @serial_numbers = serial_numbers || {}
       end
 
       def call
@@ -40,7 +41,7 @@ module Stock
 
       private
 
-      attr_reader :stock_operation, :variant, :quantity, :user, :note
+      attr_reader :stock_operation, :variant, :quantity, :user, :note, :serial_numbers
 
       def validate!
         raise Error, "Quantity must be positive" if quantity <= 0
@@ -48,10 +49,13 @@ module Stock
       end
 
       def create_items(movement)
-        quantity.times do
+        quantity.times do |index|
+          serial_number = serial_numbers[index.to_s].presence || nil
+          
           item = variant.items.create!(
-            status: :in_stock
-            # opcjonalnie: serial_number, batch, expires_at, custom_attributes
+            status: :in_stock,
+            serial_number: serial_number
+            # opcjonalnie: batch, expires_at, custom_attributes
           )
 
           movement.items << item

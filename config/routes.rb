@@ -40,7 +40,8 @@ Rails.application.routes.draw do
       get :adjust
       post :create_adjust
 
-      post :prepare_items
+      post :set_items_to_issue
+      post :set_items_to_receive
     end
   end
 

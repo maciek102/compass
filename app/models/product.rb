@@ -115,7 +115,16 @@ class Product < ApplicationRecord
     return if code.present?
     clean_name = name.to_s.strip.parameterize(preserve_case: true, separator: '').upcase
     base = clean_name[0,3].presence || SecureRandom.alphanumeric(3).upcase
-    self.update_column(:code, "#{base}#{id_by_org || id}")
+    candidate = "#{base}#{id_by_org || id}"
+    
+    # Sprawdzenie czy kod już istnieje i wygenerowanie kolejnego
+    counter = 0
+    while Product.where(organization_id: organization_id).where(code: candidate).where.not(id: id).exists?
+      counter += 1
+      candidate = "#{base}#{id_by_org || id}#{counter}"
+    end
+    
+    self.update_column(:code, candidate)
   end
 
   def generate_sku
@@ -125,9 +134,16 @@ class Product < ApplicationRecord
     cat_code = cat_code.parameterize(preserve_case: true, separator: '')
     cat_code = "XXX" if cat_code.blank?
     prod_code = code || SecureRandom.alphanumeric(3).upcase
-    base = "##{cat_code}/#{prod_code}"
+    candidate = "##{cat_code}/#{prod_code}"
     
-    self.update_column(:sku, base)
+    # Sprawdzenie czy SKU już istnieje i wygenerowanie kolejnego
+    counter = 0
+    while Product.where(organization_id: organization_id).where(sku: candidate).where.not(id: id).exists?
+      counter += 1
+      candidate = "##{cat_code}/#{prod_code}-#{counter}"
+    end
+    
+    self.update_column(:sku, candidate)
   end
   
   def set_default_status

@@ -7,6 +7,6 @@ tr.table-row
       ul.log-details
         - el.details.each do |key, value|
           li
-            == "#{key.to_s.humanize}: "
+            == "#{t("activerecord.attributes.#{el.loggable_type.underscore}.#{key}", default: key.to_s.humanize)}: "
             == format_log_detail(value)
   td = show_datetime(el.created_at)

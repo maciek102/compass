@@ -1,14 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["quantity", "strategy", "items"]
+  static targets = ["quantity", "items"]
 
   update() {
     const quantity = this.quantityTarget.value
-    const strategy = this.strategyTarget.value
     const stockOperationId = this.element.dataset.stockOperationId
 
-    fetch(`/stock_movements/set_items_to_issue`, {
+    fetch(`/stock_movements/set_items_to_receive`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,8 +15,7 @@ export default class extends Controller {
       },
       body: JSON.stringify({
         stock_operation_id: stockOperationId,
-        quantity: quantity,
-        strategy: strategy
+        quantity: quantity
       })
     })
     .then(response => response.text())

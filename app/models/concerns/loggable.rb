@@ -15,7 +15,8 @@ module Loggable
     Log.created!(
       loggable: self,
       user: Current.user,
-      message: default_log_message(:create)
+      message: default_log_message(:create),
+      details: attributes.except("created_at", "updated_at", "id", "organization_id", "id_by_org", "disabled")
     )
   end
 

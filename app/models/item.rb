@@ -83,8 +83,34 @@ class Item < ApplicationRecord
   # generacja domyślnego numeru seryjnego
   def generate_default_serial_number
     return if id.nil? || variant.nil?
-    serial_number = "#{variant.sku}-#{100 + (id_by_org || id)}"
-    self.update_column(:serial_number, serial_number)
+    candidate = "#{variant.sku}-#{100 + (id_by_org || id)}"
+    
+    # Sprawdzenie czy numer seryjny już istnieje i wygenerowanie kolejnego
+    counter = 0
+    while Item.where(organization_id: organization_id).where(serial_number: candidate).where.not(id: id).exists?
+      counter += 1
+      candidate = "#{variant.sku}-#{100 + (id_by_org || id) + counter}"
+    end
+    
+    self.update_column(:serial_number, candidate)
+  end
+
+  # generacja proponowanego numeru seryjnego, używana na nieutworzonych obiektach np przy receive
+  def generate_proposed_serial_number
+    return if variant.nil?
+    
+    # Jeśli base number został ustawiony w kontrolerze (optymalizacja N+1), użyj go
+    if respond_to?(:serial_number_base)
+      offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
+      next_number = serial_number_base + offset
+    else
+      # Fallback - oblicz od nowa (używane gdy metoda wywoływana poza kontrolerem)
+      next_id = Item.where(organization_id: organization_id).maximum(:id).to_i + 1
+      offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
+      next_number = 100 + next_id + offset
+    end
+    
+    "#{variant.sku}-#{next_number}"
   end
 
   private

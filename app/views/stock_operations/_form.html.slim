@@ -5,11 +5,11 @@
     .form-section
       .title Dane podstawowe
 
-      = f.input :quantity, label: 'Ilość'
+      = f.input :quantity
 
       = render Forms::TileSelectComponent.new(form: f, field: :direction, label: "Kierunek", options: StockOperation.directions.keys.map { |d| [d.humanize, d] })
 
-      = f.input :variant_id, collection: Variant.for_user(current_user).map { |v| ["#{v.product.name} / #{v.name} (#{v.sku})", v.id] }, label: 'Wariant'
+      = f.input :variant_id, collection: Variant.for_user(current_user).map { |v| ["#{v.product.name} / #{v.name} (#{v.sku})", v.id] }
   
   .form-actions
     = f.submit 'Wydaj z magazynu', class: 'base-button'

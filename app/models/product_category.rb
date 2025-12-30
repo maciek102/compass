@@ -200,11 +200,18 @@ class ProductCategory < ApplicationRecord
     clean_name = name.to_s.strip
     clean_name = clean_name.parameterize(preserve_case: true, separator: '')
     
-    base = clean_name.upcase[0,3]
-    base = SecureRandom.alphanumeric(3).upcase if base.blank? || base.length < 3
-    base = "#{base[0,3]}#{id_by_org || id}"
+    base_prefix = clean_name.upcase[0,3]
+    base_prefix = SecureRandom.alphanumeric(3).upcase if base_prefix.blank? || base_prefix.length < 3
+    candidate = "#{base_prefix[0,3]}#{id_by_org || id}"
 
-    self.update_column(:code, base)
+    # Sprawdzenie czy kod już istnieje i wygenerowanie kolejnego
+    counter = 0
+    while ProductCategory.where(organization_id: organization_id).where(code: candidate).where.not(id: id).exists?
+      counter += 1
+      candidate = "#{base_prefix[0,3]}#{id_by_org || id}#{counter}"
+    end
+
+    self.update_column(:code, candidate)
   end
 
   def self.ransackable_attributes(auth_object = nil)
