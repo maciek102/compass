@@ -1,7 +1,10 @@
 .tile-select-cont data-controller="tile-select" data-tile-select-target="container" style=@style
 
   / ukryty input
-  = @form.hidden_field @field, data: { tile_select_target: "select" }
+  - if @form
+    = @form.hidden_field @field, value: selected, data: input_data
+  - else
+    = hidden_field_tag @input_name, selected, data: input_data
 
   / nadpisanie wyglądu selecta przez kafelki
   label = @label if @label.present?

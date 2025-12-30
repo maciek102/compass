@@ -11,6 +11,8 @@
 # Stan = suma wszystkich ruchów
 # 
 # Atrybuty:
+# - organization_id:bigint -> multi tenant
+# - id_by_org:integer -> unikalny identyfikator produktu w ramach organizacji
 # - stock_operation_id:bigint -> operacja magazynowa
 # - quantity:integer -> ilość (zawsze dodatnia)
 # - movement_type:string -> typ ruchu (delivery, sale, correction, etc.)
@@ -85,7 +87,7 @@ class StockMovement < ApplicationRecord
 
   # tytuł do wyświetlenia
   def title
-    "##{id}"
+    "##{id_by_org}"
   end
 
   private

@@ -6,16 +6,22 @@ module Forms
   #   lub
   #   = render Forms::TileSelectComponent.new(form: f, field: :field_name, label: "Etykieta", options: [["Label", key], ...])
   class TileSelectComponent < ViewComponent::Base
-    def initialize(form:, field:, options:, label: nil, style: "")
+    def initialize(form: nil, field:, options:, value: nil, name: nil, label: nil, style: "", input_data: {})
       @form = form
       @field = field
       @options = normalize_options(options)
+      @value = value
+      @input_name = name || field
+      @input_data = input_data || {}
+
       @label = label
       @style = style
     end
 
     def selected
-      @form.object.public_send(@field)
+      return @form.object.public_send(@field) if @form&.object&.respond_to?(@field)
+
+      @value
     end
 
     private
@@ -30,6 +36,10 @@ module Forms
       else
         options
       end
+    end
+
+    def input_data
+      { tile_select_target: "select" }.merge(@input_data)
     end
   end
 end

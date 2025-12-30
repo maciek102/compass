@@ -1,4 +1,4 @@
 .tabs 
   = render "shared/tab", text: "Informacje", icon: info_icon, path: stock_operation_path(@stock_operation, tab: "main"), active_tab: "main"
   = render "shared/tab", text: "Ruchy magazynowe", icon: StockMovement.icon, path: stock_operation_path(@stock_operation, tab: "movements"), active_tab: "movements"
-  /= render "shared/tab", text: "Historia", icon: history_icon, path: stock_operation_path(@stock_operation, tab: "history"), active_tab: "history"
+  = render "shared/tab", text: "Historia", icon: history_icon, path: stock_operation_path(@stock_operation, tab: "history"), active_tab: "history"

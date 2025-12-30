@@ -6,6 +6,8 @@
 # - zarządzanie widocznością i kolejnością wyświetlania
 #
 # Atrybuty:
+# - organization_id:bigint -> multi tenant
+# - id_by_org:integer -> unikalny identyfikator produktu w ramach organizacji
 # - name:string -> nazwa kategorii
 # - description:text -> opis kategorii
 # - slug:string -> unikalny, przyjazny URL, np. "elektronika"
@@ -200,12 +202,12 @@ class ProductCategory < ApplicationRecord
     
     base = clean_name.upcase[0,3]
     base = SecureRandom.alphanumeric(3).upcase if base.blank? || base.length < 3
-    base = "#{base[0,3]}#{id}"
+    base = "#{base[0,3]}#{id_by_org || id}"
 
     self.update_column(:code, base)
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "description", "disabled", "id", "name", "position", "product_category_id", "slug", "updated_at", "visible"]
+    ["created_at", "description", "disabled", "id_by_org", "name", "position", "product_category_id", "slug", "updated_at", "visible"]
   end
 end

@@ -83,7 +83,7 @@ class Item < ApplicationRecord
   # generacja domyślnego numeru seryjnego
   def generate_default_serial_number
     return if id.nil? || variant.nil?
-    serial_number = "#{variant.sku}-#{100 + id}"
+    serial_number = "#{variant.sku}-#{100 + (id_by_org || id)}"
     self.update_column(:serial_number, serial_number)
   end
 

@@ -12,7 +12,7 @@
       = f.input :sku, label: "SKU (generowane automatycznie)"
 
       = f.input :product_category_id,
-        label: "Kategoria", collection: ProductCategory.all.map { |pc| [pc.full_name, pc.id] }, include_blank: "Wybierz kategorię", input_html: { data: { controller: "chosen" } }
+        label: "Kategoria", collection: ProductCategory.for_user(current_user).map { |pc| [pc.full_name, pc.id] }, include_blank: "Wybierz kategorię", input_html: { data: { controller: "chosen" } }
 
     .form-section
       .title Status

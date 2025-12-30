@@ -10,6 +10,8 @@
 # - powiązania z itemami (fizycznymi egzemplarzami)
 #
 # Atrybuty:
+# - organization_id:bigint -> multi tenant
+# - id_by_org:integer -> unikalny identyfikator produktu w ramach organizacji
 # - name:string -> nazwa
 # - sku:string -> unikalny SKU 
 # - ean:string -> kod kreskowy
@@ -99,7 +101,7 @@ class Variant < ApplicationRecord
     return if sku.present?
     
     prod_sku = product&.sku || SecureRandom.alphanumeric(3).upcase
-    base = "#{prod_sku}/#{100 + id}"
+    base = "#{prod_sku}/#{100 + (id_by_org || id)}"
     
     self.update_column(:sku, base)
   end
@@ -113,7 +115,7 @@ class Variant < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "custom_attributes", "disabled", "ean", "id", "location", "name", "note", "price", "product_id", "sku", "stock", "updated_at", "weight"]
+    ["created_at", "custom_attributes", "disabled", "ean", "id_by_org", "location", "name", "note", "price", "product_id", "sku", "stock", "updated_at", "weight"]
   end
 
   def self.ransackable_associations(auth_object = nil)

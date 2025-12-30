@@ -7,14 +7,18 @@ module ItemPicker
       case strategy.to_sym
       when :fifo
         ItemPicker::Fifo.new(scope: scope)
-      when :fefo
-        ItemPicker::Fefo.new(scope: scope)
+      when :lifo
+        ItemPicker::Lifo.new(scope: scope)
       when :manual
         ItemPicker::Manual.new(scope: scope, item_ids: options.fetch(:item_ids))
       else
         raise ArgumentError, "Unknown picker strategy: #{strategy}"
       end
       
+    end
+
+    def self.strategies
+      %i[fifo lifo manual]
     end
 
   end

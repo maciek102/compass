@@ -3,8 +3,14 @@ module ItemPicker
   class Lifo < Base
 
     def pick(quantity:)
-      scope
-        .order(received_at: :desc).limit(quantity)
+      available = scope.order(received_at: :desc)
+      selected = available.limit(quantity)
+
+      Result.new(
+        available_items: available,
+        selected_items: selected,
+        selected_ids: selected.pluck(:id)
+      )
     end
 
   end

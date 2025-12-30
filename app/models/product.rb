@@ -9,6 +9,8 @@
 # - miejsca integracji ze slugami, SEO oraz filtrowaniem
 #
 # Atrybuty:
+# - organization_id:bigint -> multi tenant
+# - id_by_org:integer -> unikalny identyfikator produktu w ramach organizacji
 # - name:string -> nazwa produktu
 # - description:text -> opis produktu
 # - main_description:rich_text -> główny duży opis
@@ -113,7 +115,7 @@ class Product < ApplicationRecord
     return if code.present?
     clean_name = name.to_s.strip.parameterize(preserve_case: true, separator: '').upcase
     base = clean_name[0,3].presence || SecureRandom.alphanumeric(3).upcase
-    self.update_column(:code, "#{base}#{id}")
+    self.update_column(:code, "#{base}#{id_by_org || id}")
   end
 
   def generate_sku
@@ -140,7 +142,7 @@ class Product < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "description", "disabled", "id", "name", "notes", "product_category_id", "sku", "slug", "status", "updated_at", "code"]
+    ["created_at", "description", "disabled", "id_by_org", "name", "notes", "product_category_id", "sku", "slug", "status", "updated_at", "code"]
   end
 
   def self.ransackable_associations(auth_object = nil)

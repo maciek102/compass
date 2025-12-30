@@ -45,8 +45,6 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        @list = @users = User.all.page(params[:page])
-
         flash[:notice] = flash_message(User, :update)
 
         format.turbo_stream

@@ -8,7 +8,14 @@ module ItemPicker
     end
 
     def pick(quantity:)
-      scope.where(id: @item_ids).limit(quantity)
+      available = scope
+      selected = available.where(id: @item_ids).limit(quantity)
+      
+      Result.new(
+        available_items: available,
+        selected_items: selected,
+        selected_ids: selected.pluck(:id)
+      )
     end
     
   end

@@ -4,9 +4,17 @@
     .form-section
       = f.input :stock_operation_id, as: :hidden, input_html: { value: @stock_operation.id }
       = f.input :quantity, label: 'Ilość do wydania', input_html: { value: @stock_operation.remaining_quantity, min: 1, max: @stock_operation.remaining_quantity, data: { items_picker_target: "quantity", action: "change->items-picker#update" }  }
-      .field
+      /.field
         = label_tag :strategy, "Strategia wyboru"
-        = select_tag :strategy, options_for_select(%w[fifo fefo manual]), data: { items_picker_target: "strategy", action: "change->items-picker#update" }
+        = select_tag :strategy, options_for_select(ItemPicker::Resolver.strategies.map(&:to_s)), data: { items_picker_target: "strategy", action: "change->items-picker#update" }
+      
+      = render Forms::TileSelectComponent.new(field: :strategy,
+          name: :strategy,
+          value: "fifo",
+          label: "Strategia wyboru",
+          options: ItemPicker::Resolver.strategies.map { |s| [s, s] },
+          input_data: { items_picker_target: "strategy", action: "change->items-picker#update" } )
+      
       = f.input :note, label: 'Notatka', as: :text
       = f.input :attachments, as: :file, label: 'Załączniki', input_html: { multiple: true }
 

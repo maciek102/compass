@@ -8,6 +8,8 @@ class StockOperation < ApplicationRecord
 
   has_many :stock_movements, dependent: :destroy
 
+  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
+
   enum :direction, {
     receive: "receive",
     issue: "issue"
@@ -20,7 +22,7 @@ class StockOperation < ApplicationRecord
   }
 
   FILTERS = [
-    :id_eq,
+    :id_by_org_eq,
     :variant_sku_cont,
     :status_eq,
     :direction_eq,
@@ -54,11 +56,11 @@ class StockOperation < ApplicationRecord
 
   # tytuł do wyświetlenia
   def title
-    "##{id} - #{variant.product.name} / #{variant.name}"
+    "##{id_by_org} - #{variant.product.name} / #{variant.name}"
   end
 
   def short_title
-    "##{id}"
+    "##{id_by_org}"
   end
 
   def status_color
@@ -117,7 +119,7 @@ class StockOperation < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["completed_at", "created_at", "direction", "id", "note", "quantity", "status", "updated_at", "user_id", "variant_id"]
+    ["completed_at", "created_at", "direction", "id_by_org", "note", "quantity", "status", "updated_at", "user_id", "variant_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)

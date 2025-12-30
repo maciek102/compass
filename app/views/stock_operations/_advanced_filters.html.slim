@@ -3,7 +3,7 @@
     = render 'shared/selected_filters_cont', service: @filters_service
     .grid
       .column 
-        = f.search_field :id_eq, { placeholder: "ID" }
+        = f.search_field :id_by_org_eq, { placeholder: "ID" }
       .column
         = f.select :status_eq, options_for_select(StockOperation.statuses.map { |k, v| [k.humanize, k] }, params[:q].try(:[], :status_eq)), { include_blank: "Status" }, { data: { controller: "choosen select", action: "change->select#submit", select_target: "select" } }
       .column
