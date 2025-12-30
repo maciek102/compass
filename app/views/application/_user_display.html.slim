@@ -1,13 +1,17 @@
 .user-display
-  = user_display_image(current_user)
+  - if current_user.superadmin?
+    = render 'superadmin/superadmin_menu'
 
-  .info
-    .name
-      = current_user.name.presence
+  .user-menu
+    = user_display_image(current_user)
 
-    .desc
-      = current_user.email
-      /= current_user.try(:role).presence || "Użytkownik"
-  
-  .logout
-    = link_to fa_icon("sign-out"), destroy_user_session_path, method: :delete
+    .info
+      .name
+        = current_user.name.presence
+
+      .desc
+        = current_user.organization.name
+        /= current_user.try(:role).presence || "Użytkownik"
+    
+    .logout
+      = link_to fa_icon("sign-out"), destroy_user_session_path, method: :delete

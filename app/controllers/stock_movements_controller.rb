@@ -7,7 +7,7 @@ class StockMovementsController < ApplicationController
   def index
     @search_url = stock_movements_path
 
-    @search = StockMovement.all.ransack(params[:q])
+    @search = StockMovement.for_user(current_user).ransack(params[:q])
     @list = @stock_movements = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|

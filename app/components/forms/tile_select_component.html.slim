@@ -1,4 +1,4 @@
-.tile-select-cont data-controller="tile-select" data-tile-select-target="container"
+.tile-select-cont data-controller="tile-select" data-tile-select-target="container" style=@style
 
   / ukryty input
   = @form.hidden_field @field, data: { tile_select_target: "select" }
@@ -7,5 +7,5 @@
   label = @label if @label.present?
   .tile-select
     - @options.each do |key, label|
-      .tile class=("active" if selected.to_s == key.to_s) data-value=key data-action="click->tile-select#select"
+      .tile class=("active" if selected.to_s == key.to_s) data-value=key.to_s data-action="click->tile-select#select"
         = label

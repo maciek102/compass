@@ -20,13 +20,16 @@
 class ProductCategory < ApplicationRecord
   include Destroyable
   include Loggable
+  include OrganizationScoped
 
+  # === RELACJE ===
+  belongs_to :organization
+  
   # relacja hierarchiczna
   belongs_to :parent, class_name: "ProductCategory", foreign_key: "product_category_id", optional: true
   has_many :subcategories, class_name: "ProductCategory", foreign_key: "product_category_id", dependent: :destroy
   accepts_nested_attributes_for :subcategories, allow_destroy: true
 
-  # === RELACJE ===
   # produkty należące do kategorii
   has_many :products, dependent: :destroy
   
@@ -51,6 +54,11 @@ class ProductCategory < ApplicationRecord
 
 
   # === METODY ===
+   
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
   
   def self.icon
     "tags"

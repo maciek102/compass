@@ -7,7 +7,7 @@ class StockOperationsController < ApplicationController
   def index
     @search_url = stock_operations_path
 
-    @search = StockOperation.all.order(created_at: :desc).ransack(params[:q])
+    @search = StockOperation.for_user(current_user).order(created_at: :desc).ransack(params[:q])
     @list = @stock_operations = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|

@@ -1,0 +1,18 @@
+.show-container
+  .title
+    = @product_category.name
+
+  - if @product_category.description.present?
+    .description
+      = @product_category.description
+
+  .info
+    = category_info_row("Nadrzędna kategoria", (@product_category.parent ? link_to(@product_category.parent.name, product_category_path(@product_category.parent), class: "link") : "Brak"))
+    = category_info_row("Widoczna dla klientów", yes_no(@product_category.visible?))
+    = category_info_row("Wyłączona", yes_no(@product_category.disabled?))
+    = category_info_row("Pozycja", @product_category.position)
+    = category_info_row("Slug", @product_category.slug)
+
+  .actions
+    = resource_turbo_edit_link(@product_category, "Edytuj")
+    = resource_destroy_link(@product_category, "Usuń")

@@ -46,56 +46,67 @@
   .user-display {
     margin-top: auto;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
     padding-top: 11px;
     border-top: 1px solid $main-line;
 
-    img {
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      object-fit: cover;
+    .superadmin-menu {
+      padding-bottom: 11px;
+      border-bottom: 1px solid $main-line;
     }
 
-    .avatar-placeholder {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #e53935;
-      color: white;
+    .user-menu {
       display: flex;
+      gap: 10px;
       align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 20px;
-      text-transform: uppercase;
-    }
 
-    .info {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-
-      .name {
-        font-weight: 700;
-        font-size: 15px;
+      img {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
       }
 
-      .desc {
-        font-size: 13px;
-        color: lighten($main-text-color, 30%);
-        margin-top: 3px;
-      }
-    }
-
-    .logout{
-      margin-right: 0;
-      margin-left: auto;
-
-      i{
-        color: red;
+      .avatar-placeholder {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e53935;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
         font-size: 20px;
+        text-transform: uppercase;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+
+        .name {
+          font-weight: 700;
+          font-size: 15px;
+        }
+
+        .desc {
+          font-size: 13px;
+          color: lighten($main-text-color, 30%);
+          margin-top: 3px;
+        }
+      }
+
+      .logout{
+        margin-right: 0;
+        margin-left: auto;
+
+        i{
+          color: red;
+          font-size: 20px;
+        }
       }
     }
   }

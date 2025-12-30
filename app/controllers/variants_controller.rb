@@ -6,7 +6,7 @@ class VariantsController < ApplicationController
   def index
     @search_url = variants_path
 
-    @search = Variant.includes(:product).ransack(params[:q])
+    @search = Variant.for_user(current_user).includes(:product).ransack(params[:q])
     @list = @variants = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|

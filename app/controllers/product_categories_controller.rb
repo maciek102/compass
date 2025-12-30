@@ -6,7 +6,7 @@ class ProductCategoriesController < ApplicationController
     @search_url = product_categories_path
 
     # ustawienie trybów tabeli
-    scoped = set_view_mode_scope
+    scoped = set_view_mode_scope(ProductCategory.for_user(current_user))
 
     @search = scoped.includes(:subcategories, :products).with_aggregated_counts.ransack(params[:q])
     @list = @product_categories = @search.result(distinct: true).page(params[:page])
@@ -49,8 +49,6 @@ class ProductCategoriesController < ApplicationController
     respond_to do |format|
       if @product_category.save
 
-        set_turbo_list_after_commit # ustawienie listy kategorii do renderowania w widokach
-
         flash[:notice] = flash_message(ProductCategory, :create)
 
         format.turbo_stream
@@ -64,8 +62,6 @@ class ProductCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @product_category.update(product_category_params)
-
-        set_turbo_list_after_commit # ustawienie listy kategorii do renderowania w widokach
 
         flash[:notice] = flash_message(ProductCategory, :update)
 
@@ -88,20 +84,7 @@ class ProductCategoriesController < ApplicationController
     @left_menu_context = :products
   end
 
-  # ustawnianie listy kategorii po akcji create/update do renderowania turbo stream w widokach
-  def set_turbo_list_after_commit
-    # sprawdzamy czy edytujemy z widoku show (podkategorie) czy z index (wszystkie kategorie)
-    if params[:subcategory_view].present? && params[:subcategory_view] == "true"
-      parent_category = @product_category.parent
-      @list = @product_categories = parent_category.subcategories.page(params[:page])
-      @parent_category = parent_category
-    else
-      scoped = set_view_mode_scope # konieczne extra params w linku do edit, dzięki temu zapamiętujemy tryb widoku kategorii
-      @list = @product_categories = scoped.includes(:subcategories, :products).page(params[:page])
-    end
-  end
-
-  def set_view_mode_scope
+  def set_view_mode_scope(model = ProductCategory)
     @view_modes = Views::TableViewModePresenter.new(
       params[:view],
       default: :roots,
@@ -110,7 +93,7 @@ class ProductCategoriesController < ApplicationController
         all: { label: "Wszystkie", scope: ->(scope) { scope.all } }
       }
     )
-    @view_modes.apply(ProductCategory)
+    @view_modes.apply(model)
   end
 
   def product_category_params

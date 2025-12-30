@@ -26,8 +26,10 @@
 class Product < ApplicationRecord
   include Destroyable
   include Loggable
+  include OrganizationScoped
 
   # === RELACJE ===
+  belongs_to :organization
   # kategoria produktu
   belongs_to :category, class_name: "ProductCategory", foreign_key: "product_category_id"
 
@@ -79,17 +81,14 @@ class Product < ApplicationRecord
 
 
   # === METODY ===
+   
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
   
   def self.icon
     "dropbox"
-  end
-
-  def self.for_user(user)
-    if user.is?(:admin)
-      all
-    else
-      none
-    end
   end
 
   # Zwraca liczbę wszystkich fizycznych itemów we wszystkich wariantach

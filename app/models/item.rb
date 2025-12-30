@@ -22,8 +22,10 @@
 
 class Item < ApplicationRecord
   include Destroyable
+  include OrganizationScoped
 
   # === RELACJE ===
+  belongs_to :organization # wieloorganizacyjność
   belongs_to :variant # należy do wariantu
 
   # posiada wiele operacji magazynowych
@@ -58,6 +60,11 @@ class Item < ApplicationRecord
 
 
   # === METODY ===
+  
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
 
   # czy item jest dostępny do sprzedaży?
   def available_for_sale?

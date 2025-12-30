@@ -6,11 +6,12 @@ module Forms
   #   lub
   #   = render Forms::TileSelectComponent.new(form: f, field: :field_name, label: "Etykieta", options: [["Label", key], ...])
   class TileSelectComponent < ViewComponent::Base
-    def initialize(form:, field:, label:, options:)
+    def initialize(form:, field:, options:, label: nil, style: "")
       @form = form
       @field = field
-      @label = label
       @options = normalize_options(options)
+      @label = label
+      @style = style
     end
 
     def selected

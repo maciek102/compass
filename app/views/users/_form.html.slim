@@ -1,4 +1,3 @@
-/.form-card
 = simple_form_for(@user, html: { data: { turbo_frame: "modal" } }) do |f|
   = f.error_notification
 
@@ -9,7 +8,13 @@
 
       = f.input :email, label: "Email"
       = f.input :name, label: "Nazwa"
+      = f.input :password, label: "Hasło"
+      = f.input :password_confirmation, label: "Potwierdzenie hasła"
       = f.input :role_mask, label: "Rola"
+
+      - if current_user.superadmin?
+        = f.input :organization_id, collection: Organization.all, selected: @user.organization || current_user.organization, label: "Organizacja", prompt: "Wybierz organizację"
+        = f.input :is_superadmin, as: :boolean, label: "!!! Superadmin !!!"
       
   .form-actions
     = f.submit "Zapisz", class: "base-button"

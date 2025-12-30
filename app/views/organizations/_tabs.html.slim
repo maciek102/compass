@@ -1,0 +1,5 @@
+.tabs 
+  = render "shared/tab", text: "Informacje", path: product_category_path(@product_category, tab: "main"), active_tab: "main"
+  = render "shared/tab", text: "Podkategorie", path: product_category_path(@product_category, tab: "subcategories"), active_tab: "subcategories"
+  = render "shared/tab", text: "Produkty", path: product_category_path(@product_category, tab: "products"), active_tab: "products"
+  = render "shared/tab", text: "Historia", path: product_category_path(@product_category, tab: "history"), active_tab: "history"

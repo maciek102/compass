@@ -7,9 +7,9 @@ class ProductsController < ApplicationController
     @search_url = products_path
 
     # ustawienie trybów tabeli
-    scoped = set_view_mode_scope
+    scoped = set_view_mode_scope(Product.for_user(current_user))
 
-    @search = scoped.for_user(current_user).includes(:variants).ransack(params[:q])
+    @search = scoped.includes(:variants).ransack(params[:q])
     @list = @products = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -82,7 +82,7 @@ class ProductsController < ApplicationController
     @left_menu_context = :products
   end
 
-  def set_view_mode_scope
+  def set_view_mode_scope(model = Product)
     @view_modes = Views::TableViewModePresenter.new(
       params[:view],
       default: :list,
@@ -94,7 +94,7 @@ class ProductsController < ApplicationController
 
     @expand_variants = @view_modes.current?(:groups)
     
-    @view_modes.apply(Product)
+    @view_modes.apply(model)
   end
 
   def set_filters

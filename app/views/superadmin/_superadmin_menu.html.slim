@@ -1,0 +1,5 @@
+- if current_user.superadmin?
+  .superadmin-menu
+    = simple_form_for current_user, url: superadmin_menu_user_path(current_user), method: :patch, data: { controller: "auto-submit" } do |f|
+      = f.collection_select :organization_id, Organization.all, :id, :name, { prompt: t('superadmin.organization_switch.select_prompt') }, { class: 'form-control', style: "margin: 0;" }
+      = render Forms::TileSelectComponent.new(form: f, field: :superadmin_view, options: [["Superadmin", true], ["User", false]], style: "margin: 0")

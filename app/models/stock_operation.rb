@@ -1,6 +1,8 @@
 class StockOperation < ApplicationRecord
   include Loggable
+  include OrganizationScoped
 
+  belongs_to :organization
   belongs_to :variant
   belongs_to :user, optional: true
 
@@ -25,6 +27,10 @@ class StockOperation < ApplicationRecord
     :code_cont
   ].freeze
 
+  # === SCOPE ===
+  
+
+  # === WALIDACJE ===
   validates :direction, presence: true
   validates :status, presence: true
   validates :quantity, numericality: { greater_than: 0 }
@@ -32,7 +38,15 @@ class StockOperation < ApplicationRecord
   # === CALLBACKI ===
   before_validation :set_default_status, on: :create
 
+
+
+
   # === METODY ===
+   
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
 
   def self.icon
     "database"

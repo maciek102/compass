@@ -1,0 +1,23 @@
+= simple_form_for(@organization) do |f|
+  = f.error_notification
+
+  .form-grid
+    .form-section
+      .title Dane podstawowe
+
+      = f.input :name, label: "Nazwa organizacji"
+      = f.input :description, label: "Opis"
+    
+
+    .form-section
+      .title Status
+
+      .row
+        .col-sm-6
+          = f.input :launched, as: :boolean, label: "Widoczna?"
+
+        .col-sm-6
+          = f.input :disabled, as: :boolean, label: "Wyłączona?"
+
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

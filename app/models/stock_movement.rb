@@ -20,8 +20,10 @@
 
 class StockMovement < ApplicationRecord
   include Loggable
+  include OrganizationScoped
 
   # === RELACJE ===
+  belongs_to :organization
   belongs_to :stock_operation
   belongs_to :user, optional: true
 
@@ -45,6 +47,9 @@ class StockMovement < ApplicationRecord
     sale: "sale", # sprzedaż
   }
 
+  # === SCOPE ===
+   
+
   # === WALIDACJE ===
   validates :quantity, presence: true, numericality: { greater_than: 0 }
 
@@ -59,6 +64,11 @@ class StockMovement < ApplicationRecord
 
 
   # === METODY ===
+  
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
    
   def variant
     stock_operation.variant

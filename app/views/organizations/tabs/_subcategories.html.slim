@@ -1,0 +1,1 @@
+= render "index_table", list: @subcategories, turbo_id: "categories-table-body", title: "Podkategorie", button: { text: "Dodaj podkategorię", link: new_product_category_path(parent_id: @product_category.id, subcategory_view: true), data_attrs: { turbo_frame: "modal" } }

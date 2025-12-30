@@ -1,0 +1,8 @@
+tr.table-row id="organization-row-#{el.id}" data-url=organization_path(el)
+  td = el.id
+  td.bold = el.name
+  td = el.users.count
+  td
+    .actions
+      = resource_turbo_edit_link(el)
+      = resource_destroy_link(el)

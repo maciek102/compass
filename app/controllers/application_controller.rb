@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
   
-  before_action :store_current_user
+  before_action :set_current_attributes
+  #before_action :store_current_user
+  before_action :set_locale
 
   if Rails.env.production?
     rescue_from ActionController::RoutingError, ::AbstractController::ActionNotFound, ActiveRecord::RecordNotFound do |exception|
@@ -46,6 +48,11 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_current_attributes
+    Current.user = current_user
+    Current.organization = current_user&.organization
+  end
 
   def store_current_user
     RequestStore.store[:current_user] = current_user

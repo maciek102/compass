@@ -24,8 +24,10 @@
 class Variant < ApplicationRecord
   include Destroyable
   include Loggable
+  include OrganizationScoped
 
   # === RELACJE ===
+  belongs_to :organization
   belongs_to :product
   # itemy fizyczne
   has_many :items, dependent: :destroy
@@ -61,6 +63,11 @@ class Variant < ApplicationRecord
 
 
   # === METODY ===
+   
+  def self.for_user(user)
+    default_scope = for_organization(user.organization_id)
+    default_scope
+  end
    
   def self.icon
     "cube"

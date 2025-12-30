@@ -14,7 +14,7 @@ module Loggable
   def log_creation
     Log.created!(
       loggable: self,
-      user: current_user_from_context,
+      user: Current.user,
       message: default_log_message(:create)
     )
   end
@@ -24,7 +24,7 @@ module Loggable
 
     Log.updated!(
       loggable: self,
-      user: current_user_from_context,
+      user: Current.user,
       message: default_log_message(:update),
       details: saved_changes.except(:updated_at)
     )
@@ -33,7 +33,7 @@ module Loggable
   def log_destruction
     Log.destroyed!(
       loggable: self,
-      user: current_user_from_context,
+      user: Current.user,
       message: default_log_message(:destroy)
     )
   end

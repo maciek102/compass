@@ -29,13 +29,24 @@ module Views
 
     # główne menu na podstawie roli usera
     def role_menu(user)
-      role = user.role
+      role = user.role_name
 
       case role.to_sym
+      when :superadmin then superadmin_menu
       when :admin then admin_menu
       when :user then user_menu
       else []
       end
+    end
+
+    def superadmin_menu
+      superadmin_menu = [
+        { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
+        { text: "Organizacje", url: Rails.application.routes.url_helpers.organizations_path, icon: Organization.icon },
+        { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
+      ]
+
+      user.superadmin_view ? superadmin_menu : admin_menu
     end
 
     def admin_menu
