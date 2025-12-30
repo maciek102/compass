@@ -72,6 +72,6 @@ class StockOperationsController < ApplicationController
   end
 
   def set_filters
-    @filters_service = Views::FiltersDisplayService.new(StockOperation, params)
+    @filters_service = Views::FiltersPresenter.new(StockOperation, params)
   end
 end

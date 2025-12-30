@@ -1,17 +1,16 @@
 module Views
-
-  # === FiltersDisplayService ===
+  # === FiltersPresenter ===
   #
   # Serwis odpowiedzialny za wyświetlanie i zarządzanie filtrami dla różnych modeli.
   # Centralizuje logikę formatowania wartości filtrów oraz generowania linków do usuwania.
   #
   # Użycie:
-  #   service = FiltersDisplayService.new(model_class, params)
+  #   service = Views::FiltersPresenter.new(model_class, params)
   #   service.display_value(field_name, value)
   #   service.remove_filter_link(field_name)
   #   service.active_filters
 
-  class FiltersDisplayService
+  class FiltersPresenter
     attr_reader :model_class, :params
 
     def initialize(model_class, params)
@@ -64,12 +63,12 @@ module Views
 
     # Formattery dla konkretnych wzorców pól
     PATTERN_FORMATTERS = {
-      /_id_eq$/ => ->(field, value) { Views::FiltersDisplayService.format_relation_eq(field, value) },
-      /_id_in$/ => ->(field, value) { Views::FiltersDisplayService.format_relation_in(field, value) },
-      /_cont$/ => ->(field, value) { Views::FiltersDisplayService.format_contains(field, value) },
-      /_eq$/ => ->(field, value) { Views::FiltersDisplayService.format_equals(field, value) },
-      /_gteq$/ => ->(field, value) { Views::FiltersDisplayService.format_greater_equal(field, value) },
-      /_lteq$/ => ->(field, value) { Views::FiltersDisplayService.format_less_equal(field, value) }
+      /_id_eq$/ => ->(field, value) { Views::FiltersPresenter.format_relation_eq(field, value) },
+      /_id_in$/ => ->(field, value) { Views::FiltersPresenter.format_relation_in(field, value) },
+      /_cont$/ => ->(field, value) { Views::FiltersPresenter.format_contains(field, value) },
+      /_eq$/ => ->(field, value) { Views::FiltersPresenter.format_equals(field, value) },
+      /_gteq$/ => ->(field, value) { Views::FiltersPresenter.format_greater_equal(field, value) },
+      /_lteq$/ => ->(field, value) { Views::FiltersPresenter.format_less_equal(field, value) }
     }.freeze
 
     # === FORMATTERY WZORCÓW ===

@@ -1,7 +1,6 @@
-module Views
-
+module Views  
   # service do przełączania różnych trybów widoku tabeli (np. kategorie - wszystkie / tylko roots)
-  class TableViewMode
+  class TableViewModePresenter
     attr_reader :current, :default, :modes
 
     def initialize(current_param, default:, modes:)
@@ -27,5 +26,4 @@ module Views
       @modes[current][:scope].call(scope)
     end
   end
-
 end

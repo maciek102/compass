@@ -3,7 +3,9 @@ module Views
   # menu główne - podstawowe menu zależne od roli usera
   # menu kontekstowe - dodatkowe menu zależne od kontekstu (np. produkty - lista produktów + kategorie)
   # dostępne konteksty - :products, :warehouse
-  class LeftMenuBuilder
+  class LeftMenuPresenter
+    include IconsHelper
+    
     attr_reader :user, :context # automatyczny getter
 
     def initialize(user:, context: nil)
@@ -38,9 +40,9 @@ module Views
 
     def admin_menu
       [
-        { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: "home" },
-        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
         { text: "Magazyn", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
+        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
       ]
     end

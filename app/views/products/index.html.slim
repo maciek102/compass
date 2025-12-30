@@ -1,6 +1,6 @@
 = render "products/page_headers/index"
 
 / przełączanie widoków (scope) tabeli
-= view_mode_switcher(@view_modes, ->(extra) { url_for(params.permit!.merge(extra)) })
+= render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes,base_params: params)
 
 = render "index_table", list: @products

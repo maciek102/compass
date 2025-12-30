@@ -72,17 +72,6 @@ module ApplicationHelper
     end
   end
 
-  # switch do przełączania trybów widoku tabeli (TableViewMode)
-  def view_mode_switcher(view_modes, base_path)
-    content_tag :div, class: "view-switcher" do
-      view_modes.available_modes.map do |mode|
-        link_to base_path.call(view: mode), class: "view-switcher-button #{'active' if view_modes.current?(mode)}" do
-          view_modes.label_for(mode)
-        end
-      end.join.html_safe
-    end
-  end
-
   def show_datetime(date)
     date.present? ? date.strftime("%d.%m.%Y %H:%M") : "-"
   end

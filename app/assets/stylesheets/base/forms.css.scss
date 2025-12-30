@@ -63,7 +63,7 @@
   }
 }
 
-.form-card form .form-inputs label {
+form label {
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -81,11 +81,10 @@ select {
   transition: all 0.2s ease;
 }
 
-.form-card form input:not([type="submit"]),
-.form-card form textarea,
-.form-card form select {
-  margin-top: 4px !important;
-  margin-bottom: 14px !important;
+form input:not([type="submit"]),
+form textarea,
+form select {
+  margin-bottom: 8px;
 }
 
 input:focus,
@@ -106,4 +105,32 @@ input[type="checkbox"] {
   margin-top: 30px;
   display: flex;
   gap: 10px;
+}
+
+// customowy select z kafelkami
+.tile-select-cont {
+  width: 100%;
+  margin-bottom: 8px;
+
+  .tile-select {
+    display: flex;
+    gap: 4px;
+
+    .tile {
+      border: 1px solid #d0d0d0;
+      padding: 4px 8px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 6px;
+
+      &:hover {
+        border-color: lighten($first-color, 20%);
+      }
+    }
+
+    .tile.active {
+      border-color: $first-color;
+      background: $second-color;
+    }
+  }
 }

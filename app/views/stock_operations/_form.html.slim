@@ -6,7 +6,9 @@
       .title Dane podstawowe
 
       = f.input :quantity, label: 'Ilość'
-      = f.input :direction, collection: StockOperation.directions.keys.map { |d| [d.humanize, d] }, label: 'Kierunek'
+
+      /= f.input :direction, collection: StockOperation.directions.keys.map { |d| [d.humanize, d] }, label: 'Kierunek'
+      = render Forms::TileSelectComponent.new(form: f, field: :direction, label: "Kierunek", options: StockOperation.directions.keys.map { |d| [d.humanize, d] })
 
       = f.input :variant_id, collection: Variant.all.map { |v| ["#{v.product.name} / #{v.name} (#{v.sku})", v.id] }, label: 'Wariant'
   

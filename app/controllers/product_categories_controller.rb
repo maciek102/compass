@@ -102,7 +102,7 @@ class ProductCategoriesController < ApplicationController
   end
 
   def set_view_mode_scope
-    @view_modes = Views::TableViewMode.new(
+    @view_modes = Views::TableViewModePresenter.new(
       params[:view],
       default: :roots,
       modes: {

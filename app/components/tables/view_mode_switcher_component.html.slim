@@ -1,0 +1,4 @@
+div.view-switcher
+  - @view_modes.available_modes.each do |mode|
+    = link_to url_for_mode(mode), class: "view-switcher-button #{'active' if @view_modes.current?(mode)}" do
+      = @view_modes.label_for(mode)

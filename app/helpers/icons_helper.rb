@@ -14,4 +14,8 @@ module IconsHelper
   def history_icon
     "history"
   end
+
+  def dashboard_icon
+    "home"
+  end
 end

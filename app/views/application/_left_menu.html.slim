@@ -1,7 +1,7 @@
 .left-menu 
 
-  / użycie LeftMenuBuilder do renderowania menu, zależne od usera i opcjonalnego kontekstu z kontrolera
-  - builder = Views::LeftMenuBuilder.new(user: current_user, context: @left_menu_context ? @left_menu_context : nil)
+  / użycie LeftMenuPresenter do renderowania menu, zależne od usera i opcjonalnego kontekstu z kontrolera
+  - builder = Views::LeftMenuPresenter.new(user: current_user, context: @left_menu_context ? @left_menu_context : nil)
   - builder.build.each do |item|
     = left_menu_link(text: item[:text],url: item[:url],icon: item[:icon],active: current_page?(item[:url]))
 
