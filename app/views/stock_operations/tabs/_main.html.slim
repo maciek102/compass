@@ -31,4 +31,4 @@
   .col-lg-4 
 
 br
-= render "index_table", list: @stock_movements, custom_dir: "stock_movements/", title: "Ruchy magazynowe"
+= render Tables::IndexTableComponent.new(list: @stock_movements, custom_dir: "stock_movements/", title: "Ruchy magazynowe")

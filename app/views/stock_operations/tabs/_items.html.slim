@@ -1,1 +1,1 @@
-= render "index_table", list: @items, custom_dir: "items/", title: "Egzemplarze"
+= render Tables::IndexTableComponent.new(list: @items, custom_dir: "items/", title: "Egzemplarze")

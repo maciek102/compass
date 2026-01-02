@@ -1,2 +1,2 @@
 = render "users/page_headers/index"
-= render "index_table", list: @users
+= render Tables::IndexTableComponent.new(list: @users)

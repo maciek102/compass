@@ -3,4 +3,4 @@
 / przełączanie widoków (scope) tabeli
 = render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes,base_params: params)
 
-= render "index_table", list: @product_categories, turbo_id: "categories-table-body"
+= render Tables::IndexTableComponent.new(list: @product_categories, turbo_id: "categories-table-body")

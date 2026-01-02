@@ -1,3 +1,3 @@
 = render "variants/page_headers/index"
 
-= render "index_table", list: @variants
+= render Tables::IndexTableComponent.new(list: @variants)

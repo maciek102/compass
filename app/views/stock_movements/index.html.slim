@@ -1,3 +1,3 @@
 = render "stock_movements/page_headers/index"
 
-= render "index_table", list: @stock_movements
+= render Tables::IndexTableComponent.new(list: @stock_movements)

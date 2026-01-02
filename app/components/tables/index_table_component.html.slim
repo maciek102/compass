@@ -1,0 +1,7 @@
+.index-table-cont#index-table-cont
+  - if @title.present? || @button
+    .header
+      .title = @title unless @title.blank?
+      .table-button = link_to @button[:text] || I18n.t("add_new"), @button[:link], class: @button[:class] || "base-button", data: @button[:data_attrs] || {} unless @button.nil?
+
+  = render Tables::TableComponent.new(list: @list, custom_dir: @custom_dir, no_pages: @no_pages, turbo_id: @turbo_id)

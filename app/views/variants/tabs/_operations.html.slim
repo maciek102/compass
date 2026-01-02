@@ -1,1 +1,1 @@
-= render "index_table", list: @stock_movements, custom_dir: "stock_movements/", title: "Operacje"
+= render Tables::IndexTableComponent.new(list: @stock_movements, custom_dir: "stock_movements/", title: "Operacje")

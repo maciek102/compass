@@ -14,9 +14,9 @@ module Loggable
   def log_creation
     Log.created!(
       loggable: self,
-      user: Current.user,
+      user: loggable_user,
       message: default_log_message(:create),
-      details: attributes.except("created_at", "updated_at", "id", "organization_id", "id_by_org", "disabled")
+      details: attributes.except(*excepted_log_attributes)
     )
   end
 
@@ -25,16 +25,16 @@ module Loggable
 
     Log.updated!(
       loggable: self,
-      user: Current.user,
+      user: loggable_user,
       message: default_log_message(:update),
-      details: saved_changes.except(:updated_at)
+      details: saved_changes.except(*excepted_log_attributes)
     )
   end
 
   def log_destruction
     Log.destroyed!(
       loggable: self,
-      user: Current.user,
+      user: loggable_user,
       message: default_log_message(:destroy)
     )
   end
@@ -52,7 +52,17 @@ module Loggable
     respond_to?(:name) ? name : id
   end
 
+  # nadpisywalne w modelu
+  def loggable_user
+    Current.user
+  end
+
   def action_suffix(action)
     { create: "utworzony", update: "zmieniony", destroy: "usunięty" }[action] || ""
+  end
+
+  # atrybuty, które nie powinny być zapisywane
+  def excepted_log_attributes
+    %w[created_at updated_at id organization_id id_by_org disabled]
   end
 end

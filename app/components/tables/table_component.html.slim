@@ -1,0 +1,9 @@
+table.index-table data-controller="click-row" data-action="click->click-row#navigate"
+  thead
+    = render "#{@custom_dir}table_header"
+  tbody id=@turbo_id
+    - @list.each do |el|
+      = render "#{@custom_dir}row", el: el
+
+- unless defined?(@no_pages) && @no_pages
+  = render 'pagination', list: @list

@@ -200,6 +200,7 @@ pl:
 
   log_in: Zaloguj się
   form: Formularz
+  add_new: Dodaj nowy
 
   roles:
     admin: Administrator
