@@ -38,12 +38,15 @@ class Variant < ApplicationRecord
   # historia zmian
   has_many :logs, as: :loggable, dependent: :destroy
 
+  has_one_attached :barcode_image # kod kreskowy
+  has_one_attached :qr_code_image # kod QR
+
   has_many_attached :images # zdjęcie
 
   # === WALIDACJE ===
   validates :name, presence: true
-  validates :sku, uniqueness: true, allow_blank: true
-  validates :ean, uniqueness: true, allow_blank: true
+  validates :sku, uniqueness: { scope: :organization_id, allow_blank: true }
+  validates :ean, uniqueness: { scope: :organization_id, allow_blank: true }
   validates :price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # === STATUSY ===
@@ -60,7 +63,7 @@ class Variant < ApplicationRecord
   # === CALLBACKI ===
   before_validation :assign_default_name, if: -> { name.blank? }
   before_validation :set_default_stock, if: -> { stock.nil? }
-  after_save :generate_sku, if: -> { sku.blank? }
+  before_save :generate_sku, if: -> { sku.blank? }
 
 
 
@@ -99,18 +102,24 @@ class Variant < ApplicationRecord
 
   def generate_sku
     return if sku.present?
-    
-    prod_sku = product&.sku || SecureRandom.alphanumeric(3).upcase
-    candidate = "#{prod_sku}/#{100 + (id_by_org || id)}"
-    
-    # Sprawdzenie czy SKU już istnieje i wygenerowanie kolejnego
+
+    raise "Product code missing" if product&.code.blank?
+    raise "Category code missing" if product&.category&.code.blank?
+
+    cat_code  = product.category.code.to_s.strip.upcase
+    prod_code = product.code.to_s.strip.upcase
+
+    next_number = Variant.where(organization_id: organization_id, product_id: product_id).count + 1
+
+    candidate = format("%s-%s-%03d", cat_code, prod_code, next_number)
+
     counter = 0
     while Variant.where(organization_id: organization_id).where(sku: candidate).where.not(id: id).exists?
       counter += 1
-      candidate = "#{prod_sku}/#{100 + (id_by_org || id) + counter}"
+      candidate = format("%s-%s-%03d", cat_code, prod_code, next_number + counter)
     end
-    
-    self.update_column(:sku, candidate)
+
+    self.sku = candidate
   end
 
   def assign_default_name

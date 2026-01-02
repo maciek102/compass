@@ -64,9 +64,9 @@ class Product < ApplicationRecord
 
   # === WALIDACJE ===
   validates :name, presence: true
-  validates :slug, uniqueness: true, allow_blank: true
-  validates :code, uniqueness: true, allow_blank: true
-  validates :sku, uniqueness: true, allow_blank: true
+  validates :slug, uniqueness: { scope: :organization_id, allow_blank: true }
+  validates :code, uniqueness: { scope: :organization_id, allow_blank: true }
+  validates :sku, uniqueness: { scope: :organization_id, allow_blank: true }
 
   # === SCOPE ===
   scope :active, -> { where(disabled: false) } # niezarchiwizowane
@@ -76,8 +76,8 @@ class Product < ApplicationRecord
   # === CALLBACKI ===
   before_validation :generate_slug, if: -> { name.present? }
   before_validation :set_default_status, if: -> { status.nil? }
-  after_save :generate_code, if: -> { code.blank? }
-  after_save :generate_sku, if: -> { sku.blank? }
+  before_save :generate_code, if: -> { code.blank? }
+  before_save :generate_sku, if: -> { sku.blank? }
   after_create :create_default_variant # tworzenie domyślnego wariantu w przypadku braku
 
 
@@ -110,40 +110,43 @@ class Product < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  # generacja unikalnego kodu produktu ("ELE", "SMA1", etc.)
+  # generacja unikalnego kodu produktu ("IPH1", "XIA2", etc.)
   def generate_code
     return if code.present?
-    clean_name = name.to_s.strip.parameterize(preserve_case: true, separator: '').upcase
-    base = clean_name[0,3].presence || SecureRandom.alphanumeric(3).upcase
-    candidate = "#{base}#{id_by_org || id}"
-    
-    # Sprawdzenie czy kod już istnieje i wygenerowanie kolejnego
+
+    base = name.to_s.parameterize(preserve_case: true, separator: '').upcase[0,3]
+    base = SecureRandom.alphanumeric(3).upcase if base.blank?
+
+    candidate = base
     counter = 0
-    while Product.where(organization_id: organization_id).where(code: candidate).where.not(id: id).exists?
+
+    while Product.exists?(organization_id: organization_id, code: candidate)
       counter += 1
-      candidate = "#{base}#{id_by_org || id}#{counter}"
+      candidate = "#{base}#{counter}"
     end
-    
-    self.update_column(:code, candidate)
+
+    self.code = candidate
   end
 
   def generate_sku
     return if sku.present?
-    
-    cat_code = category&.code.to_s.strip.upcase
-    cat_code = cat_code.parameterize(preserve_case: true, separator: '')
-    cat_code = "XXX" if cat_code.blank?
-    prod_code = code || SecureRandom.alphanumeric(3).upcase
-    candidate = "##{cat_code}/#{prod_code}"
-    
-    # Sprawdzenie czy SKU już istnieje i wygenerowanie kolejnego
+    raise "Category code missing" if category&.code.blank?
+    raise "Product code missing" if code.blank?
+
+    cat_code  = category.code.to_s.strip.upcase
+    cat_code  = cat_code.parameterize(preserve_case: true, separator: '')
+    cat_code  = "XXX" if cat_code.blank?
+    prod_code = code
+
+    candidate = "#{cat_code}-#{prod_code}"
     counter = 0
-    while Product.where(organization_id: organization_id).where(sku: candidate).where.not(id: id).exists?
+
+    while Product.where(organization_id: organization_id).where(sku: candidate).exists?
       counter += 1
-      candidate = "##{cat_code}/#{prod_code}-#{counter}"
+      candidate = "#{cat_code}-#{prod_code}#{counter}"
     end
-    
-    self.update_column(:sku, candidate)
+
+    self.sku = candidate
   end
   
   def set_default_status

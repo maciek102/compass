@@ -72,7 +72,8 @@ class VariantsController < ApplicationController
   end
 
   def set_left_menu_context
-    @left_menu_context = :products
+    # context - potrzebny żeby lewe menu wiedziało, który kontekst (produktowy/magazynowy) jest aktywny dla wariantów - DO EWENTUALNEJ POPRAWY, nie miałem lepszego pomysłu
+    @left_menu_context = params[:context]&.to_sym || :products
   end
 
   def variant_params

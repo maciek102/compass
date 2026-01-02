@@ -3,6 +3,7 @@ module Views
   # menu główne - podstawowe menu zależne od roli usera
   # menu kontekstowe - dodatkowe menu zależne od kontekstu (np. produkty - lista produktów + kategorie)
   # dostępne konteksty - :products, :warehouse
+  # menu superadmina - działa na podstawie flagi w User
   class LeftMenuPresenter
     include IconsHelper
     
@@ -40,20 +41,22 @@ module Views
     end
 
     def superadmin_menu
-      superadmin_menu = [
+      # superadmin ma możliwość przełączania się na widok "zwykłego" usera, zależne od flagi superadmin_view w User
+      return admin_menu unless user.superadmin_view 
+
+      # domyślne menu superadmina
+      [
         { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
         { text: "Organizacje", url: Rails.application.routes.url_helpers.organizations_path, icon: Organization.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
       ]
-
-      user.superadmin_view ? superadmin_menu : admin_menu
     end
 
     def admin_menu
       [
         { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
-        { text: "Magazyn", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
-        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
+        { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon },
+        { text: "Produkty", url: products_context.first[:url], icon: Product.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
       ]
     end
@@ -82,6 +85,7 @@ module Views
       end
     end
 
+    # menu produktowe
     def products_context
       [
         { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
@@ -90,8 +94,10 @@ module Views
       ]
     end
 
+    # menu magazynowe
     def warehouse_context
       [
+        { text: "Stan", url: Rails.application.routes.url_helpers.variants_path(context: :warehouse), icon: Variant.icon },
         { text: "Operacje", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
         { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
       ]

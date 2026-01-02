@@ -42,8 +42,8 @@ class ProductCategory < ApplicationRecord
 
   # === WALIDACJE ===
   validates :name, presence: true
-  validates :slug, uniqueness: true, allow_blank: true
-  validates :code, uniqueness: true
+  validates :slug, uniqueness: { scope: :organization_id, allow_blank: true }
+  validates :code, uniqueness: { scope: :organization_id }
 
   # === SCOPE ===
   scope :active, -> { where(disabled: false) } # niezarchiwizowane
@@ -193,25 +193,26 @@ class ProductCategory < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  # generacja unikalnego kodu kategorii ("ELE1", "SMA2", etc.)
+  # generacja unikalnego kodu kategorii ("ELE", "SMA1", etc.)
   def generate_code
     return if code.present?
 
-    clean_name = name.to_s.strip
-    clean_name = clean_name.parameterize(preserve_case: true, separator: '')
-    
-    base_prefix = clean_name.upcase[0,3]
-    base_prefix = SecureRandom.alphanumeric(3).upcase if base_prefix.blank? || base_prefix.length < 3
-    candidate = "#{base_prefix[0,3]}#{id_by_org || id}"
+    base = name.to_s.parameterize(preserve_case: true, separator: '').upcase[0,3]
+    base = SecureRandom.alphanumeric(3).upcase if base.blank?
 
-    # Sprawdzenie czy kod już istnieje i wygenerowanie kolejnego
-    counter = 0
-    while ProductCategory.where(organization_id: organization_id).where(code: candidate).where.not(id: id).exists?
-      counter += 1
-      candidate = "#{base_prefix[0,3]}#{id_by_org || id}#{counter}"
+    ProductCategory.transaction do
+      ProductCategory.where(organization_id: organization_id).lock
+
+      candidate = base
+      counter = 0
+
+      while ProductCategory.exists?(organization_id: organization_id, code: candidate)
+        counter += 1
+        candidate = "#{base}#{counter}"
+      end
+
+      update_column(:code, candidate)
     end
-
-    self.update_column(:code, candidate)
   end
 
   def self.ransackable_attributes(auth_object = nil)

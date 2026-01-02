@@ -1,4 +1,5 @@
-tr.table-row data-url=variant_path(el)
+/ context - potrzebny żeby lewe menu wiedziało, który kontekst (produktowy/magazynowy) jest aktywny dla wariantów - DO EWENTUALNEJ POPRAWY, nie miałem lepszego pomysłu
+tr.table-row data-url=variant_path(el, context: @left_menu_context)
   td = el.sku
   td 
     = "#{el.product.name} / "

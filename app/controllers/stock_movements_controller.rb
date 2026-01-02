@@ -145,8 +145,7 @@ class StockMovementsController < ApplicationController
   # przygotowanie tablicy proponowanych itemów do przyjęcia na magazyn
   def set_proposed_items(stock_operation:, quantity:)
     
-    next_id = Item.where(organization_id: current_user.organization_id).maximum(:id_by_org).to_i + 1
-    base_number = 100 + next_id
+    base_number = Item.where(organization_id: current_user.organization_id, variant_id: stock_operation.variant_id).count + 1
     
     Array.new(quantity) do |index|
       item = Item.new(

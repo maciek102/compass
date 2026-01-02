@@ -44,7 +44,7 @@ class Item < ApplicationRecord
   }
 
   # === WALIDACJE ===
-  validates :serial_number, uniqueness: true, allow_blank: true
+  validates :serial_number, uniqueness: { scope: :organization_id, allow_blank: true }
   validates :status, presence: true
 
   # === SCOPE ===
@@ -55,7 +55,7 @@ class Item < ApplicationRecord
   # === CALLBACKI ===
   before_validation :set_default_status, if: -> { status.blank? }
   before_validation :set_default_received_at, if: -> { received_at.blank? }
-  after_save :generate_default_serial_number, if: -> { serial_number.blank? }
+  before_save :generate_default_serial_number, if: -> { serial_number.blank? }
 
 
 
@@ -82,35 +82,43 @@ class Item < ApplicationRecord
 
   # generacja domyślnego numeru seryjnego
   def generate_default_serial_number
-    return if id.nil? || variant.nil?
-    candidate = "#{variant.sku}-#{100 + (id_by_org || id)}"
-    
-    # Sprawdzenie czy numer seryjny już istnieje i wygenerowanie kolejnego
+    return if serial_number.present?
+    raise "Variant missing" if variant.nil?
+    raise "Variant SKU missing" if variant.sku.blank?
+
+    base_sku = variant.sku
+
+    next_number = Item.where(organization_id: organization_id, variant_id: variant_id).count + 1
+
+    candidate = format("%s-%06d", base_sku, next_number)
+
     counter = 0
-    while Item.where(organization_id: organization_id).where(serial_number: candidate).where.not(id: id).exists?
+    while Item.where(organization_id: organization_id).where(serial_number: candidate).exists?
       counter += 1
-      candidate = "#{variant.sku}-#{100 + (id_by_org || id) + counter}"
+      candidate = format("%s-%06d", base_sku, next_number + counter)
     end
-    
-    self.update_column(:serial_number, candidate)
+
+    self.serial_number = candidate
   end
 
   # generacja proponowanego numeru seryjnego, używana na nieutworzonych obiektach np przy receive
   def generate_proposed_serial_number
-    return if variant.nil?
-    
-    # Jeśli base number został ustawiony w kontrolerze (optymalizacja N+1), użyj go
+    return if variant.nil? || variant.sku.blank?
+
+    base_sku = variant.sku
+
     if respond_to?(:serial_number_base)
+      # użyj wcześniej przygotowanego base i offset (przygotowane w kontrolerze, aby uniknąć n+1)
       offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
       next_number = serial_number_base + offset
     else
-      # Fallback - oblicz od nowa (używane gdy metoda wywoływana poza kontrolerem)
-      next_id = Item.where(organization_id: organization_id).maximum(:id).to_i + 1
+      # fallback – policz od liczby istniejących itemów wariantu (liczenie od nowa)
+      next_number = Item.where(organization_id: organization_id, variant_id: variant_id).count + 1
       offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
-      next_number = 100 + next_id + offset
+      next_number += offset
     end
-    
-    "#{variant.sku}-#{next_number}"
+
+    format("%s-%06d", base_sku, next_number)
   end
 
   private
