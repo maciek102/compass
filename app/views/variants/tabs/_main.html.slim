@@ -12,3 +12,6 @@
   .actions
     = resource_turbo_edit_link(@variant, "Edytuj")
     = resource_destroy_link(@variant, "Usuń")
+  
+  = image_tag @variant.barcode_image if @variant.barcode_image.attached?
+  = image_tag @variant.qr_code_image if @variant.qr_code_image.attached?
