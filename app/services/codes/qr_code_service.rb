@@ -12,7 +12,8 @@ module Codes
       png = qr.as_png(
         color: 'black',
         background_color: 'white',
-        border_modules: 4
+        border_modules: 4,
+        module_px_size: 10
       ).to_s
       attach_png(png)
     end
@@ -20,7 +21,13 @@ module Codes
     private
 
     def variant_url
-      Rails.application.routes.url_helpers.variant_url(@variant.id, host: ENV['APP_HOST'] || 'localhost:3000')
+      host = ENV['APP_HOST'] || 'localhost:3000'
+      protocol = ENV['APP_PROTOCOL'] || 'http'
+      Rails.application.routes.url_helpers.variant_url(
+        @variant.id, 
+        host: host,
+        protocol: protocol
+      )
     end
 
     def attach_png(png)

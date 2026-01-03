@@ -98,7 +98,7 @@ module Views
     # menu magazynowe
     def warehouse_context
       [
-        { text: "Stan", url: Rails.application.routes.url_helpers.variants_path(context: :warehouse), icon: Variant.icon },
+        { text: "Stan", url: Rails.application.routes.url_helpers.stock_index_variants_path, icon: Variant.icon },
         { text: "Operacje", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
         { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
       ]

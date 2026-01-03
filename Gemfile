@@ -82,7 +82,7 @@ gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
 gem 'exception_notification', '~> 4.5'
 gem "sassc-rails"
 gem 'devise', '~> 4.9', '>= 4.9.4'
-gem 'mini_magick', '~> 4.5', '>= 4.5.1'
+gem 'mini_magick', '~> 5.3', '>= 5.3.1'
 gem 'dotenv-rails', '~> 3.2'
 gem 'request_store', '~> 1.7'
 gem 'view_component', '~> 4.1', '>= 4.1.1'

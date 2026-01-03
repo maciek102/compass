@@ -1,0 +1,25 @@
+/ context - potrzebny żeby lewe menu wiedziało, który kontekst (produktowy/magazynowy) jest aktywny dla wariantów - DO EWENTUALNEJ POPRAWY, nie miałem lepszego pomysłu
+
+- expand_items = @expand_items || false
+- nested_row_classes = ["nested-row"]
+- nested_row_classes << "hidden" unless expand_items
+- toggle_icon = expand_items ? "arrow-up" : "arrow-down"
+
+tr.table-row id="variant-row-#{el.id}" data-url=variant_path(el, context: @left_menu_context)
+  td = el.sku
+  td 
+    strong = el.product.name
+    = " / #{el.name}"
+  td 
+    = "#{el.stock} "
+    / przycisk do rozwijania/zamykania widoku itemów wariantu
+    = link_to fa_icon(toggle_icon), toggle_items_variant_path(el), remote: true, class: "action-button", id: "toggle-items-#{el.id}"
+  td
+    .actions
+      = link_to fa_icon("plus", text: "Operacja"), new_stock_operation_path(variant_id: el.id), data: { turbo_frame: "modal" }, class: "action-button", title: "Operacja"
+
+/ renderowanie itemów wariantu w linii pod produktem
+tr class=nested_row_classes.join(" ") id="variant-#{el.id}-nested-items"
+  td colspan=6
+    - if expand_items
+      = render partial: 'items/nested_row', locals: { items: el.items }

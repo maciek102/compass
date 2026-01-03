@@ -15,6 +15,23 @@ class VariantsController < ApplicationController
     end
   end
 
+  def stock_index
+    @left_menu_context = :warehouse
+
+    @search_url = stock_index_variants_path
+
+    # ustawienie trybów tabeli
+    scoped = set_view_mode_scope(Variant.for_user(current_user))
+
+    @search = scoped.includes(:product, :items).ransack(params[:q])
+    @list = @variants = @search.result(distinct: true).page(params[:page])
+
+    respond_to do |f|
+      f.html
+      f.js { render "application/index" }
+    end
+  end
+
   def show
     @tab = params[:tab] || "main"
 
@@ -69,6 +86,14 @@ class VariantsController < ApplicationController
     @left_menu_context = nil
   end
 
+  def toggle_items
+    @items = @variant.items
+
+    respond_to do |f|
+      f.js
+    end
+  end
+
   private
 
   def set_product
@@ -78,6 +103,21 @@ class VariantsController < ApplicationController
   def set_left_menu_context
     # context - potrzebny żeby lewe menu wiedziało, który kontekst (produktowy/magazynowy) jest aktywny dla wariantów - DO EWENTUALNEJ POPRAWY, nie miałem lepszego pomysłu
     @left_menu_context = params[:context]&.to_sym || :products
+  end
+
+  def set_view_mode_scope(model = Variant)
+    @view_modes = Views::TableViewModePresenter.new(
+      params[:view],
+      default: :list,
+      modes: {
+        list: { label: "Lista", scope: ->(scope) { scope } },
+        groups: { label: "Grupy", scope: ->(scope) { scope } }
+      }
+    )
+
+    @expand_items = @view_modes.current?(:groups)
+    
+    @view_modes.apply(model)
   end
 
   def variant_params

@@ -1,0 +1,6 @@
+= render "variants/page_headers/index"
+
+/ przełączanie widoków (scope) tabeli
+= render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes, base_params: params)
+
+= render Tables::IndexTableComponent.new(list: @variants, custom_dir: "variants/stock_index/")

@@ -5,6 +5,7 @@
   .info
     = category_info_row("Stan magazynowy", @variant.current_stock)
     = category_info_row("SKU", @variant.sku)
+    = category_info_row("EAN", @variant.ean || "Brak")
     = category_info_row("Produkt", link_to(@variant.product.name, product_path(@variant.product), class: "link"))
     = category_info_row("Kategoria", (@variant.product.category ? link_to(@variant.product.category.name, product_category_path(@variant.product.category), class: "link") : "Brak"))
     

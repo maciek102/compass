@@ -27,7 +27,12 @@ Rails.application.routes.draw do
 
   resources :variants, only: %i[ index show edit update destroy ] do
     collection do
+      get :stock_index
       get :scanner
+    end
+
+    member do
+      get :toggle_items
     end
   end
 
