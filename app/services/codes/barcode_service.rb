@@ -11,7 +11,7 @@ module Codes
     def call
       ensure_ean_present
       barcode = Barby::EAN13.new(@variant.ean)
-      png = Barby::PngOutputter.new(barcode).to_png(height: 50, margin: 10)
+      png = Barby::PngOutputter.new(barcode).to_png(height: 150, margin: 10)
       attach_png(png)
     end
 

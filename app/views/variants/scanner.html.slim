@@ -1,0 +1,35 @@
+= render "variants/page_headers/scanner"
+
+.row
+  .col-lg-8
+    .show-container data-controller="barcode-scanner"
+      .title Skanuj kod EAN lub QR
+      p.text-muted Wgraj obraz lub skieruj kamerę na kod. Uwaga - skaner może popełniać błędy w zależności od jakości obrazu i oświetlenia.
+
+      hr
+      
+      .d-flex.gap-2.mb-3
+        = button_tag "Skanuj", class: "btn btn-primary btn-lg", data: { action: "barcode-scanner#startCamera" }
+        = button_tag "Anuluj", type: "button", class: "btn btn-outline-secondary", data: { action: "barcode-scanner#stopCamera" }
+
+      .d-none.mb-3 data-barcode-scanner-target="videoContainer"
+        video.w-100.rounded.border data-barcode-scanner-target="video" autoplay="autoplay" playsinline="playsinline" muted="muted" style="max-height: 400px;"
+        canvas.d-none data-barcode-scanner-target="canvas"
+
+      p.text-muted Lub wgraj plik
+
+      .mb-3
+        input.form-control type="file" accept="image/*" data-barcode-scanner-target="input" data-action="change->barcode-scanner#decodeFromFile"
+        small.form-text.text-muted Zdjęcie etykiety lub zrzut ekranu z kodem.
+
+
+      .mb-2
+        p.text-muted.mb-1 data-barcode-scanner-target="status"
+        p.text-danger.mb-1 data-barcode-scanner-target="error"
+
+      hr
+      
+      .mb-0
+        label.form-label.mb-1 Wynik odczytu
+        pre.form-control.bg-light data-barcode-scanner-target="result"
+        p.text-muted.mb-0 data-barcode-scanner-target="format"

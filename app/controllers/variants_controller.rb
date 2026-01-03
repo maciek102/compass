@@ -65,6 +65,10 @@ class VariantsController < ApplicationController
   def destroy
   end
 
+  def scanner
+    @left_menu_context = nil
+  end
+
   private
 
   def set_product

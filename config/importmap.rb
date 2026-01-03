@@ -13,4 +13,6 @@ pin "chosen-jquery", to: "https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/ch
 pin "trix"
 pin "@rails/actiontext", to: "actiontext.esm.js"
 pin "slim-select" # @2.9.0
+pin "@zxing/browser", to: "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.4/+esm"
+pin "@zxing/library", to: "https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/+esm"
 pin_all_from "app/javascript/controllers", under: "controllers"

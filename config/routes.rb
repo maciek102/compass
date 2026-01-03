@@ -25,7 +25,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :variants, only: %i[ index show edit update destroy ]
+  resources :variants, only: %i[ index show edit update destroy ] do
+    collection do
+      get :scanner
+    end
+  end
 
   resources :items
 
