@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :organizations
+  resources :organizations do
+    collection do
+      get :dashboard
+    end
+  end
 
   resources :users do
     member do
@@ -53,6 +57,8 @@ Rails.application.routes.draw do
       post :set_items_to_receive
     end
   end
+
+  resources :import_runs, only: %i[ index show new create ]
 
   authenticated :user do
     root to: 'users#dashboard', as: :authenticated_root

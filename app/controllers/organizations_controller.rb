@@ -56,6 +56,10 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def dashboard
+    
+  end
+
   private
 
   def organization_params

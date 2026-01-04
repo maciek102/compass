@@ -1,0 +1,14 @@
+= simple_form_for(@import_run, html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-grid
+
+    .form-section
+      .title Rodzaj danych
+
+      = f.select :resource, ImportExport::ConfigResolver.allowed_resources.map { |r| [r.humanize, r] }, include_blank: "Wybierz"
+      = f.input :source_file, as: :file
+      
+      
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

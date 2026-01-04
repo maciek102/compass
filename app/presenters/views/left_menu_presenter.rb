@@ -58,7 +58,8 @@ module Views
         { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon },
         { text: "Produkty", url: products_context.first[:url], icon: Product.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon },
-        { text: "Skaner", url: Rails.application.routes.url_helpers.scanner_variants_path, icon: "barcode" }
+        { text: "Skaner", url: Rails.application.routes.url_helpers.scanner_variants_path, icon: "barcode" },
+        { text: "Ustawienia", url: Rails.application.routes.url_helpers.dashboard_organizations_path, icon: "cog" }
       ]
     end
 

@@ -1,0 +1,8 @@
+.org-dashboard 
+  - presenter = Views::OrgDashboardPresenter.new(user: current_user)
+  - presenter.build.each do |item|
+    = link_to item[:url], class: 'tile' do
+      .icon
+        = fa_icon(item[:icon])
+      .title
+        = item[:text]

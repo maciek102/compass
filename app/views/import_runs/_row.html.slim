@@ -1,0 +1,7 @@
+tr.table-row id="import-run-row-#{el.id}" data-url=import_run_path(el)
+  td = el.title
+  td = el.source_file&.filename.to_s
+  td = el.resource
+  td = el.status.humanize
+  td = el.user.name
+  td = show_datetime(el.created_at)

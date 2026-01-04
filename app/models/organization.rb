@@ -24,6 +24,7 @@ class Organization < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :stock_operations, dependent: :destroy
   has_many :stock_movements, dependent: :destroy
+  has_many :import_runs, dependent: :destroy
 
   has_many :logs, as: :loggable, dependent: :destroy # historia zmian
   

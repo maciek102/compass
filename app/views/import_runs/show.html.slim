@@ -1,0 +1,49 @@
+= render "import_runs/page_headers/show"
+
+.show-container
+  .title
+    - case @import_run.status
+    - when "pending"
+      = status_label("Oczekujący", klass: "status-pending", style: "background-color: #ffc107; color: #000;")
+    - when "running"
+      = status_label("W trakcie", klass: "status-running", style: "background-color: #17a2b8; color: #fff;")
+    - when "success"
+      = status_label("Sukces", klass: "status-success", style: "background-color: #28a745; color: #fff;")
+    - when "failed"
+      = status_label("Błąd", klass: "status-failed", style: "background-color: #dc3545; color: #fff;")
+
+  .info
+    = category_info_row("Typ zasobu", @import_run.resource.humanize)
+    = category_info_row("Status", @import_run.status.humanize)
+    = category_info_row("Użytkownik", @import_run.user.email)
+    = category_info_row("Data utworzenia", l(@import_run.created_at, format: :long))
+    
+    - if @import_run.total_rows.present?
+      = category_info_row("Postęp", "#{@import_run.processed_rows || 0} / #{@import_run.total_rows} wierszy")
+    
+    - if @import_run.created_count.present? || @import_run.updated_count.present?
+      .info-row
+        .info-label Statystyki:
+        .info-value
+          = content_tag(:span, "✓ Utworzono: #{@import_run.created_count || 0}", style: "color: #28a745; margin-right: 15px;")
+          = content_tag(:span, "↻ Zaktualizowano: #{@import_run.updated_count || 0}", style: "color: #17a2b8; margin-right: 15px;")
+          - if @import_run.error_count.to_i > 0
+            = content_tag(:span, "✗ Błędy: #{@import_run.error_count}", style: "color: #dc3545;")
+    
+    - if @import_run.source_file.attached?
+      = category_info_row("Plik źródłowy", link_to(@import_run.file_name, rails_blob_path(@import_run.source_file, disposition: "attachment"), class: "link"))
+    
+    - if @import_run.result_file.attached?
+      = category_info_row("Raport błędów", link_to("Pobierz CSV z błędami", rails_blob_path(@import_run.result_file, disposition: "attachment"), class: "link", style: "color: #dc3545;"))
+
+  - if @import_run.import_errors.present? && @import_run.import_errors.any?
+    .section-title style="margin-top: 30px;"
+      | Szczegóły błędów (#{@import_run.import_errors.size})
+    
+    .error-list style="margin-top: 15px;"
+      - @import_run.import_errors.each do |error|
+        .error-item style="background: #fff3f3; border-left: 4px solid #dc3545; padding: 12px; margin-bottom: 10px; border-radius: 4px;"
+          .error-line style="font-weight: bold; color: #721c24; margin-bottom: 5px;"
+            | Linia #{error["line"]}
+          .error-message style="color: #666;"
+            = error["message"]
