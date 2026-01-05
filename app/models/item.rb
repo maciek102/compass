@@ -21,6 +21,8 @@
 # - images:active_storage -> zdjęcia egzemplarza
 
 class Item < ApplicationRecord
+  acts_as_tenant :organization
+  
   include Destroyable
   include OrganizationScoped
 
@@ -62,8 +64,8 @@ class Item < ApplicationRecord
   # === METODY ===
   
   def self.for_user(user)
-    default_scope = for_organization(user.organization_id)
-    default_scope
+    # acts_as_tenant automatycznie scopes do organizacji użytkownika
+    all
   end
 
   # czy item jest dostępny do sprzedaży?

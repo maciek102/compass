@@ -4,6 +4,7 @@
 - toggle_icon = expand_variants ? "arrow-up" : "arrow-down"
 
 tr.table-row id="product-row-#{el.id}" data-url=product_path(el)
+  td = "##{el.id_by_org}"
   td = el.sku
   td.bold = el.name
   td = el.status.humanize

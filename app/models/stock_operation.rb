@@ -1,4 +1,6 @@
 class StockOperation < ApplicationRecord
+  acts_as_tenant :organization
+  
   include Loggable
   include OrganizationScoped
 
@@ -46,8 +48,8 @@ class StockOperation < ApplicationRecord
   # === METODY ===
    
   def self.for_user(user)
-    default_scope = for_organization(user.organization_id)
-    default_scope
+    # acts_as_tenant automatycznie scopes do organizacji użytkownika
+    all
   end
 
   def self.icon

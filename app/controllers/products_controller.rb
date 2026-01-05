@@ -36,7 +36,7 @@ class ProductsController < ApplicationController
   end
 
   def new
-    @product.product_category_id = params[:category_id] if params[:category_id].present?
+    @product.product_category_id = params[:product_category_id] if params[:product_category_id].present?
   end
 
   def edit
@@ -44,10 +44,17 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-    if @product.save
-      redirect_to @product, notice: "Produkt został utworzony."
-    else
-      render :new
+
+    respond_to do |format|
+      if @product.save
+
+        flash[:notice] = flash_message(Product, :create)
+
+        format.turbo_stream
+        format.html { redirect_to @product, notice: flash[:notice] }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

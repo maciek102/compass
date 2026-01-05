@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
   
+  set_current_tenant_through_filter
+  before_action :set_tenant
   before_action :set_current_attributes
   #before_action :store_current_user
   before_action :set_locale
@@ -48,6 +50,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_tenant
+    if current_user
+      set_current_tenant(current_user.organization)
+    end
+  end
 
   def set_current_attributes
     Current.user = current_user

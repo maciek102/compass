@@ -8,8 +8,17 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# Najpierw tworzymy organizację
+org = Organization.find_or_create_by!(name: "Default Org") do |organization|
+  organization.description = "Domyślna organizacja testowa"
+  organization.launched = true
+end
+
+# Następnie tworzymy użytkownika przypisanego do organizacji
 User.find_or_create_by!(email: "admin@test.com") do |user|
   user.name = "Admin"
   user.password = "Test123."
   user.password_confirmation = "Test123."
+  user.organization = org
+  user.is_superadmin = true
 end

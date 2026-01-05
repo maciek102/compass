@@ -81,6 +81,7 @@ gem 'ransack', '~> 4.0'
 gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
 gem 'exception_notification', '~> 4.5'
 gem "sassc-rails"
+gem 'acts_as_tenant', '~> 1.0', '>= 1.0.1'
 gem 'devise', '~> 4.9', '>= 4.9.4'
 gem 'mini_magick', '~> 5.3', '>= 5.3.1'
 gem 'dotenv-rails', '~> 3.2'

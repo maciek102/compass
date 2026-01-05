@@ -17,6 +17,7 @@
 # - meta: dodatkowe metadane dotyczące importu w formacie JSON
 
 class ImportRun < ApplicationRecord
+  acts_as_tenant :organization
   include OrganizationScoped
 
   belongs_to :organization
@@ -33,8 +34,8 @@ class ImportRun < ApplicationRecord
   }
 
   def self.for_user(user)
-    default_scope = for_organization(user.organization_id)
-    default_scope
+    # acts_as_tenant automatycznie scopes do organizacji użytkownika
+    all
   end
 
   def self.icon

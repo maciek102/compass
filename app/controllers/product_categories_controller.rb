@@ -54,7 +54,7 @@ class ProductCategoriesController < ApplicationController
         format.turbo_stream
         format.html { redirect_to @product_category, notice: flash[:notice] }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end

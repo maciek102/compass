@@ -10,24 +10,25 @@ class Ability
       can :manage, :all
     
     # ADMIN organizacji - dostęp do zasobów w jego organizacji
+    # acts_as_tenant automatycznie scopuje zapytania do organizacji użytkownika
     elsif user.admin?
       can :manage, User, organization_id: user.organization_id, superadmin: false
-      can :manage, ProductCategory, organization_id: user.organization_id
-      can :manage, Product, organization_id: user.organization_id
-      can :manage, Variant, organization_id: user.organization_id
-      can :manage, Item, organization_id: user.organization_id
-      can :manage, StockOperation, organization_id: user.organization_id
-      can :manage, StockMovement, organization_id: user.organization_id
+      can :manage, ProductCategory
+      can :manage, Product
+      can :manage, Variant
+      can :manage, Item
+      can :manage, StockOperation
+      can :manage, StockMovement
 
     # STANDARD user - ograniczony dostęp
     else
       can :read, User, organization_id: user.organization_id, superadmin: false
-      can :read, ProductCategory, organization_id: user.organization_id
-      can :read, Product, organization_id: user.organization_id
-      can :read, Variant, organization_id: user.organization_id
-      can :read, Item, organization_id: user.organization_id
-      can :read, StockOperation, organization_id: user.organization_id
-      can :read, StockMovement, organization_id: user.organization_id
+      can :read, ProductCategory
+      can :read, Product
+      can :read, Variant
+      can :read, Item
+      can :read, StockOperation
+      can :read, StockMovement
     end
   end
 
