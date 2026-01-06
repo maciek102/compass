@@ -18,6 +18,7 @@ class Organization < ApplicationRecord
 
   # === RELACJE ===
   has_many :users, dependent: :destroy
+  has_many :clients, dependent: :destroy
   has_many :product_categories, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :variants, dependent: :destroy

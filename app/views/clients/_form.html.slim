@@ -1,0 +1,22 @@
+/.form-card
+= simple_form_for(@client, html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-grid
+    .form-section
+      .title Dane podstawowe
+
+      = f.input :name, label: "Nazwa klienta / Firmy"
+      = f.input :email, label: "Email", input_html: { type: "email" }
+      = f.input :phone, label: "Telefon", placeholder: "+48 123 456 789"
+      = f.input :address, as: :text, label: "Adres", input_html: { rows: 3 }
+
+    .form-section
+      .title Dane biznesowe (opcjonalnie)
+
+      = f.input :tax_id, label: "NIP / Tax ID"
+      = f.input :registration_number, label: "REGON / Registration Number"
+    
+  .form-actions
+    = f.submit @client.persisted? ? "Aktualizuj" : "Utwórz klienta", class: "btn btn--primary"
+    = link_to "Anuluj", clients_path, class: "btn btn--secondary"

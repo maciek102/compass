@@ -1,0 +1,21 @@
+tr.table-row id="client-row-#{el.id}" data-url=client_path(el)
+  td = "##{el.id_by_org}"
+  td
+    .client-info
+      strong = el.name
+      - if el.email.present?
+        br
+        small = el.email
+
+  td = el.phone || "—"
+  td = el.address || "—"
+
+  td
+    - if el.tax_id.present?
+      = el.tax_id
+    - else
+      span.text-muted —
+  td
+    .actions
+      = resource_turbo_edit_link(el)
+      = resource_destroy_link(el)

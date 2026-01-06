@@ -1,0 +1,15 @@
+- content_for :page_title do
+  | Klienci
+
+- content_for :breadcrumbs do
+  = link_to "Dashboard", dashboard_user_path(current_user)
+  |  / Klienci
+
+- content_for :header_actions do
+  = link_to "Dodaj klienta", new_client_path, class: "base-button", data: { turbo_frame: "modal" }
+
+- content_for :filters do
+  = render "filters"
+
+- content_for :page_header do
+  = render "page_header_template"

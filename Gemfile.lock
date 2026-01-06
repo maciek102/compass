@@ -387,7 +387,7 @@ DEPENDENCIES
   devise (~> 4.9, >= 4.9.4)
   dotenv-rails (~> 3.2)
   exception_notification (~> 4.5)
-  font-awesome-rails
+  font-awesome-rails (~> 4.7, >= 4.7.0.9)
   importmap-rails
   jbuilder
   jquery-rails (~> 4.6)

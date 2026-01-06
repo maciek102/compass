@@ -13,6 +13,7 @@ class Ability
     # acts_as_tenant automatycznie scopuje zapytania do organizacji użytkownika
     elsif user.admin?
       can :manage, User, organization_id: user.organization_id, superadmin: false
+      can :manage, Client
       can :manage, ProductCategory
       can :manage, Product
       can :manage, Variant
@@ -23,6 +24,7 @@ class Ability
     # STANDARD user - ograniczony dostęp
     else
       can :read, User, organization_id: user.organization_id, superadmin: false
+      can :read, Client
       can :read, ProductCategory
       can :read, Product
       can :read, Variant

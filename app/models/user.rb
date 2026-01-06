@@ -111,7 +111,7 @@ class User < ApplicationRecord
   end
 
   def self.icon
-    "users"
+    "user"
   end
 
   def self.quick_search
