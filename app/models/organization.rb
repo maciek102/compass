@@ -18,14 +18,6 @@ class Organization < ApplicationRecord
 
   # === RELACJE ===
   has_many :users, dependent: :destroy
-  has_many :clients, dependent: :destroy
-  has_many :product_categories, dependent: :destroy
-  has_many :products, dependent: :destroy
-  has_many :variants, dependent: :destroy
-  has_many :items, dependent: :destroy
-  has_many :stock_operations, dependent: :destroy
-  has_many :stock_movements, dependent: :destroy
-  has_many :import_runs, dependent: :destroy
 
   has_many :logs, as: :loggable, dependent: :destroy # historia zmian
   

@@ -1,0 +1,99 @@
+# === Calculation ===
+#
+# Model reprezentuje obliczenie (zbiór wierszy z pozycjami, cenami, rabatami, marżami, VAT).
+# Każda oferta/zamówienie/faktura może mieć wiele obliczeń (różne scenariusze, wersje).
+# Umożliwia wersjonowanie - każda edycja tworzy nowe obliczenie.
+#
+# Atrybuty:
+# - organization_id:bigint -> multi tenant
+# - id_by_org:integer -> unikalny identyfikator w ramach organizacji
+# - calculable_id:bigint -> ID głównego dokumentu (Offer, Order, itp.)
+# - calculable_type:string -> typ głównego dokumentu ("Offer", "Order", itp.)
+# - number:integer -> numer obliczenia
+# - calculation_number:string -> numer dla wyświetlania
+# - status:string -> draft, sent, accepted, rejected, archived
+# - valid_until:datetime -> ważne do
+# - sent_at:datetime -> wysłane w
+# - accepted_at:datetime -> zaakceptowane w
+# - rejected_at:datetime -> odrzucone w
+# - notes:text -> notatki
+# - user_id:bigint -> autor
+
+class Calculation < ApplicationRecord
+  acts_as_tenant :organization
+
+  include Destroyable
+  include Loggable
+  include OrganizationScoped
+
+  # === POLYMORPHIC ASSOCIATION ===
+  belongs_to :calculable, polymorphic: true
+
+  # === RELACJE ===
+  belongs_to :organization
+  belongs_to :user, optional: true
+
+  has_many :calculation_rows, dependent: :destroy
+  has_many :row_adjustments, through: :calculation_rows
+  accepts_nested_attributes_for :calculation_rows, allow_destroy: true
+
+  has_many :logs, as: :loggable, dependent: :destroy
+
+
+  # === WALIDACJE ===
+  validates :calculable_id, presence: true
+  validates :calculable_type, presence: true, inclusion: { in: %w(Offer Order Invoice) }
+  validates :version_number, presence: true, numericality: { only_integer: true, greater_than: 0 }
+
+  # === CALLBACK ===
+  before_validation :set_version_number, on: :create
+
+  # === SCOPES ===
+  scope :by_type, ->(type) { where(calculable_type: type) }
+  scope :by_document, ->(doc_id, doc_type) { where(calculable_id: doc_id, calculable_type: doc_type) }
+  scope :recent, -> { order(created_at: :desc) }
+
+  # === INSTANCE METHODS ===
+
+  # Wszystkie wiersze
+  def rows
+    calculation_rows
+  end
+
+  # Liczba wierszy
+  def rows_count
+    calculation_rows.count
+  end
+
+  # Całkowita suma netto
+  def total_net
+    calculation_rows.sum(:total_net)
+  end
+
+  # Całkowita suma VAT
+  def total_vat
+    calculation_rows.sum(:vat_amount)
+  end
+
+  # Całkowita suma brutto
+  def total_gross
+    calculation_rows.sum(:total_gross)
+  end
+
+  # Całkowita suma rabatów
+  def total_discounts
+    calculation_rows.sum(:discount_total)
+  end
+
+  # Całkowita suma marż
+  def total_margins
+    calculation_rows.sum(:margin_total)
+  end
+
+  private
+
+  # Ustaw numer obliczenia
+  def set_version_number
+    self.version_number = calculable.calculations.count + 1 if version_number.blank?
+  end
+end

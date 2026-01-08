@@ -14,6 +14,9 @@ class Ability
     elsif user.admin?
       can :manage, User, organization_id: user.organization_id, superadmin: false
       can :manage, Client
+      can :manage, Offer
+      can :manage, Calculation
+      can :manage, CalculationRow
       can :manage, ProductCategory
       can :manage, Product
       can :manage, Variant
@@ -25,6 +28,9 @@ class Ability
     else
       can :read, User, organization_id: user.organization_id, superadmin: false
       can :read, Client
+      can :read, Offer
+      can :read, Calculation
+      can :read, CalculationRow
       can :read, ProductCategory
       can :read, Product
       can :read, Variant

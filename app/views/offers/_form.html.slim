@@ -1,0 +1,36 @@
+= simple_form_for(@offer) do |f|
+  = f.error_notification
+
+  .form-grid
+    .form-section
+      .title Dane podstawowe
+
+      = f.input :client_id, label: "Klient", collection: Client.for_user(current_user).map { |c| [c.name, c.id] }, include_blank: "Wybierz klienta", input_html: { data: { controller: "chosen"} }
+    
+    / .form-section
+    /   .title Podkategorie
+    /   .row
+    /     = f.simple_fields_for :subcategories do |builder|
+    /       = render 'subcategory_fields', f: builder
+    /   = link_to_add_fields "Dodaj podkategorię", f, :subcategories, "action-btn"
+
+    / .form-section
+    /   .title Status
+
+    /   .row
+    /     .col-sm-6
+    /       = f.input :visible, as: :boolean, label: "Widoczna?"
+
+    /     .col-sm-6
+    /       = f.input :disabled, as: :boolean, label: "Wyłączona?"
+
+    / .form-section
+    /   .title Dodatkowe
+
+    /   = f.input :description, as: :text, label: "Opis", input_html: { rows: 4 }
+    /   = f.input :position, label: "Pozycja wyświetlania"
+    /   = f.input :slug, label: "Slug (generowany automatycznie)"
+    /   = f.input :code, label: "Kod kategorii (generowany automatycznie)"
+
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

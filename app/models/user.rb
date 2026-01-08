@@ -9,6 +9,8 @@ class User < ApplicationRecord
   # === RELACJE ===
   belongs_to :organization # przynależność do organizacji
   has_many :logs, as: :loggable, dependent: :destroy # historia zmian
+  has_many :offers
+  
   
   # avatar (zdjęcie profilowe)
   has_one_attached :avatar

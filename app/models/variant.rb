@@ -37,6 +37,8 @@ class Variant < ApplicationRecord
   has_many :items, dependent: :destroy
   # ruchy magazynowe
   has_many :stock_operations, dependent: :destroy
+  # wiersze w obliczeniach (oferty, zamówienia)
+  has_many :calculation_rows, dependent: :nullify
   # historia zmian
   has_many :logs, as: :loggable, dependent: :destroy
 

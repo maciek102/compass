@@ -1,0 +1,4 @@
+.tabs 
+  = render "shared/tab", text: "Informacje", path: offer_path(@offer, tab: "main"), active_tab: "main"
+  = render "shared/tab", text: "Pozycje", path: offer_path(@offer, tab: "calculations"), active_tab: "calculations"
+  = render "shared/tab", text: "Historia", path: offer_path(@offer, tab: "history"), active_tab: "history"

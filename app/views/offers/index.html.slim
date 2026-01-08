@@ -1,0 +1,6 @@
+= render "offers/page_headers/index"
+
+/ przełączanie widoków (scope) tabeli
+/= render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes,base_params: params)
+
+= render Tables::IndexTableComponent.new(list: @offers, turbo_id: "offers-table-body")

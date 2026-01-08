@@ -1,4 +1,4 @@
-$('#index-table-cont').html('<%= j render "table", list: @list %>');
+$('#index-table-cont').html('<%= j render Tables::TableComponent.new(list: @list, custom_dir: @custom_dir, no_pages: @no_pages, turbo_id: @turbo_id) %>');
 
 <% if defined?(@filters_service) && @filters_service.present? %>
   $('#selected-filters-cont').html('<%= j render "shared/selected_filters", service: @filters_service %>');

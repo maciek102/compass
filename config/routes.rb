@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :offers
+
   resources :clients
 
   resources :product_categories
