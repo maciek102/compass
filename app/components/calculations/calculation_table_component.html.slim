@@ -1,0 +1,5 @@
+.index-table-cont#calculation-table-cont
+  .header
+    .title = @calculation.title
+
+  = render Calculations::RowsTableComponent.new(calculation: @calculation, turbo_id: @turbo_id)

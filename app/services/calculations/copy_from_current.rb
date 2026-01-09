@@ -14,10 +14,10 @@ module Calculations
       new(**args).call
     end
 
-    def initialize(calculable:, user:)
+    def initialize(calculable:, user:, calculation: nil)
       @calculable = calculable
       @user = user
-      @current_calculation = calculable.calculations.find_by(is_current: true)
+      @current_calculation = calculation || calculable.calculations.find_by(is_current: true)
     end
 
     def call
@@ -34,6 +34,8 @@ module Calculations
         # Przelicz totale
         Calculations::Recalculate.call(calculation: new_calculation)
 
+        log_copy!(new_calculation)
+
         new_calculation
       end
     end
@@ -46,18 +48,15 @@ module Calculations
       raise Error, "Calculable is required" unless calculable
       raise Error, "User is required" unless user
       raise Error, "No current calculation found" unless current_calculation
+      raise Error, "Calculation does not belong to calculable" if current_calculation.calculable != calculable
       raise Error, "Organization mismatch" if calculable.organization_id != user.organization_id
     end
 
     def copy_calculation!
-      next_number = calculable.calculations.maximum(:number).to_i + 1
-
       calculable.calculations.create!(
         organization: current_calculation.organization,
         user: user,
-        number: next_number,
         is_current: true,
-        notes: current_calculation.notes,
         total_net: 0,
         total_vat: 0,
         total_gross: 0,
@@ -94,6 +93,15 @@ module Calculations
           )
         end
       end
+    end
+
+    def log_copy!(new_calculation)
+      Log.created!(
+        loggable: calculable,
+        user: user,
+        message: "Skopiowano wersję ##{new_calculation.version_number}",
+        details: { calculation_id: new_calculation.id }
+      )
     end
   end
 end

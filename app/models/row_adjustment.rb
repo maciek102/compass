@@ -1,4 +1,6 @@
 class RowAdjustment < ApplicationRecord
+  acts_as_tenant :organization
+
   include Loggable
 
   belongs_to :calculation_row

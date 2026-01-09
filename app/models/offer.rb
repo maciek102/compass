@@ -84,11 +84,6 @@ class Offer < ApplicationRecord
         quantity: row.quantity,
         unit: row.unit,
         unit_price: row.unit_price,
-        discount_percent: row.discount_percent,
-        discount_amount: row.discount_amount,
-        margin_percent: row.margin_percent,
-        margin_amount: row.margin_amount,
-        vat_percent: row.vat_percent
       )
     end
 

@@ -21,6 +21,15 @@ Rails.application.routes.draw do
 
   resources :offers
 
+  resources :calculations, only: %i[create] do
+    member do
+      patch :set_current
+      post :copy
+    end
+
+    resources :calculation_rows, only: %i[new create edit update destroy]
+  end
+
   resources :clients
 
   resources :product_categories

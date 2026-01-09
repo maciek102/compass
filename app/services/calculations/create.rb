@@ -47,14 +47,10 @@ module Calculations
     end
 
     def create_calculation!
-      next_number = calculable.calculations.maximum(:number).to_i + 1
-
       @calculation = calculable.calculations.create!(
         organization: organization,
         user: user,
-        number: next_number,
         is_current: true,
-        notes: notes,
         total_net: 0,
         total_vat: 0,
         total_gross: 0,
@@ -73,7 +69,17 @@ module Calculations
       # Przelicz totale
       Calculations::Recalculate.call(calculation: @calculation)
 
+      log_creation!
+
       @calculation
+    end
+
+    def log_creation!
+      Log.created!(
+        loggable: calculable,
+        user: user,
+        message: "Utworzono wersję ##{@calculation.version_number}"
+      )
     end
   end
 end

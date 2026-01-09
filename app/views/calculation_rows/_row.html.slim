@@ -1,0 +1,7 @@
+tr.table-row 
+  td = "#{el.position}."
+  td = el.name 
+  td = "#{el.quantity} #{el.unit}"
+  td = number_to_currency(el.unit_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = number_to_currency(el.total_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td

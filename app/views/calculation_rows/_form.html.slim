@@ -1,0 +1,12 @@
+= simple_form_for(@calculation_row, url: calculation_calculation_rows_path(calculation_id: @calculation_row.calculation_id), html: {data: {turbo_frame: "modal"}}) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name, label: "Nazwa"
+    = f.input :quantity, label: "Ilość"
+    = f.input :unit, label: "Jednostka"
+    = f.input :unit_price, label: "Cena jednostkowa"
+
+  .form-actions
+    = f.button :submit, "Zapisz", class: "base-button"
+    = link_to "Anuluj", "#", data: {turbo_frame: "modal"}, class: "base-button secondary-button"

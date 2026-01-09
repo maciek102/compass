@@ -1,6 +1,7 @@
 class CreateCalculationRows < ActiveRecord::Migration[8.1]
   def change
     create_table :calculation_rows do |t|
+      t.references :organization, null: false, foreign_key: true
       t.references :calculation, null: false, foreign_key: true
 
       t.references :variant, foreign_key: true

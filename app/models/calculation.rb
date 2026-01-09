@@ -23,7 +23,6 @@ class Calculation < ApplicationRecord
   acts_as_tenant :organization
 
   include Destroyable
-  include Loggable
   include OrganizationScoped
 
   # === POLYMORPHIC ASSOCIATION ===
@@ -57,7 +56,7 @@ class Calculation < ApplicationRecord
 
   # Wszystkie wiersze
   def rows
-    calculation_rows
+    calculation_rows.order(:position).includes(:row_adjustments) || []
   end
 
   # Liczba wierszy
@@ -88,6 +87,14 @@ class Calculation < ApplicationRecord
   # Całkowita suma marż
   def total_margins
     calculation_rows.sum(:margin_total)
+  end
+
+  def current?
+    is_current
+  end
+
+  def title
+    "Wersja ##{version_number}"
   end
 
   private

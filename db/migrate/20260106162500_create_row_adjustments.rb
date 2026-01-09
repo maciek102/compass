@@ -1,6 +1,7 @@
 class CreateRowAdjustments < ActiveRecord::Migration[8.1]
   def change
     create_table :row_adjustments do |t|
+      t.references :organization, null: false, foreign_key: true
       t.references :calculation_row, null: false, foreign_key: true
 
       t.integer :adjustment_type, null: false, default: 0

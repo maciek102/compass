@@ -1,0 +1,6 @@
+.versions-table-cont
+  .header
+    .title = "Wersje"
+    = button_to "Nowa wersja", calculations_path, method: :post, params: { calculable_type: object.class.name, calculable_id: object.id }, class: "base-button", data: { turbo: false }
+
+  = render Tables::TableComponent.new(list: object.calculations.order(created_at: :desc), custom_dir: "calculations/versions_table/", no_pages: true)

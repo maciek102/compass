@@ -1,0 +1,8 @@
+table.index-table data-controller="click-row" data-action="click->click-row#navigate"
+  thead
+    = render "calculation_rows/table_header"
+  tbody id=@turbo_id
+    - @rows.each do |el|
+      = render "calculation_rows/row", el: el
+    
+    = render "calculation_rows/actions_row", calculation: @calculation

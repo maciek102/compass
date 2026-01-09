@@ -1,0 +1,8 @@
+tr.table-row style=(el.current? ? "background-color: #e6ffed;" : "") 
+  td = "##{el.version_number}"
+  td = el.user.name if el.user.present?
+  td = show_datetime(el.created_at)
+  td
+    .actions
+      = link_to fa_icon("copy", text: "Kopiuj"), copy_calculation_path(el), method: :post, class: "action-button"
+      = link_to fa_icon("check", text: "Zmień"), set_current_calculation_path(el), method: :patch, class: "action-button" unless el.current?

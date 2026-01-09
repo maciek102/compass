@@ -13,12 +13,7 @@
 # - quantity:decimal -> ilość
 # - unit:string -> jednostka miary (szt., kg, l, m, itp.)
 # - unit_price:decimal -> cena jednostkowa netto
-# - discount_percent:decimal -> rabat w %
-# - discount_amount:decimal -> rabat w kwocie
-# - margin_percent:decimal -> marża w %
-# - margin_amount:decimal -> marża w kwocie
 # - vat_percent:decimal -> stawka VAT %
-# - vat_amount:decimal -> kwota VAT
 # - subtotal:decimal -> ilość * cena jednostkowa
 # - discount_total:decimal -> rabat łącznie
 # - margin_total:decimal -> marża łącznie
@@ -26,6 +21,10 @@
 # - total_gross:decimal -> brutto (z VAT)
 
 class CalculationRow < ApplicationRecord
+  acts_as_tenant :organization
+
+  include Loggable
+
   # === RELACJE ===
   belongs_to :calculation
   belongs_to :variant, optional: true
@@ -58,37 +57,23 @@ class CalculationRow < ApplicationRecord
     !standard?
   end
 
+  def total_price
+    total_gross
+  end
+
   # Oblicza i zapisuje wszystkie sumy
   def calculate_totals
     # Subtotal = ilość * cena jednostkowa
     self.subtotal = (quantity * unit_price).round(2)
 
-    # Rabat
-    if discount_percent.present? && discount_percent > 0
-      self.discount_total = (subtotal * (discount_percent / 100)).round(2)
-    elsif discount_amount.present?
-      self.discount_total = discount_amount.round(2)
-    else
-      self.discount_total = 0
-    end
-
-    # Marża
-    if margin_percent.present? && margin_percent > 0
-      self.margin_total = (subtotal * (margin_percent / 100)).round(2)
-    elsif margin_amount.present?
-      self.margin_total = margin_amount.round(2)
-    else
-      self.margin_total = 0
-    end
-
-    # Netto (po rabatach i marżach)
-    self.total_net = (subtotal - discount_total + margin_total).round(2)
+    # Total net = subtotal (adjustments są w osobnej tabeli row_adjustments)
+    self.total_net = subtotal
 
     # VAT
-    if vat_percent.present? && vat_percent > 0
-      self.vat_amount = (total_net * (vat_percent / 100)).round(2)
+    vat_amount = if vat_percent.present? && vat_percent > 0
+      (total_net * (vat_percent / 100)).round(2)
     else
-      self.vat_amount = 0
+      0
     end
 
     # Brutto (netto + VAT)

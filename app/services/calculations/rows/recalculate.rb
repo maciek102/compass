@@ -80,11 +80,17 @@ module Calculations
       end
 
       def save_row!
-        row.update_columns(
-          subtotal: @subtotal,
-          total_net: @total_net,
-          total_gross: @total_gross
-        )
+        if row.new_record?
+          row.subtotal = @subtotal
+          row.total_net = @total_net
+          row.total_gross = @total_gross
+        else
+          row.update_columns(
+            subtotal: @subtotal,
+            total_net: @total_net,
+            total_gross: @total_gross
+          )
+        end
       end
     end
   end

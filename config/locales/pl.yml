@@ -197,6 +197,12 @@ pl:
         user_id: "Użytkownik"
         created_at: "Data utworzenia"
         updated_at: "Data aktualizacji"
+      
+      calculation:
+        version_number: "Numer"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        created_at: "Utworzono"
 
   log_in: Zaloguj się
   form: Formularz
