@@ -21,8 +21,7 @@
 # - total_gross:decimal -> brutto (z VAT)
 
 class CalculationRow < ApplicationRecord
-  acts_as_tenant :organization
-
+  include Tenantable
   include Loggable
 
   # === RELACJE ===
@@ -46,13 +45,25 @@ class CalculationRow < ApplicationRecord
   scope :without_variant, -> { where(variant_id: nil) }
   scope :ordered, -> { order(:position) }
 
-  # === INSTANCE METHODS ===
+  # === JEDNOSTKI ===
+  enum :unit, {
+    piece: 0, # sztuka
+    kilogram: 1, # kilogram
+    liter: 2, # litr
+    meter: 3, # metr
+    hour: 4, # godzina
+    service: 5 # usługa
+  }
 
-  # Zwraca czy to wiersz produktu czy niestandardowy
+
+  # === METODY ===
+
+  # standardowy wiersz / pozycja - ma przypisany produkt (wariant)
   def standard?
     variant_id.present?
   end
 
+  # niestandardowy wiersz / pozycja - brak przypisanego produktu (wariantu), np. usługa dodatkowa
   def custom?
     !standard?
   end
@@ -80,13 +91,7 @@ class CalculationRow < ApplicationRecord
     self.total_gross = (total_net + vat_amount).round(2)
   end
 
-  # Metoda do pobrania nazwy z wariantu jeśli nie ustawiono własnej nazwy
   def display_name
     name.presence || variant&.name || "Wiersz niestandardowy"
-  end
-
-  # Metoda do pobrania opisu z wariantu jeśli nie ustawiono własnego
-  def display_description
-    description.presence || variant&.note
   end
 end

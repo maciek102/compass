@@ -1,11 +1,13 @@
 class CalculationRowsController < ApplicationController
   load_and_authorize_resource :calculation
   load_and_authorize_resource :calculation_row, through: :calculation
+
+  def new
+    @mode = params[:type]&.downcase || "custom"
+  end
   
   # POST /calculations/:calculation_id/calculation_rows
   def create
-    authorize! :update, @calculation.calculable
-
     @calculation_row = Calculations::Rows::Create.call(
       calculation: @calculation,
       **calculation_row_params.to_h.symbolize_keys
@@ -26,8 +28,6 @@ class CalculationRowsController < ApplicationController
 
   # PATCH/PUT /calculations/:calculation_id/calculation_rows/:id
   def update
-    authorize! :update, @calculation.calculable
-
     Calculations::Rows::Update.call(
       row: @calculation_row,
       **calculation_row_params.to_h.symbolize_keys

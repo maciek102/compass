@@ -24,8 +24,7 @@
 # - image:active_storage -> zdjęcia
 
 class Variant < ApplicationRecord
-  acts_as_tenant :organization
-  
+  include Tenantable
   include Destroyable
   include Loggable
   include OrganizationScoped
@@ -74,7 +73,6 @@ class Variant < ApplicationRecord
   # === METODY ===
    
   def self.for_user(user)
-    # acts_as_tenant automatycznie scopes do organizacji użytkownika
     all
   end
    
@@ -100,6 +98,10 @@ class Variant < ApplicationRecord
 
   def self.quick_search
     :name_or_sku_or_product_name_cont
+  end
+
+  def full_name
+    "#{product.name} / #{name}"
   end
 
   private

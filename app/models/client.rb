@@ -15,14 +15,12 @@
 # - disabled:boolean -> soft-delete / deaktywacja
 
 class Client < ApplicationRecord
-  acts_as_tenant :organization
+  include Tenantable
   include OrganizationScoped
-
   include Destroyable
   include Loggable
 
   # === RELACJE ===
-  belongs_to :organization
   has_many :logs, as: :loggable, dependent: :destroy # historia zmian
 
   # === WALIDACJE ===
@@ -49,8 +47,8 @@ class Client < ApplicationRecord
     all
   end
 
-  def self.search_by_name_or_email(query)
-    where("name ILIKE ? OR email ILIKE ?", "%#{query}%", "%#{query}%")
+  def self.quick_search
+    :name_or_email_cont
   end
 
   # Zwraca pełny adres

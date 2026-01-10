@@ -26,8 +26,7 @@
 # - private_images:active_storage -> zdjęcia robocze
 
 class Product < ApplicationRecord
-  acts_as_tenant :organization
-  
+  include Tenantable
   include Destroyable
   include Loggable
   include OrganizationScoped
@@ -87,7 +86,6 @@ class Product < ApplicationRecord
   # === METODY ===
    
   def self.for_user(user)
-    # acts_as_tenant automatycznie scopes do organizacji użytkownika
     all
   end
   

@@ -40,6 +40,26 @@
       color: $first-color;
       font-weight: 600;
     }
+
+    // submenu link style
+    &.submenu {
+      //padding-left: 44px; // wcięcie (32px + 12px)
+      font-size: 14px;
+      
+      i {
+        font-size: 18px;
+      }
+    }
+  }
+
+  // kontener submenu
+  .left-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: 32px;
   }
 
   // user display na dole menu

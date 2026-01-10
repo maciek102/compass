@@ -21,8 +21,7 @@
 # - user_id:bigint -> kto wykonał operację
 
 class StockMovement < ApplicationRecord
-  acts_as_tenant :organization
-  
+  include Tenantable
   include Loggable
   include OrganizationScoped
 
@@ -70,7 +69,6 @@ class StockMovement < ApplicationRecord
   # === METODY ===
   
   def self.for_user(user)
-    # acts_as_tenant automatycznie scopes do organizacji użytkownika
     all
   end
    

@@ -21,8 +21,7 @@
 # - images:active_storage -> zdjęcia egzemplarza
 
 class Item < ApplicationRecord
-  acts_as_tenant :organization
-  
+  include Tenantable
   include Destroyable
   include OrganizationScoped
 
@@ -40,7 +39,7 @@ class Item < ApplicationRecord
   enum :status, {
     in_stock: 0, # w magazynie, dostępny
     reserved: 1, # zarezerwowany pod zamówienie
-    sold: 2, # sprzedany
+    issued: 2, # wydany
     returned: 3, # zwrócony od klienta
     damaged: 4 # uszkodzony
   }
@@ -64,7 +63,6 @@ class Item < ApplicationRecord
   # === METODY ===
   
   def self.for_user(user)
-    # acts_as_tenant automatycznie scopes do organizacji użytkownika
     all
   end
 

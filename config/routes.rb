@@ -30,7 +30,11 @@ Rails.application.routes.draw do
     resources :calculation_rows, only: %i[new create edit update destroy]
   end
 
-  resources :clients
+  resources :clients do
+    collection do
+      get :search
+    end
+  end
 
   resources :product_categories
 
@@ -46,6 +50,7 @@ Rails.application.routes.draw do
     collection do
       get :stock_index
       get :scanner
+      get :search
     end
 
     member do

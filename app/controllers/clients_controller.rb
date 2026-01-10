@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:search]
 
   def index
     @search_url = clients_path
@@ -35,6 +35,34 @@ class ClientsController < ApplicationController
   end
 
   def edit
+  end
+
+  def search
+    authorize! :index, Client
+    
+    query = params[:q].to_s.strip
+    search_params = query.present? ? { name_or_email_cont: query } : {}
+    search = Client.for_user(current_user).active.ransack(search_params)
+    
+    @clients = search.result(distinct: true).by_name.limit(30)
+    
+    respond_to do |format|
+      format.json do
+        render json: {
+          results: @clients.map { |client| 
+            {
+              id: client.id,
+              text: client.name,
+              html: render_to_string(
+                partial: 'clients/search_result',
+                locals: { client: client },
+                formats: [:html]
+              )
+            }
+          }
+        }
+      end
+    end
   end
 
   def create

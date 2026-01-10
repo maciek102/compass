@@ -1,7 +1,7 @@
 module Views
   # generator lewego menu na podstawie roli usera i opcjonalnego kontekstu
   # menu główne - podstawowe menu zależne od roli usera
-  # menu kontekstowe - dodatkowe menu zależne od kontekstu (np. produkty - lista produktów + kategorie)
+  # menu kontekstowe - dodatkowe submenu pod głównym elementem (np. produkty -> warianty, kategorie)
   # dostępne konteksty - :products, :warehouse
   # menu superadmina - działa na podstawie flagi w User
   class LeftMenuPresenter
@@ -17,14 +17,28 @@ module Views
     def build
       return [] unless user
 
+      menu = role_menu(user)
+      
+      # Rozwiń submenu dla aktywnego kontekstu
       if context.present?
-        return contextual_menu(context)
+        expand_context_in_menu(menu, context)
+      else
+        menu
       end
-
-      role_menu(user)
     end
 
     private
+
+    # submenu dla aktywnego kontekstu
+    def expand_context_in_menu(menu, ctx)
+      menu.map do |item|
+        if item[:context] == ctx
+          item.merge(children: contextual_menu_links(ctx), expanded: true)
+        else
+          item
+        end
+      end
+    end
 
     # === MENU GŁÓWNE ===
 
@@ -55,8 +69,8 @@ module Views
     def admin_menu
       [
         { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
-        { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon },
-        { text: "Produkty", url: products_context.first[:url], icon: Product.icon },
+        { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon, context: :warehouse },
+        { text: "Produkty", url: products_context.first[:url], icon: Product.icon, context: :products },
         { text: "Oferty", url: Rails.application.routes.url_helpers.offers_path, icon: Offer.icon },
         { text: "Klienci", url: Rails.application.routes.url_helpers.clients_path, icon: Client.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon },
@@ -71,16 +85,9 @@ module Views
       ]
     end
 
-    # === MENU KONTEKSTOWE ===
+    # === SUBMENU KONTEKSTOWE ===
 
-    # menu kontekstowe (np. produkty)
-    def contextual_menu(ctx)
-      # back_link = { text: "Wyjdź", url: role_menu(user).first[:url], icon: "arrow-left" }
-      back_link = { text: "Wyjdź", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: "arrow-left" }
-
-      [back_link] + contextual_menu_links(ctx)
-    end
-
+    # Zwraca linki submenu dla danego kontekstu
     def contextual_menu_links(ctx)
       case ctx.to_sym
       when :products then products_context

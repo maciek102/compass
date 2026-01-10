@@ -12,7 +12,7 @@ class CreateCalculationRows < ActiveRecord::Migration[8.1]
       t.text :description
 
       t.decimal :quantity, precision: 12, scale: 2, null: false, default: 1
-      t.string :unit
+      t.integer :unit
 
       t.decimal :unit_price, precision: 12, scale: 2, default: 0
 

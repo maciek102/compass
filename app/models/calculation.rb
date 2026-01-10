@@ -20,8 +20,7 @@
 # - user_id:bigint -> autor
 
 class Calculation < ApplicationRecord
-  acts_as_tenant :organization
-
+  include Tenantable
   include Destroyable
   include OrganizationScoped
 
@@ -29,7 +28,6 @@ class Calculation < ApplicationRecord
   belongs_to :calculable, polymorphic: true
 
   # === RELACJE ===
-  belongs_to :organization
   belongs_to :user, optional: true
 
   has_many :calculation_rows, dependent: :destroy

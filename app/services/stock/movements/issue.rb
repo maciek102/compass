@@ -54,9 +54,10 @@ module Stock
         raise Error, "Not enough stock" if items.size < quantity
       end
 
+      # wydanie itemów i powiązanie ich z ruchem magazynowym
       def issue_items(movement)
         items.each do |item|
-          item.update!(status: :sold)
+          item.update!(status: :issued)
           movement.items << item
         end
       end

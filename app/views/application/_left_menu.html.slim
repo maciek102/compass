@@ -3,7 +3,15 @@
   / użycie LeftMenuPresenter do renderowania menu, zależne od usera i opcjonalnego kontekstu z kontrolera
   - builder = Views::LeftMenuPresenter.new(user: current_user, context: @left_menu_context ? @left_menu_context : nil)
   - builder.build.each do |item|
-    = left_menu_link(text: item[:text],url: item[:url],icon: item[:icon],active: current_page?(item[:url]))
+    / akwywny jeżeli jesteśmy w danym kontrolerze, lub jeżeli to jest nadrzędny element menu kontekstowego
+    - active = current_page?(item[:url]) || (@left_menu_context == item[:context] if item[:context].present?)
+    = left_menu_link(text: item[:text], url: item[:url], icon: item[:icon], active: active)
+    
+    / submenu (children) - renderowane jeśli istnieją i kontekst jest rozwinięty
+    - if item[:children].present? && item[:expanded]
+      .left-submenu
+        - item[:children].each do |child|
+          = left_menu_link(text: child[:text], url: child[:url], icon: child[:icon], active: current_page?(child[:url]), submenu: true)
 
   / wyświeltenie usera
   = render "user_display"

@@ -204,9 +204,20 @@ pl:
         user_id: "Użytkownik"
         created_at: "Utworzono"
 
+      calculation_row:
+        name: "Nazwa"
+        quantity: "Ilość"
+        unit: "Jednostka"
+        unit_price: "Cena jednostkowa"
+        position: "Pozycja"
+
   log_in: Zaloguj się
   form: Formularz
   add_new: Dodaj nowy
+  async_select:
+    placeholder: "Wpisz min. %{min_chars} znaki..."
+    no_results: "Brak wyników"
+    searching: "Wyszukiwanie..."
 
   roles:
     admin: Administrator
@@ -220,7 +231,7 @@ pl:
   item_statuses:
     in_stock: "W magazynie"
     reserved: "Zarezerwowany"
-    sold: "Sprzedany"
+    issued: "Wydany"
     returned: "Zwrócony"
     damaged: "Uszkodzony"
 
@@ -240,6 +251,15 @@ pl:
     transfer: "Przesunięcie"
     loss: "Ubytek"
     damage: "Uszkodzenie"
+
+  # Jednostki miary
+  units:
+    piece: "szt."
+    kilogram: "kg"
+    liter: "l"
+    meter: "m"
+    hour: "godz."
+    service: "usługa"
 
   notices:
     create:

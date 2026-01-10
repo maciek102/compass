@@ -1,0 +1,7 @@
+.result-item
+  .text-container
+    .title= client.name
+    .desc
+      - if client.email.present?
+        = client.email
+

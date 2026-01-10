@@ -2,11 +2,29 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name, label: "Nazwa"
-    = f.input :quantity, label: "Ilość"
-    = f.input :unit, label: "Jednostka"
-    = f.input :unit_price, label: "Cena jednostkowa"
+
+    / produkt - wybór wariantu
+    - if @mode == "product"
+
+      / async select dla wariantu
+      = render Forms::AsyncSelectComponent.new(form: f,
+        field: :variant_id,
+        url: search_variants_path,
+        label: "Produkt (Wariant)",
+        selected_id: @calculation_row.variant_id,
+        selected_text: @calculation_row.variant&.name)
+
+    
+    / niestandardowa pozycja
+    - else
+      = f.input :name, placeholder: "np. Usługa montażu"
+      
+
+    / wspólne pola
+    = f.input :quantity
+    = f.input :unit, as: :select, collection: CalculationRow.units.keys.map { |u| [t("units.#{u}"), u] }, include_blank: false
+    = f.input :unit_price
+    = f.input :vat_percent, input_html: { placeholder: "23" }
 
   .form-actions
-    = f.button :submit, "Zapisz", class: "base-button"
-    = link_to "Anuluj", "#", data: {turbo_frame: "modal"}, class: "base-button secondary-button"
+    = f.submit "Zapisz", class: "base-button"

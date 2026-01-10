@@ -10,7 +10,7 @@
 # - indeks: index [:organization_id, :id_by_org], unique: true
 #
 # Użycie (po zadeklarowaniu acts_as_tenant):
-#   acts_as_tenant :organization
+#   include Tenantable
 #   include OrganizationScoped
 
 module OrganizationScoped

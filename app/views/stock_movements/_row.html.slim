@@ -4,7 +4,7 @@ tr.table-row data-url=stock_movement_path(el)
   td 
     strong = el.variant.product.name
     = " / #{el.variant.name}"
-  td = el.direction.humanize
+  td = direction_label(el.direction)
   td = el.quantity
   td = el.user.name if el.user.present?
   td = show_datetime(el.created_at)

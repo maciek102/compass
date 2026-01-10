@@ -1,7 +1,8 @@
 /tr.table-row id="client-row-#{el.id}" data-url=client_path(el)
 tr.table-row
-  td 
-    = link_to fa_icon("plus-circle", text: "Dodaj produkt"), new_calculation_calculation_row_path(calculation_id: calculation.id), class: "action-button", title: "Dodaj nowy wiersz", data: { turbo_frame: "modal" }
-  td
-  td
-  td
+  td colspan="6"
+    = link_to fa_icon("shopping-bag", text: "Dodaj produkt"), new_calculation_calculation_row_path(calculation_id: calculation.id, type: "product"), class: "action-button", data: { turbo_frame: "modal" }
+
+    div style="display: inline-block; width: 10px;"
+
+    = link_to fa_icon("edit", text: "Dodaj niestandardową pozycję"), new_calculation_calculation_row_path(calculation_id: calculation.id, type: "custom"), class: "action-button", data: { turbo_frame: "modal" }

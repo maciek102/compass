@@ -1,6 +1,6 @@
 class VariantsController < ApplicationController
   before_action :set_product, only: %i[ new create ]
-  load_and_authorize_resource :variant
+  load_and_authorize_resource :variant, except: %i[ search ]
   before_action :set_left_menu_context # ustawieneie kontekstu buildera menu
   
   def index
@@ -91,6 +91,32 @@ class VariantsController < ApplicationController
 
     respond_to do |f|
       f.js
+    end
+  end
+
+  def search
+    authorize! :index, Variant
+    query = params[:q].to_s.strip
+    search_params = query.present? ? { name_or_sku_or_product_name_cont: query } : {}
+    search = Variant.for_user(current_user).includes(:product).ransack(search_params)
+    @variants = search.result(distinct: true).limit(30)
+
+    respond_to do |format|
+      format.json do
+        render json: {
+          results: @variants.map { |variant|
+            {
+              id: variant.id,
+              text: variant.name,
+              html: render_to_string(
+                partial: 'variants/search_result',
+                locals: { variant: variant },
+                formats: [:html]
+              )
+            }
+          }
+        }
+      end
     end
   end
 

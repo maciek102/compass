@@ -13,8 +13,7 @@
 # - external_number:string -> numer zewnętrzny od klienta
 
 class Offer < ApplicationRecord
-  acts_as_tenant :organization
-
+  include Tenantable
   include Destroyable
   include Loggable
   include OrganizationScoped

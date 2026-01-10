@@ -1,0 +1,34 @@
+.async-select-wrapper(
+  data-controller="async-select"
+  data-async-select-url-value=@url
+  data-async-select-min-chars-value=@min_chars
+  data-async-select-placeholder-value=@placeholder
+  data-async-select-delay-value=@delay
+)
+  / label (opcjonalnie)
+  - if @label.present?
+    label.form-label for=component_id
+      = @label
+      - if @required
+        span.text-danger< *
+
+  / hidden select dla formularza
+  - if @form && @field
+    = @form.hidden_field @field, value: selected_value, data: { async_select_target: "hiddenSelect" }, id: component_id
+  - else
+    = hidden_field_tag @name, selected_value, data: { async_select_target: "hiddenSelect" }, id: component_id
+
+  / wybrana wartość
+  .async-select-selected data-async-select-target="selectedDisplay" style=("display: none;" unless has_selection?)
+    span.async-select-selected-label data-async-select-target="selectedLabel"
+      = selected_label
+    button.async-select-clear type="button" data-action="click->async-select#clear" data-async-select-target="clearButton"
+      | ×
+
+  / input
+  .async-select-input-container data-async-select-target="inputContainer" style=("display: none;" if has_selection?)
+    input.async-select-input.form-control type="text" placeholder=@placeholder autocomplete="off" data-async-select-target="input" data-action="input->async-select#search focus->async-select#handleFocus"
+
+  / dropdown z wynikami
+  .async-select-dropdown data-async-select-target="dropdown" style="display: none;"
+    .async-select-results data-async-select-target="results"

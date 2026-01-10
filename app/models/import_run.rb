@@ -17,10 +17,9 @@
 # - meta: dodatkowe metadane dotyczące importu w formacie JSON
 
 class ImportRun < ApplicationRecord
-  acts_as_tenant :organization
+  include Tenantable
   include OrganizationScoped
 
-  belongs_to :organization
   belongs_to :user
 
   has_one_attached :source_file # plik wysłany przez użytkownika
@@ -34,7 +33,6 @@ class ImportRun < ApplicationRecord
   }
 
   def self.for_user(user)
-    # acts_as_tenant automatycznie scopes do organizacji użytkownika
     all
   end
 

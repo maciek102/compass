@@ -1,0 +1,11 @@
+.result-item
+  / dodać zdjęcie
+
+  .text-container
+    .title 
+      strong = variant.product.name
+      = " / #{variant.name}"
+    .desc
+      - if variant.sku.present?
+        = variant.sku
+
