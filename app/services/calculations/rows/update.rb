@@ -26,6 +26,7 @@ module Calculations
 
         ActiveRecord::Base.transaction do
           update_row!
+          log_update!
           recalculate!
         end
 
@@ -55,6 +56,14 @@ module Calculations
       def recalculate!
         Calculations::Rows::Recalculate.call(row: row)
         Calculations::Recalculate.call(calculation: row.calculation)
+      end
+
+      def log_update!
+        Log.updated!(
+          loggable: row.calculation.calculable,
+          user: Current.user,
+          message: "Wersja ##{row.calculation.version_number} - zaktualizowano pozycję: #{row.name}"
+        )
       end
     end
   end

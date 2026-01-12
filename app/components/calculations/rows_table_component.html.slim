@@ -5,4 +5,8 @@ table.index-table data-controller="click-row" data-action="click->click-row#navi
     - @rows.each do |el|
       = render "calculation_rows/row", el: el
     
+    / podsumowanie wartości
+    = render "calculations/calculation_totals", calculation: @calculation
+
+    / dodawanie nowych pozycji
     = render "calculation_rows/actions_row", calculation: @calculation

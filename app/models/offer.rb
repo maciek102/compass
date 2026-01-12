@@ -40,6 +40,17 @@ class Offer < ApplicationRecord
   scope :by_number, ->(number) { where(number: number) }
   scope :recent, -> { order(created_at: :desc) }
 
+  # === STATUSY ===
+  enum :status, {
+    brand_new: 0, # nowa
+    in_preparation: 1, # w przygotowaniu
+    sent: 2, # wysłana
+    accepted: 3, # zaakceptowana
+    converted_to_order: 4, # zamieniona na zamówienie
+    not_accepted: 5, # niezaakceptowana
+    rejected: 6 # odrzucona
+  }
+
   # === INSTANCE METHODS ===
    
   def self.for_user(user)
@@ -54,7 +65,6 @@ class Offer < ApplicationRecord
   # Tworzy nowe obliczenie (draft)
   def create_calculation!(user: nil)
     calculations.create!(
-      status: "draft",
       user_id: user&.id || self.user_id
     )
   end
@@ -65,7 +75,6 @@ class Offer < ApplicationRecord
     return create_calculation!(user: user) unless current
 
     new_calculation = calculations.build(
-      status: "draft",
       user_id: user&.id || self.user_id,
       notes: current.notes,
       valid_until: current.valid_until
@@ -106,6 +115,44 @@ class Offer < ApplicationRecord
 
   def self.icon
     "file"
+  end
+
+  # STATUSY
+  # kolory statusów
+  def status_color
+    case status
+    when "brand_new"
+      "#cfd0d1" # jasny szary
+    when "in_preparation"
+      "#3B82F6" # niebieski
+    when "sent"
+      "#6366F1" # indigo
+    when "accepted"
+      "#22C55E" # zielony 
+    when "converted_to_order"
+      "#15803D" # ciemny zielony
+    when "not_accepted"
+      "#F59E0B" # pomarańczowy
+    when "rejected"
+      "#374151" # ciemny szary
+    else
+      "#cfd0d1"
+    end
+  end
+
+  # czy kalkulacja może być edytowana
+  def editable?
+    brand_new? || in_preparation? || not_accepted?
+  end
+
+  # czy oferta może być wysłana do klienta
+  def sendable?
+    in_preparation?
+  end
+
+  # czy oferta może być zamieniona na zamówienie
+  def convertible_to_order?
+    accepted?
   end
 
   def self.quick_search

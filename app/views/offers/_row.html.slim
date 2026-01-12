@@ -1,6 +1,8 @@
 tr.table-row id="offer-row-#{el.id}" data-url=offer_path(el)
   td = "##{el.id_by_org}"
-  td.bold = el.number
+  td
+    = status_label(t("activerecord.attributes.offer.statuses.#{el.status}"), style: "background-color: #{el.status_color};")
+    .bold = el.number
   td = el.client.name if el.client.present?
   td = l(el.created_at, format: :short)
   td

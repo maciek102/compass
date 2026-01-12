@@ -5,6 +5,9 @@ class CalculationRowsController < ApplicationController
   def new
     @mode = params[:type]&.downcase || "custom"
   end
+
+  def edit
+  end
   
   # POST /calculations/:calculation_id/calculation_rows
   def create

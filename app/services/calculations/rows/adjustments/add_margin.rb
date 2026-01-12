@@ -8,8 +8,7 @@ module Calculations
       # Calculations::Rows::Adjustments::AddMargin.call(
       #   row: calculation_row,
       #   amount: 20,
-      #   is_percentage: true,
-      #   name: "Marża handlowa 20%"
+      #   is_percentage: true
       # )
       class AddMargin
         class Error < StandardError; end
@@ -18,11 +17,10 @@ module Calculations
           new(**args).call
         end
 
-        def initialize(row:, amount:, is_percentage: false, name: "Marża", description: nil)
+        def initialize(row:, amount:, is_percentage: false, description: nil)
           @row = row
           @amount = amount
           @is_percentage = is_percentage
-          @name = name
           @description = description
         end
 
@@ -39,19 +37,16 @@ module Calculations
 
         private
 
-        attr_reader :row, :amount, :is_percentage, :name, :description, :adjustment
+        attr_reader :row, :amount, :is_percentage, :description, :adjustment
 
         def validate!
           raise Error, "Row is required" unless row
           raise Error, "Amount must be positive" if amount.to_f < 0
-          raise Error, "Name is required" if name.blank?
         end
 
         def create_adjustment!
           @adjustment = row.row_adjustments.create!(
-            organization: row.calculation.organization,
             adjustment_type: :margin,
-            name: name,
             amount: amount,
             is_percentage: is_percentage,
             description: description

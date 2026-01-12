@@ -1,4 +1,4 @@
-= simple_form_for(@calculation_row, url: calculation_calculation_rows_path(calculation_id: @calculation_row.calculation_id), html: {data: {turbo_frame: "modal"}}) do |f|
+= simple_form_for([@calculation_row.calculation, @calculation_row], html: { data: { turbo_frame: "modal" } }) do |f|
   = f.error_notification
 
   .form-inputs

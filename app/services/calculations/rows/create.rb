@@ -17,7 +17,7 @@ module Calculations
         new(**args).call
       end
 
-      def initialize(calculation:, variant_id: nil, name: nil, description: nil, quantity: 1, unit: "szt.", unit_price: 0, vat_percent: 23)
+      def initialize(calculation:, variant_id: nil, name: nil, description: nil, quantity: 1, unit: 0, unit_price: 0, vat_percent: 23)
         @calculation = calculation
         @variant_id = variant_id
         @name = name
@@ -71,6 +71,8 @@ module Calculations
           total_net: 0,
           total_gross: 0
         )
+
+        log_creation!
       end
 
       def recalculate!
@@ -80,6 +82,14 @@ module Calculations
 
       def variant
         @variant ||= Variant.find_by(id: variant_id) if variant_id.present?
+      end
+
+      def log_creation!
+        Log.created!(
+          loggable: calculation.calculable,
+          user: Current.user,
+          message: "Wersja ##{calculation.version_number} - dodano nową pozycję: #{row.name}"
+        )
       end
     end
   end

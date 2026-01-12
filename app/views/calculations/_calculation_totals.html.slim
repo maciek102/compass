@@ -1,0 +1,8 @@
+/ podsumowanie wartości wersji kalkulacji
+
+tr.table-row 
+  td
+  td = "Suma rabatów: #{number_to_currency(calculation.total_discounts)}"
+  td = "Suma marży: #{number_to_currency(calculation.total_margins)}"
+  td = "Netto: #{number_to_currency(calculation.total_net)}"
+  td = "Brutto: #{number_to_currency(calculation.total_gross)}"

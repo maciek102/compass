@@ -22,6 +22,7 @@ module Calculations
 
         ActiveRecord::Base.transaction do
           destroy_row!
+          log_deletion!
           recalculate!
         end
 
@@ -42,6 +43,14 @@ module Calculations
 
       def recalculate!
         Calculations::Recalculate.call(calculation: calculation)
+      end
+
+      def log_deletion!
+        Log.destroyed!(
+          loggable: calculation.calculable,
+          user: Current.user,
+          message: "Wersja ##{calculation.version_number} - usunięto pozycję: #{row.name}"
+        )
       end
     end
   end

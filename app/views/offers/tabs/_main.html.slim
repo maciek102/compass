@@ -1,6 +1,7 @@
 .show-container
   .title
     = @offer.number
+    = status_label(t("activerecord.attributes.offer.statuses.#{@offer.status}"), style: "background-color: #{@offer.status_color};")
 
   .info
     = category_info_row("Klient", @offer.client.name)

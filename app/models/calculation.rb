@@ -62,31 +62,6 @@ class Calculation < ApplicationRecord
     calculation_rows.count
   end
 
-  # Całkowita suma netto
-  def total_net
-    calculation_rows.sum(:total_net)
-  end
-
-  # Całkowita suma VAT
-  def total_vat
-    calculation_rows.sum(:vat_amount)
-  end
-
-  # Całkowita suma brutto
-  def total_gross
-    calculation_rows.sum(:total_gross)
-  end
-
-  # Całkowita suma rabatów
-  def total_discounts
-    calculation_rows.sum(:discount_total)
-  end
-
-  # Całkowita suma marż
-  def total_margins
-    calculation_rows.sum(:margin_total)
-  end
-
   def current?
     is_current
   end

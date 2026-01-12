@@ -27,7 +27,9 @@ Rails.application.routes.draw do
       post :copy
     end
 
-    resources :calculation_rows, only: %i[new create edit update destroy]
+    resources :calculation_rows, only: %i[new create edit update destroy] do
+      resources :row_adjustments, only: %i[index create destroy]
+    end
   end
 
   resources :clients do

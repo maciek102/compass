@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "calculation-table-cont" do %>
+	<%= render Calculations::CalculationTableComponent.new(calculation: @calculation, turbo_id: "calculation-rows-table-body") %>
+<% end %>
+
+<%= turbo_stream.replace "flash_message", partial: "application/flash" %>
+<%= turbo_stream.replace "modal", partial: "shared/empty_modal" %>

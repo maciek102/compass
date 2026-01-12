@@ -1,0 +1,12 @@
+= simple_form_for([calculation, calculation_row, RowAdjustment.new], html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :amount, placeholder: "Kwota lub procent", required: true
+    = f.input :is_percentage, label: "Procent (%)"
+
+    /= f.input :description, placeholder: "Opcjonalny opis", as: :text
+
+  .form-actions
+    = f.submit "Dodaj", class: "base-button"
+    = hidden_field_tag :type, adjustment_type

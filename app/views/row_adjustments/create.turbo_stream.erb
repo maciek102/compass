@@ -1,0 +1,2 @@
+<%= turbo_stream.append("row-adjustments-table-body", partial: "row_adjustments/row", locals: { el: @row_adjustment, calculation: @calculation, calculation_row: @calculation_row }) %>
+<%= turbo_stream.replace("flash_message", partial: "application/flash") %>

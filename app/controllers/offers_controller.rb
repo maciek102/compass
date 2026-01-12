@@ -7,7 +7,7 @@ class OffersController < ApplicationController
     # ustawienie trybów tabeli
     #scoped = set_view_mode_scope(ProductCategory.for_user(current_user))
 
-    @search = Offer.for_user(current_user).ransack(params[:q])
+    @search = Offer.for_user(current_user).recent.ransack(params[:q])
     @list = @offers = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|

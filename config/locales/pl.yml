@@ -211,6 +211,22 @@ pl:
         unit_price: "Cena jednostkowa"
         position: "Pozycja"
 
+      offer:
+        number: "Numer"
+        client: "Klient"
+        status: "Status"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        created_at: "Utworzono"
+        statuses:
+          brand_new: "Nowa"
+          in_preparation: "W przygotowaniu"
+          sent: "Wysłana"
+          accepted: "Zaakceptowana"
+          converted_to_order: "Utworzono zamówienie"
+          not_accepted: "Niezaakceptowana"
+          rejected: "Odrzucona"
+
   log_in: Zaloguj się
   form: Formularz
   add_new: Dodaj nowy

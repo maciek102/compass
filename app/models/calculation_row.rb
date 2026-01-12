@@ -37,7 +37,7 @@ class CalculationRow < ApplicationRecord
   validates :position, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # === CALLBACK ===
-  before_save :calculate_totals
+  #before_save :calculate_totals
 
   # === SCOPES ===
   scope :by_calculation, ->(calculation_id) { where(calculation_id: calculation_id) }
@@ -73,23 +73,23 @@ class CalculationRow < ApplicationRecord
   end
 
   # Oblicza i zapisuje wszystkie sumy
-  def calculate_totals
-    # Subtotal = ilość * cena jednostkowa
-    self.subtotal = (quantity * unit_price).round(2)
+  # def calculate_totals
+  #   # Subtotal = ilość * cena jednostkowa
+  #   self.subtotal = (quantity * unit_price).round(2)
 
-    # Total net = subtotal (adjustments są w osobnej tabeli row_adjustments)
-    self.total_net = subtotal
+  #   # Total net = subtotal (adjustments są w osobnej tabeli row_adjustments)
+  #   self.total_net = subtotal
 
-    # VAT
-    vat_amount = if vat_percent.present? && vat_percent > 0
-      (total_net * (vat_percent / 100)).round(2)
-    else
-      0
-    end
+  #   # VAT
+  #   vat_amount = if vat_percent.present? && vat_percent > 0
+  #     (total_net * (vat_percent / 100)).round(2)
+  #   else
+  #     0
+  #   end
 
-    # Brutto (netto + VAT)
-    self.total_gross = (total_net + vat_amount).round(2)
-  end
+  #   # Brutto (netto + VAT)
+  #   self.total_gross = (total_net + vat_amount).round(2)
+  # end
 
   def display_name
     name.presence || variant&.name || "Wiersz niestandardowy"
