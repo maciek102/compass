@@ -72,6 +72,30 @@ class OffersController < ApplicationController
     end
   end
 
+  def change_status
+    new_status = params.dig(:offer, :status)
+
+    if new_status.blank?
+      return respond_to do |format|
+        format.turbo_stream { render_turbo_stream_response("Błąd: Nie podano statusu", :error) }
+      end
+    end
+
+    if @offer.transition_to!(new_status)
+      message = "Status oferty zmieniony na #{@offer.status_label}"
+      respond_to do |format|
+        format.turbo_stream { render_turbo_stream_response(message, :notice) }
+        format.html { redirect_to @offer, notice: message }
+      end
+    else
+      message = "Nie można zmienić statusu na #{new_status}"
+      respond_to do |format|
+        format.turbo_stream { render_turbo_stream_response(message, :error) }
+        format.html { redirect_to @offer, alert: message }
+      end
+    end
+  end
+
   def destroy
     @offer.destroy
     redirect_to offers_path, notice: "Oferta została usunięta."
@@ -93,7 +117,12 @@ class OffersController < ApplicationController
 
   def offer_params
     params.require(:offer).permit(
-      :client_id
+      :client_id, :status
     )
+  end
+
+  def render_turbo_stream_response(message, type)
+    flash[type.to_sym] = message
+    render :show, status: :ok
   end
 end

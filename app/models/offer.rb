@@ -119,10 +119,10 @@ class Offer < ApplicationRecord
 
   # STATUSY
   # kolory statusów
-  def status_color
+  def self.status_color(status)
     case status
     when "brand_new"
-      "#cfd0d1" # jasny szary
+      "#959696" # jasny szary
     when "in_preparation"
       "#3B82F6" # niebieski
     when "sent"
@@ -136,8 +136,12 @@ class Offer < ApplicationRecord
     when "rejected"
       "#374151" # ciemny szary
     else
-      "#cfd0d1"
+      "#959696"
     end
+  end
+
+  def status_color
+    Offer.status_color(status)
   end
 
   # czy kalkulacja może być edytowana
@@ -153,6 +157,41 @@ class Offer < ApplicationRecord
   # czy oferta może być zamieniona na zamówienie
   def convertible_to_order?
     accepted?
+  end
+
+  # dostępne przejścia dla aktualnego statusu
+  def available_transitions
+    case status
+    when "brand_new"
+      [:in_preparation, :rejected]
+    when "in_preparation"
+      [:sent, :brand_new, :rejected]
+    when "sent"
+      [:accepted, :not_accepted]
+    when "accepted"
+      [:converted_to_order, :not_accepted]
+    when "converted_to_order"
+      [:accepted]
+    when "not_accepted"
+      [:in_preparation, :rejected]
+    when "rejected"
+      []
+    else
+      []
+    end
+  end
+
+  # label dla statusu
+  def status_label
+    I18n.t("activerecord.attributes.offer.statuses.#{status}")
+  end
+
+  # zmiana statusu oferty
+  def transition_to!(new_status)
+    new_status = new_status.to_s
+    return false unless available_transitions.map(&:to_s).include?(new_status)
+    
+    update!(status: new_status)
   end
 
   def self.quick_search

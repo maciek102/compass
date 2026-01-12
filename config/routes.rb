@@ -19,7 +19,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :offers
+  resources :offers do
+    member do
+      patch :change_status
+    end
+  end
 
   resources :calculations, only: %i[create] do
     member do
