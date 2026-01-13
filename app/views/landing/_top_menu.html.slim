@@ -1,0 +1,12 @@
+.top-menu
+  .top-menu-container
+    .left
+      .logo-section
+        .logo
+           = image_tag asset_url("compass_logo.png"), class: "small-logo"
+        .logo-title
+          | Compass
+    .right
+      = render "top_menu_links"
+      .action-section
+        = link_to t(:get_started), new_session_path(:user), class: "base-button"

@@ -1,14 +1,19 @@
-.landing
-  .landing-info
-    .landing-card
-      h1 Landing
-      p.small-text Find me in app/views/landing/index.html.slim
-
-      - if user_signed_in?
-        p.small-text = "You are logged in as #{current_user.email}"
-        = button_to "Wyloguj", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary btn-sm"
-      - else
-        p.small-text You are not logged in.
-        = link_to t(:log_in), new_user_session_path, class: "btn btn-outline-secondary btn-sm"
-
-    
+= render "top_menu"
+.landing data-controller="cursor-glow"
+  .row.front-view.pt-2
+    .company-logo
+      = image_tag 'compass_logo.png', alt: 'Compass logo', class: 'main-logo'
+      .title
+        | Compass
+      .subtitle
+        | powered by 
+        span.special RBM
+      .description
+        | Wyznacz jasny 
+        span.special kierunek 
+        | dla swojego biznesu i uzyskaj pełną automatyzacje Twojej firmy.
+        br
+        | Nowy standard efektywności w pracy.
+    .action-buttons
+      = link_to t(:get_started), new_session_path(:user), class: "base-button lg"
+      = link_to t(:become_partner), "#", class: "base-button lg reverse"

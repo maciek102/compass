@@ -21,22 +21,24 @@ class AddOrganizationMultiTenancy < ActiveRecord::Migration[8.1]
     add_column :stock_movements, :organization_id, :bigint, if_not_exists: true
     add_index :stock_movements, :organization_id, if_not_exists: true
     
-    unless Organization.exists?
-      default_org = Organization.create!(
-        name: "Default Organization",
-        description: "Default organization for existing data"
-      )
-    else
-      default_org = Organization.first
+    ActsAsTenant.without_tenant do
+      unless Organization.exists?
+        default_org = Organization.create!(
+          name: "Default Organization",
+          description: "Default organization for existing data"
+        )
+      else
+        default_org = Organization.first
+      end
+      
+      User.where(organization_id: nil).update_all(organization_id: default_org.id)
+      ProductCategory.where(organization_id: nil).update_all(organization_id: default_org.id)
+      Product.where(organization_id: nil).update_all(organization_id: default_org.id)
+      Variant.where(organization_id: nil).update_all(organization_id: default_org.id)
+      Item.where(organization_id: nil).update_all(organization_id: default_org.id)
+      StockOperation.where(organization_id: nil).update_all(organization_id: default_org.id)
+      StockMovement.where(organization_id: nil).update_all(organization_id: default_org.id)
     end
-    
-    User.where(organization_id: nil).update_all(organization_id: default_org.id)
-    ProductCategory.where(organization_id: nil).update_all(organization_id: default_org.id)
-    Product.where(organization_id: nil).update_all(organization_id: default_org.id)
-    Variant.where(organization_id: nil).update_all(organization_id: default_org.id)
-    Item.where(organization_id: nil).update_all(organization_id: default_org.id)
-    StockOperation.where(organization_id: nil).update_all(organization_id: default_org.id)
-    StockMovement.where(organization_id: nil).update_all(organization_id: default_org.id)
     
     change_column_null :users, :organization_id, false
     change_column_null :product_categories, :organization_id, false

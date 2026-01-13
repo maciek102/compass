@@ -1,1 +1,7 @@
 @import "base/colors.css.scss";
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}

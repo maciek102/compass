@@ -230,6 +230,12 @@ pl:
   log_in: Zaloguj się
   form: Formularz
   add_new: Dodaj nowy
+  features: Funkcje
+  pricing: Cennik
+  loyalty_program: Program lojalnościowy
+  docs: Dokumentacja
+  get_started: Rozpocznij
+  become_partner: Zostań Partnerem
   async_select:
     placeholder: "Wpisz min. %{min_chars} znaki..."
     no_results: "Brak wyników"

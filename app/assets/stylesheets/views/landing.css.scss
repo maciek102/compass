@@ -1,20 +1,103 @@
 @import "base/colors.css.scss";
 
 .landing{
-  margin-top: 150px;
-  .landing-info{
-    display: flex;
-    justify-content: center;
-    
-    .landing-card{
-      border: 1px solid grey;
-      text-align: center;
-      padding: 20px;
-      border-radius: 8px;
-    }
+  position: relative;
+  overflow: hidden;
+  background-color: white;
 
-    p.small-text{
-      font-size: 10px;
+  .cursor-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    margin-left: -300px;
+    margin-top: -300px;
+    pointer-events: none;
+    background: radial-gradient(
+      circle,
+      rgba(255, 138, 51, 0.18) 0%,
+      rgba(255, 138, 51, 0.10) 25%,
+      rgba(255, 138, 51, 0.05) 50%,
+      rgba(255, 138, 51, 0) 70%
+    );
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    mix-blend-mode: multiply;
+  }
+  
+  .front-view{
+    position: relative;
+    height: calc(100vh - 65px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .company-logo{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .title{
+        font-size: 3rem;
+        font-weight: 400;
+        color: $logo-black;
+        letter-spacing: -0.025em;
+      }
+      .subtitle{
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: $gray-400;
+        font-size: 0.75rem;
+        padding: 0 80px;
+        
+        &::before,
+        &::after{
+          content: '';
+          position: absolute;
+          height: 1px;
+          width: 70px;
+          background: linear-gradient(to right, transparent, $gray-300);
+        }
+        
+        &::before{
+          left: 0;
+          background: linear-gradient(to left, $gray-300, transparent);
+        }
+        
+        &::after{
+          right: 0;
+          background: linear-gradient(to right, $gray-300, transparent);
+        }
+        
+        span.special{
+          color: $orange-base;
+          font-weight: 600;
+          font-size: 1rem;
+        }
+      }
+      .description{
+        margin-top: 30px;
+        text-align: center;
+        font-size: 1.10rem;
+        color: $gray-600;
+        font-weight: 200;
+
+        span.special{
+          color: $orange-250;
+        }
+      }
+    }
+    
+    .action-buttons{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 40px;
     }
   }
 }

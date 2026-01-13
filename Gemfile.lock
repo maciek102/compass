@@ -146,6 +146,7 @@ GEM
       actionmailer (>= 5.2, < 9)
       activesupport (>= 5.2, < 9)
     execjs (2.10.0)
+    ffi (1.17.1-arm64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     font-awesome-rails (4.7.0.9)
       railties (>= 3.2, < 9.0)
@@ -219,9 +220,12 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
+    nokogiri (1.18.2-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-gnu)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pg (1.6.2-arm64-darwin)
     pg (1.6.2-x86_64-linux)
     popper_js (2.11.8)
     pp (0.6.2)
@@ -372,6 +376,7 @@ GEM
     zeitwerk (2.7.1)
 
 PLATFORMS
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
