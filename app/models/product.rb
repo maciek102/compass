@@ -38,8 +38,6 @@ class Product < ApplicationRecord
 
   # warianty produktu
   has_many :variants, dependent: :destroy
-  # historia zmian
-  has_many :logs, as: :loggable, dependent: :destroy
 
   has_one_attached :main_image # główne zdjęcie
   has_many_attached :gallery # dodatkowe zdjęcia

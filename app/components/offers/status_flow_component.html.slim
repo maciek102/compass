@@ -3,7 +3,7 @@
     - main_flow_items.each do |item|
       .flow-item-wrapper
         - if item[:available]
-          = link_to change_status_offer_path(@offer, offer: { status: item[:status] }), method: :patch, class: "flow-item current available", style: "background-color: #{item[:color]}" do
+          = link_to change_status_offer_path(@offer, offer: { event: item[:event] }), method: :patch, class: "flow-item current available", style: "background-color: #{item[:color]}" do
             .status-label = status_label_i18n(item[:status])
         - else
           .flow-item.unavailable style="background-color: #{item[:color]}"
@@ -20,7 +20,7 @@
       .alternative-buttons
         - alternative_items.each do |item|
           - if item[:available]
-            = link_to change_status_offer_path(@offer, offer: { status: item[:status] }), method: :patch, class: "flow-item", style: "background-color: #{item[:color]}" do
+            = link_to change_status_offer_path(@offer, offer: { event: item[:event] }), method: :patch, class: "flow-item", style: "background-color: #{item[:color]}" do
               .status-label = status_label_i18n(item[:status])
               - if current?(item[:status])
                 .current-badge AKTUALNY

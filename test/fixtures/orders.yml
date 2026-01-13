@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organization: one
+  client: one
+  offer: one
+  user: one
+  number: MyString
+  external_number: MyString
+  status: 1
+  disabled: false
+  id_by_org: 1
+
+two:
+  organization: two
+  client: two
+  offer: two
+  user: two
+  number: MyString
+  external_number: MyString
+  status: 1
+  disabled: false
+  id_by_org: 1

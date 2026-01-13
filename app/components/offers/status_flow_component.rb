@@ -29,27 +29,44 @@ module Offers
     end
 
     def visible?(status)
-      @offer.available_transitions.map(&:to_s).include?(status.to_s) ||
-        @offer.status.to_s == status.to_s
+      available?(status) || current?(status)
     end
 
     def current?(status)
-      @offer.status.to_s == status.to_s
+      @offer.aasm.current_state == status.to_sym
     end
 
     def available?(status)
-      @offer.available_transitions.map(&:to_s).include?(status.to_s)
+      event = event_for_status(status)
+      return false unless event
+      
+      @offer.send("may_#{event}?")
+    end
+
+    # mapowanie ze statusu na event który do niego prowadzi
+    def event_for_status(status)
+      case status.to_sym
+      when :brand_new then :go_back_to_new
+      when :in_preparation then :prepare
+      when :sent then :send_to_client
+      when :accepted then :accept
+      when :not_accepted then :mark_as_not_accepted
+      when :converted_to_order then :convert_to_order
+      when :rejected then :reject
+      else nil
+      end
     end
 
     def completed?(status)
-      main_flow.map(&:to_s).include?(status.to_s) &&
-        main_flow.map(&:to_s).index(status.to_s) < main_flow.map(&:to_s).index(@offer.status.to_s)
+      main_flow.include?(status) &&
+        main_flow.index(status) < main_flow.index(@offer.aasm.current_state)
     end
 
     def main_flow_items
       main_flow.each_with_index.map do |status, index|
         {
           status: status,
+          event: event_for_status(status),
           available: available?(status),
           color: status_color(status),
           has_arrow: index < main_flow.length - 1
@@ -61,6 +78,7 @@ module Offers
       alternative_statuses.map do |status|
         {
           status: status,
+          event: event_for_status(status),
           available: available?(status),
           color: status_color(status)
         }

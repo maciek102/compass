@@ -21,8 +21,9 @@ class Client < ApplicationRecord
   include Loggable
 
   # === RELACJE ===
-  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
-
+  has_many :offers
+  has_many :orders
+  
   # === WALIDACJE ===
   validates :name, presence: true
   validates :email, presence: true

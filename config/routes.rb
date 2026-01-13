@@ -23,6 +23,16 @@ Rails.application.routes.draw do
     member do
       patch :change_status
     end
+
+    collection do
+      get :search
+    end
+  end
+
+  resources :orders do
+    member do
+      patch :change_status
+    end
   end
 
   resources :calculations, only: %i[create] do

@@ -1,14 +1,14 @@
-class OffersController < ApplicationController
+class OrdersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search_url = offers_path
+    @search_url = orders_path
 
     # ustawienie trybów tabeli
     #scoped = set_view_mode_scope(ProductCategory.for_user(current_user))
 
-    @search = Offer.for_user(current_user).recent.ransack(params[:q])
-    @list = @offers = @search.result(distinct: true).page(params[:page])
+    @search = Order.for_user(current_user).recent.ransack(params[:q])
+    @list = @orders = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
       f.html
@@ -20,11 +20,11 @@ class OffersController < ApplicationController
     @tab = params[:tab] || "main"
 
     if @tab == "calculations"
-      @current_calculation = @offer.current_calculation
+      @current_calculation = @order.current_calculation
       @rows = @current_calculation.rows
     elsif @tab == "history"
-      @search_url = offer_path(@offer, tab: "history")
-      @search = @offer.logs.ransack(params[:q])
+      @search_url = order_path(@order, tab: "history")
+      @search = @order.logs.ransack(params[:q])
       @list = @logs = @search.result.recent.page(params[:logs_page])
     end
 
@@ -35,23 +35,23 @@ class OffersController < ApplicationController
   end
 
   def new
-    @offer.client_id = params[:client_id] if params[:client_id].present?
+    @order.client_id = params[:client_id] if params[:client_id].present?
   end
 
   def edit
   end
 
   def create
-    @offer = Offer.new(offer_params)
-    @offer.user = current_user
+    @order = Order.new(order_params)
+    @order.user = current_user
 
     respond_to do |format|
-      if @offer.save
+      if @order.save
 
-        flash[:notice] = flash_message(Offer, :create)
+        flash[:notice] = flash_message(Order, :create)
 
         format.turbo_stream
-        format.html { redirect_to @offer, notice: flash[:notice] }
+        format.html { redirect_to @order, notice: flash[:notice] }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -60,12 +60,12 @@ class OffersController < ApplicationController
 
   def update
     respond_to do |format|
-      if @offer.update(offer_params)
+      if @order.update(order_params)
 
-        flash[:notice] = flash_message(Offer, :update)
+        flash[:notice] = flash_message(Order, :update)
 
         format.turbo_stream
-        format.html { redirect_to offers_path, notice: flash[:notice] }
+        format.html { redirect_to orders_path, notice: flash[:notice] }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -73,7 +73,7 @@ class OffersController < ApplicationController
   end
 
   def change_status
-    event_name = params.dig(:offer, :event)
+    event_name = params.dig(:order, :event)
 
     if event_name.blank?
       return respond_to do |format|
@@ -82,52 +82,24 @@ class OffersController < ApplicationController
     end
 
     begin
-      @offer.aasm.fire!(event_name.to_sym)
-      message = "Status oferty zmieniony na #{@offer.status_label}"
+      @order.aasm.fire!(event_name.to_sym)
+      message = "Status zamówienia zmieniony na #{@order.status_label}"
       respond_to do |format|
         format.turbo_stream { render_turbo_stream_response(message, :notice) }
-        format.html { redirect_to @offer, notice: message }
+        format.html { redirect_to @order, notice: message }
       end
     rescue AASM::InvalidTransition => e
       message = "Nie można wykonać przejścia: #{e.message}"
       respond_to do |format|
         format.turbo_stream { render_turbo_stream_response(message, :error) }
-        format.html { redirect_to @offer, alert: message }
+        format.html { redirect_to @order, alert: message }
       end
     end
   end
 
   def destroy
-    @offer.destroy
-    redirect_to offers_path, notice: "Oferta została usunięta."
-  end
-
-  def search
-    authorize! :index, Offer
-    
-    query = params[:q].to_s.strip
-    search_params = query.present? ? { number_or_external_number_cont: query } : {}
-    search = Offer.for_user(current_user).active.ransack(search_params)
-    
-    @offers = search.result(distinct: true).recent.limit(30)
-    
-    respond_to do |format|
-      format.json do
-        render json: {
-          results: @offers.map { |offer| 
-            {
-              id: offer.id,
-              text: offer.number,
-              html: render_to_string(
-                partial: 'offers/search_result',
-                locals: { offer: offer },
-                formats: [:html]
-              )
-            }
-          }
-        }
-      end
-    end
+    @order.destroy
+    redirect_to orders_path, notice: "Zamówienie zostało usunięte."
   end
 
   private
@@ -144,9 +116,13 @@ class OffersController < ApplicationController
   #   @view_modes.apply(model)
   # end
 
-  def offer_params
-    params.require(:offer).permit(
-      :client_id, :status
+  def order_params
+    params.require(:order).permit(
+      :client_id,
+      :offer_id,
+      :number,
+      :external_number,
+      :status
     )
   end
 

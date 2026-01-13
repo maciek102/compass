@@ -1,0 +1,11 @@
+tr.table-row id="order-row-#{el.id}" data-url=order_path(el)
+  td = "##{el.id_by_org}"
+  td
+    = status_label(t("activerecord.attributes.order.statuses.#{el.status}"), style: "background-color: #{el.status_color};")
+    .bold = el.number
+  td = el.client.name if el.client.present?
+  td = l(el.created_at, format: :short)
+  td
+    .actions
+      = resource_turbo_edit_link(el)
+      = resource_destroy_link(el)

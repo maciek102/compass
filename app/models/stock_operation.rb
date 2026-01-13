@@ -9,8 +9,6 @@ class StockOperation < ApplicationRecord
 
   has_many :stock_movements, dependent: :destroy
 
-  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
-
   enum :direction, {
     receive: "receive",
     issue: "issue"

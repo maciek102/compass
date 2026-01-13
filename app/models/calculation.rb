@@ -34,8 +34,6 @@ class Calculation < ApplicationRecord
   has_many :row_adjustments, through: :calculation_rows
   accepts_nested_attributes_for :calculation_rows, allow_destroy: true
 
-  has_many :logs, as: :loggable, dependent: :destroy
-
 
   # === WALIDACJE ===
   validates :calculable_id, presence: true

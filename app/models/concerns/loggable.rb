@@ -4,6 +4,8 @@ module Loggable
   extend ActiveSupport::Concern
 
   included do
+    has_many :logs, as: :loggable, dependent: :destroy
+
     after_create  :log_creation
     after_update  :log_update
     before_destroy :log_destruction

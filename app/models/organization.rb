@@ -18,8 +18,6 @@ class Organization < ApplicationRecord
 
   # === RELACJE ===
   has_many :users, dependent: :destroy
-
-  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
   
   # === WALIDACJE ===
   validates :name, presence: true, uniqueness: true

@@ -33,7 +33,6 @@ class StockMovement < ApplicationRecord
   # posiada wiele powiązanych itemów
   has_many :stock_movement_items, dependent: :destroy
   has_many :items, through: :stock_movement_items
-  has_many :logs, as: :loggable, dependent: :destroy # historia zmian
 
   has_many_attached :attachments # załączniki
 

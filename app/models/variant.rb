@@ -38,8 +38,6 @@ class Variant < ApplicationRecord
   has_many :stock_operations, dependent: :destroy
   # wiersze w obliczeniach (oferty, zamówienia)
   has_many :calculation_rows, dependent: :nullify
-  # historia zmian
-  has_many :logs, as: :loggable, dependent: :destroy
 
   has_one_attached :barcode_image # kod kreskowy
   has_one_attached :qr_code_image # kod QR

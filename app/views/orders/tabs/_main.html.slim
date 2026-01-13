@@ -1,0 +1,19 @@
+.row
+  .col-lg-4
+    .show-container
+      .title
+        = @offer.number
+        = status_label(t("activerecord.attributes.offer.statuses.#{@offer.status}"), style: "background-color: #{@offer.status_color};")
+
+      .info
+        = category_info_row("Klient", @offer.client.name)
+        = category_info_row("Numer", @offer.number)
+        = category_info_row("Data utworzenia", l(@offer.created_at, format: :short))
+        /= category_info_row("Status", @offer.status_label)
+
+      .actions
+        = resource_turbo_edit_link(@offer, "Edytuj")
+        = resource_destroy_link(@offer, "Usuń")
+
+  .col-lg-8
+    = render Offers::StatusFlowComponent.new(@offer)

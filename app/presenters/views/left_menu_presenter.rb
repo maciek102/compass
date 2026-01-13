@@ -72,6 +72,7 @@ module Views
         { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon, context: :warehouse },
         { text: "Produkty", url: products_context.first[:url], icon: Product.icon, context: :products },
         { text: "Oferty", url: Rails.application.routes.url_helpers.offers_path, icon: Offer.icon },
+        { text: "Zamówienia", url: Rails.application.routes.url_helpers.orders_path, icon: Order.icon },
         { text: "Klienci", url: Rails.application.routes.url_helpers.clients_path, icon: Client.icon },
         { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon },
         { text: "Skaner", url: Rails.application.routes.url_helpers.scanner_variants_path, icon: "barcode" },

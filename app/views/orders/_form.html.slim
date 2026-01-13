@@ -1,0 +1,23 @@
+= simple_form_for(@order) do |f|
+  = f.error_notification
+
+  .form-grid
+    .form-section
+      .title Dane podstawowe
+
+      = render Forms::AsyncSelectComponent.new(form: f,
+        field: :client_id,
+        url: search_clients_path,
+        label: "Klient",
+        selected_id: @order.client_id,
+        selected_text: @order.client&.name)
+
+      = render Forms::AsyncSelectComponent.new(form: f,
+        field: :offer_id,
+        url: search_offers_path,
+        label: "Oferta",
+        selected_id: @order.offer_id,
+        selected_text: @order.offer&.number)
+
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

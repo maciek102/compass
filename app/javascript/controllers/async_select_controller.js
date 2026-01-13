@@ -25,6 +25,7 @@ export default class extends Controller {
 
     // obsługa kliknięć poza komponentem
     this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+    this.element.addEventListener('click', (e) => e.stopPropagation())
     document.addEventListener('click', this.boundHandleClickOutside)
   }
 

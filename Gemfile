@@ -78,6 +78,7 @@ gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.9'
 gem 'kaminari', '~> 1.2', '>= 1.2.2'
 gem 'cancancan', '~> 3.5'
 gem 'ransack', '~> 4.0'
+gem 'aasm', '~> 5.5', '>= 5.5.2'
 gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
 gem 'exception_notification', '~> 4.5'
 gem "sassc-rails"

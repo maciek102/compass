@@ -1,0 +1,7 @@
+.result-item
+  .text-container
+    .title = offer.number
+    .desc
+      - if offer.client.name.present?
+        = offer.client.name
+

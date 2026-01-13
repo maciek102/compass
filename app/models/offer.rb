@@ -24,7 +24,7 @@ class Offer < ApplicationRecord
   belongs_to :user
 
   has_many :calculations, as: :calculable, dependent: :destroy
-  has_many :logs, as: :loggable, dependent: :destroy
+  has_one :order
 
   # === WALIDACJE ===
   validates :organization_id, presence: true
@@ -36,20 +36,55 @@ class Offer < ApplicationRecord
   after_create :set_offer_number
 
   # === SCOPES ===
+  scope :active, -> { where(disabled: false)}
   scope :for_client, ->(client_id) { where(client_id: client_id) }
   scope :by_number, ->(number) { where(number: number) }
   scope :recent, -> { order(created_at: :desc) }
 
   # === STATUSY ===
-  enum :status, {
-    brand_new: 0, # nowa
-    in_preparation: 1, # w przygotowaniu
-    sent: 2, # wysłana
-    accepted: 3, # zaakceptowana
-    converted_to_order: 4, # zamieniona na zamówienie
-    not_accepted: 5, # niezaakceptowana
-    rejected: 6 # odrzucona
-  }
+  include AASM
+
+  aasm column: :status do
+    state :brand_new, initial: true
+    state :in_preparation
+    state :sent
+    state :accepted
+    state :converted_to_order
+    state :not_accepted
+    state :rejected
+
+    event :prepare do
+      transitions from: [:brand_new, :not_accepted], to: :in_preparation
+    end
+
+    event :go_back_to_new do
+      transitions from: :in_preparation, to: :brand_new
+    end
+
+    event :send_to_client do
+      transitions from: :in_preparation, to: :sent
+    end
+
+    event :accept do
+      transitions from: :sent, to: :accepted
+    end
+
+    event :mark_as_not_accepted do
+      transitions from: [:sent, :accepted, :converted_to_order], to: :not_accepted
+    end
+
+    event :convert_to_order do
+      transitions from: :accepted, to: :converted_to_order
+    end
+
+    event :revert_from_order do
+      transitions from: :converted_to_order, to: :accepted
+    end
+
+    event :reject do
+      transitions from: [:brand_new, :in_preparation, :not_accepted], to: :rejected
+    end
+  end
 
   # === INSTANCE METHODS ===
    
@@ -120,7 +155,7 @@ class Offer < ApplicationRecord
   # STATUSY
   # kolory statusów
   def self.status_color(status)
-    case status
+    case status.to_s
     when "brand_new"
       "#959696" # jasny szary
     when "in_preparation"
@@ -141,7 +176,7 @@ class Offer < ApplicationRecord
   end
 
   def status_color
-    Offer.status_color(status)
+    Offer.status_color(self.status)
   end
 
   # czy kalkulacja może być edytowana
@@ -149,49 +184,8 @@ class Offer < ApplicationRecord
     brand_new? || in_preparation? || not_accepted?
   end
 
-  # czy oferta może być wysłana do klienta
-  def sendable?
-    in_preparation?
-  end
-
-  # czy oferta może być zamieniona na zamówienie
-  def convertible_to_order?
-    accepted?
-  end
-
-  # dostępne przejścia dla aktualnego statusu
-  def available_transitions
-    case status
-    when "brand_new"
-      [:in_preparation, :rejected]
-    when "in_preparation"
-      [:sent, :brand_new, :rejected]
-    when "sent"
-      [:accepted, :not_accepted]
-    when "accepted"
-      [:converted_to_order, :not_accepted]
-    when "converted_to_order"
-      [:accepted]
-    when "not_accepted"
-      [:in_preparation, :rejected]
-    when "rejected"
-      []
-    else
-      []
-    end
-  end
-
-  # label dla statusu
   def status_label
-    I18n.t("activerecord.attributes.offer.statuses.#{status}")
-  end
-
-  # zmiana statusu oferty
-  def transition_to!(new_status)
-    new_status = new_status.to_s
-    return false unless available_transitions.map(&:to_s).include?(new_status)
-    
-    update!(status: new_status)
+    I18n.t("activerecord.attributes.offer.statuses.#{self.status}")
   end
 
   def self.quick_search
@@ -216,7 +210,7 @@ class Offer < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["client_id", "created_at", "external_number", "id", "id_by_org", "number", "organization_id", "updated_at", "user_id"]
+    ["client_id", "created_at", "external_number", "id", "id_by_org", "number", "organization_id", "status", "updated_at", "user_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)
