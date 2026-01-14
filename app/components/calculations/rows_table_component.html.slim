@@ -1,9 +1,9 @@
 table.index-table data-controller="click-row" data-action="click->click-row#navigate"
   thead
-    = render "calculation_rows/table_header"
+    = render "#{@custom_dir}table_header"
   tbody id=@turbo_id
     - @rows.each do |el|
-      = render "calculation_rows/row", el: el
+      = render "#{@custom_dir}row", el: el
     
     / podsumowanie wartości
     = render "calculations/calculation_totals", calculation: @calculation

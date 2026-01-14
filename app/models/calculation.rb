@@ -32,6 +32,7 @@ class Calculation < ApplicationRecord
 
   has_many :calculation_rows, dependent: :destroy
   has_many :row_adjustments, through: :calculation_rows
+  has_many :stock_operations, dependent: :nullify
   accepts_nested_attributes_for :calculation_rows, allow_destroy: true
 
 
@@ -62,6 +63,14 @@ class Calculation < ApplicationRecord
 
   def current?
     is_current
+  end
+
+  def confirmed?
+    confirmed_at.present?
+  end
+
+  def editable?
+    !confirmed?
   end
 
   def title

@@ -57,8 +57,7 @@ class Variant < ApplicationRecord
   # }
 
   # === SCOPE ===
-  scope :active, -> { where(disabled: false) } # niezarchiwizowane
-  scope :available_for_sale, -> { where(disabled: false, status: statuses[:available]) } # widoczne, aktywne dla klienta
+  scope :available_for_sale, -> { active.where(status: statuses[:available]) } # widoczne, aktywne dla klienta
   scope :of_product, ->(product_id) { where(product_id: product_id) }
 
   # === CALLBACKI ===
@@ -78,15 +77,15 @@ class Variant < ApplicationRecord
     "cube"
   end
 
-  # faktyczna ilość dostępna
+  # faktyczna ilość dostępna (pomija rezerwacje)
   def current_stock
     stock || 0
   end
 
-  # przeliczenie stanu magazynowego na podstawie ruchów magazynowych
+  # przeliczenie stanu magazynowego na podstawie egzemplarzy w stanie in_stock (bez zarezerwowanych produktów)
   def recalculate_stock!
-    total = stock_operations.joins(:stock_movements).sum("stock_movements.quantity * stock_movements.direction")
-    update_column(:stock, total)
+    total_in_stock = items.in_stock.count
+    update_column(:stock, total_in_stock)
   end
 
   # czy można kupić?

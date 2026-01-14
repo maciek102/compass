@@ -25,3 +25,18 @@
     background-color: #CA8A04;
   }
 }
+
+.stock-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: inherit;
+
+  .text{
+    white-space: nowrap;
+  }
+
+  i {
+    font-size: 14px;
+  }
+}

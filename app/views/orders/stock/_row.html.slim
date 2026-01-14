@@ -1,0 +1,12 @@
+tr.table-row 
+  td = link_to el.short_title, stock_operation_path(el)
+  td = el.variant.name
+  td = el.variant.product.name
+  td = el.quantity
+  td = el.quantity_finished
+  td 
+    span.badge class=(el.completed? ? "badge-success" : "badge-warning")
+      = el.status.humanize
+  td
+    .actions
+      = link_to fa_icon("eye", text: "Podgląd"), stock_operation_path(el), class: "action-button"

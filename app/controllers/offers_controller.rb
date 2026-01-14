@@ -72,34 +72,27 @@ class OffersController < ApplicationController
     end
   end
 
+  def destroy
+    @offer.destroy
+    redirect_to offers_path, notice: "Oferta została usunięta."
+  end
+
   def change_status
-    event_name = params.dig(:offer, :event)
+    event_name = params.dig(:event)
 
     if event_name.blank?
-      return respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response("Błąd: Nie podano zdarzenia", :error) }
-      end
+      redirect_to request.referrer || offers_path, alert: "Błąd: Nie podano zdarzenia"
+      return
     end
 
     begin
       @offer.aasm.fire!(event_name.to_sym)
       message = "Status oferty zmieniony na #{@offer.status_label}"
-      respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response(message, :notice) }
-        format.html { redirect_to @offer, notice: message }
-      end
+      redirect_to request.referrer || offers_path, notice: message
     rescue AASM::InvalidTransition => e
       message = "Nie można wykonać przejścia: #{e.message}"
-      respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response(message, :error) }
-        format.html { redirect_to @offer, alert: message }
-      end
+      redirect_to request.referrer || offers_path, alert: message
     end
-  end
-
-  def destroy
-    @offer.destroy
-    redirect_to offers_path, notice: "Oferta została usunięta."
   end
 
   def search
@@ -148,10 +141,5 @@ class OffersController < ApplicationController
     params.require(:offer).permit(
       :client_id, :status
     )
-  end
-
-  def render_turbo_stream_response(message, type)
-    flash[type.to_sym] = message
-    render :show, status: :ok
   end
 end

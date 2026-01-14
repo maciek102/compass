@@ -37,10 +37,6 @@ module Stock
         raise Error, "Quantity must be positive" if quantity <= 0
         raise Error, "Variant disabled" if variant.disabled?
         raise Error, "Invalid direction" unless %w[in out].include?(direction)
-
-        if direction == "out" && variant.stock.to_i < quantity
-          raise Error, "Insufficient stock"
-        end
       end
 
       def create_stock_movement

@@ -227,6 +227,25 @@ pl:
           not_accepted: "Niezaakceptowana"
           rejected: "Odrzucona"
 
+      order:
+        number: "Numer"
+        client: "Klient"
+        status: "Status"
+        user: "Użytkownik"
+        user_id: "Użytkownik"
+        created_at: "Utworzono"
+        statuses:
+          brand_new: "Nowe"
+          in_preparation: "W przygotowaniu"
+          approved: "Zatwierdzone"
+          in_progress: "W realizacji"
+          ready: "Gotowe"
+          completed: "Zrealizowane"
+          closed: "Zamknięte"
+          cancelled: "Anulowane"
+          on_hold: "Wstrzymane"
+          complaint: "Reklamacja"
+
   log_in: Zaloguj się
   form: Formularz
   add_new: Dodaj nowy

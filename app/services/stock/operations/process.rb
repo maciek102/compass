@@ -40,23 +40,18 @@ module Stock
         return false unless stock_operation.open?
         return false if stock_operation.variant.disabled?
         return false if quantity.to_i <= 0
-        return false if quantity.to_i <= stock_operation.remaining_quantity
+        return false if quantity.to_i > stock_operation.remaining_quantity
 
         case action
         when :receive
-          true # zawsze można przyjąć, jeżeli powyższe warunki spełnione
+          true
         when :issue
-          # sprawdzamy czy jest wystarczająco fizycznych itemów do wydania
-          # picker.present? && picker.pick(quantity: quantity).size >= quantity
           true
         when :adjust
-          true # można zawsze zrobić korektę w ramach remaining_quantity
+          true
         else
           false
         end
-
-        true
-        
       end
 
       private

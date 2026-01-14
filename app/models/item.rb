@@ -28,6 +28,7 @@ class Item < ApplicationRecord
   # === RELACJE ===
   belongs_to :organization # wieloorganizacyjność
   belongs_to :variant # należy do wariantu
+  belongs_to :reserved_stock_operation, class_name: "StockOperation", optional: true
 
   # posiada wiele operacji magazynowych
   has_many :stock_movement_items
@@ -49,14 +50,22 @@ class Item < ApplicationRecord
   validates :status, presence: true
 
   # === SCOPE ===
-  scope :active, -> { where(disabled: false) }
-  scope :available, -> { active.in_stock } # egzemplarze które można sprzedać
+  scope :available, -> { active.in_stock } # egzemplarze które można wydać 
+  scope :available_for_calculation, ->(calculation) { # egzemplarze dostępne dla danej kalkulacji (uwzględnia rezerwacje)
+    if calculation.present?
+      where("status = ? OR (status = ? AND reserved_stock_operation_id IN (?))", Item.statuses[:in_stock], Item.statuses[:reserved], calculation.stock_operations.select(:id))
+    else
+      where(status: Item.statuses[:in_stock])
+    end
+  }
   scope :of_variant, ->(variant_id) { where(variant_id: variant_id) }
 
   # === CALLBACKI ===
   before_validation :set_default_status, if: -> { status.blank? }
   before_validation :set_default_received_at, if: -> { received_at.blank? }
   before_save :generate_default_serial_number, if: -> { serial_number.blank? }
+  # o każdej zmianie przeliczamy stock wariantu
+  after_commit :recalculate_variant_stock!, on: [:create, :update, :destroy]
 
 
 
@@ -78,6 +87,21 @@ class Item < ApplicationRecord
 
   def self.icon
     "square"
+  end
+
+  # przelicza stan magazynowy powiązanego wariantu
+  def recalculate_variant_stock!
+    variant.recalculate_stock!
+  end
+
+  # rezerwacja egzemplarza pod daną operację magazynową
+  def reserve_for!(operation)
+    update!(status: :reserved, reserved_stock_operation: operation)
+  end
+
+  # zwolnienie rezerwacji
+  def unreserve!
+    update!(status: :in_stock, reserved_stock_operation: nil)
   end
 
   # generacja domyślnego numeru seryjnego
@@ -108,11 +132,11 @@ class Item < ApplicationRecord
     base_sku = variant.sku
 
     if respond_to?(:serial_number_base)
-      # użyj wcześniej przygotowanego base i offset (przygotowane w kontrolerze, aby uniknąć n+1)
+      # użycie base i offset (ustawiane w kontrolerze, aby uniknąć n+1)
       offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
       next_number = serial_number_base + offset
     else
-      # fallback – policz od liczby istniejących itemów wariantu (liczenie od nowa)
+      # fallback – domyślne liczenie od nowa
       next_number = Item.where(organization_id: organization_id, variant_id: variant_id).count + 1
       offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
       next_number += offset

@@ -1,6 +1,6 @@
 module Calculations
-  # Serwis do kopiowania aktualnego obliczenia (current) jako nowa wersja
-  # Kopiuje wszystkie wiersze i adjustmenty, zachowując strukturę
+  # Serwis do duplikowania current kalkulacji jako nowa wersja
+  # Kopiuje wszystkie wiersze i adjustmenty
   #
   # Przykład użycia:
   # Calculations::CopyFromCurrent.call(
@@ -24,14 +24,13 @@ module Calculations
       validate!
 
       ActiveRecord::Base.transaction do
-        # Dezaktywuj bieżącą wersję
+        # dezaktywacja bieżącej kalkulacji
         @current_calculation.update!(is_current: false)
 
-        # Skopiuj jako nową
         new_calculation = copy_calculation!
         copy_rows!(new_calculation)
 
-        # Przelicz totale
+        # przeliczenie wartości kalkulacji
         Calculations::Recalculate.call(calculation: new_calculation)
 
         log_copy!(new_calculation)
@@ -81,12 +80,10 @@ module Calculations
           total_gross: 0
         )
 
-        # Skopiuj adjustmenty
         row.row_adjustments.each do |adjustment|
           new_row.row_adjustments.create!(
             organization: adjustment.organization,
             adjustment_type: adjustment.adjustment_type,
-            name: adjustment.name,
             amount: adjustment.amount,
             is_percentage: adjustment.is_percentage,
             description: adjustment.description

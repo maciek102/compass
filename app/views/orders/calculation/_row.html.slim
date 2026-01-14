@@ -1,0 +1,21 @@
+tr.table-row 
+  td = "#{el.position}."
+  td = el.name 
+  td = "#{el.quantity} #{t("units.#{el.unit}")}"
+  td = number_to_currency(el.unit_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = number_to_currency(el.total_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = render Stock::StockDisplayComponent.new(variant: el.variant, needed_quantity: el.quantity)
+  td
+    - unless el.calculation.confirmed?
+      .actions 
+        = link_to calculation_calculation_row_row_adjustments_path(calculation_id: el.calculation_id, calculation_row_id: el.id), class: "action-button blue", title: "Marża", data: { turbo_frame: "modal" } do
+          = fa_icon("percent")
+
+        = link_to calculation_calculation_row_row_adjustments_path(calculation_id: el.calculation_id, calculation_row_id: el.id, type: "discount"), class: "action-button orange", title: "Rabat", data: { turbo_frame: "modal" } do
+          = fa_icon("tag")
+        
+        = link_to edit_calculation_calculation_row_path(el.calculation, el), class: "action-button yellow", title: "Edytuj pozycję", data: { turbo_frame: "modal" } do
+          = fa_icon("edit")
+
+        = link_to calculation_calculation_row_path(el.calculation, el), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę pozycję?" }, class: "action-button red", title: "Usuń pozycję" do
+          = fa_icon("trash")

@@ -133,7 +133,13 @@ class StockMovementsController < ApplicationController
 
   # przygotowanie listy itemów możliwych do wyboru w trakcie wydawania (ItemPicker)
   def set_picker_items(stock_operation:, strategy:, quantity:, item_ids: [])
-    scope = stock_operation.variant.items.in_stock
+    variant_items = if stock_operation.calculation&.confirmed?
+      # jeżeli itemy wybierane są dla potwierdzonej kalkulacji, to bierzemy pod uwagę rezerwacje z tej kalkulacji
+      stock_operation.variant.items.available_for_calculation(stock_operation.calculation)
+    else
+      stock_operation.variant.items.available
+    end
+    scope = variant_items
     picker = ItemPicker::Resolver.call(strategy: strategy, scope: scope, item_ids: item_ids)
     result = picker.pick(quantity: quantity)
     

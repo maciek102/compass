@@ -7,5 +7,9 @@ tr.table-row data-url=stock_operation_path(el)
   td = status_label(el.status.humanize, style: el.status_color)
   td = direction_label(el.direction)
   td = el.quantity
+  td = el.quantity_finished
   td = el.user.name if el.user.present?
   td = show_datetime(el.created_at)
+  td
+    - if el.open?
+      = link_to fa_icon(StockMovement.icon, text: "Wykonaj"), send("#{el.direction}_stock_movements_path", stock_operation_id: el.id), data: { turbo_frame: "modal" }, class: "base-button"

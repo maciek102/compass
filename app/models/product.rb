@@ -68,8 +68,7 @@ class Product < ApplicationRecord
   validates :sku, uniqueness: { scope: :organization_id, allow_blank: true }
 
   # === SCOPE ===
-  scope :active, -> { where(disabled: false) } # niezarchiwizowane
-  scope :available_for_sale, -> { where(disabled: false, status: statuses[:available]) } # widoczne, aktywne dla klienta
+  scope :available_for_sale, -> { active.where(status: statuses[:available]) } # widoczne, aktywne dla klienta
   scope :with_category, ->(category_id) { where(product_category_id: category_id) }
 
   # === CALLBACKI ===

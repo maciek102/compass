@@ -39,6 +39,8 @@ Rails.application.routes.draw do
     member do
       patch :set_current
       post :copy
+      post :confirm
+      delete :unconfirm
     end
 
     resources :calculation_rows, only: %i[new create edit update destroy] do

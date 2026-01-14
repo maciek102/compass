@@ -36,8 +36,6 @@ class Client < ApplicationRecord
   
 
   # === SCOPES ===
-  scope :active, -> { where(disabled: false) }
-  scope :inactive, -> { where(disabled: true) }
   scope :by_name, -> { order(:name) }
   scope :recent, -> { order(created_at: :desc) }
 

@@ -1,5 +1,8 @@
 .index-table-cont#calculation-table-cont
   .header
     .title = @calculation.title
+    
+    - if @calculation.confirmed?
+      span = "Wersja potwierdzona #{@calculation.confirmed_at.strftime("%d.%m.%Y %H:%M")}. Edycja jest niemożliwa."
 
-  = render Calculations::RowsTableComponent.new(calculation: @calculation, turbo_id: @turbo_id)
+  = render Calculations::RowsTableComponent.new(calculation: @calculation, turbo_id: @turbo_id, custom_dir: @custom_dir)

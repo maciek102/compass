@@ -6,6 +6,7 @@ class StockOperation < ApplicationRecord
   belongs_to :organization
   belongs_to :variant
   belongs_to :user, optional: true
+  belongs_to :calculation, optional: true
 
   has_many :stock_movements, dependent: :destroy
 
@@ -82,6 +83,11 @@ class StockOperation < ApplicationRecord
 
   def remaining_quantity
     quantity - completed_quantity
+  end
+
+  # stan wykonania
+  def quantity_finished
+    "#{completed_quantity} / #{quantity}"
   end
 
   def can_accept_movement?(quantity)

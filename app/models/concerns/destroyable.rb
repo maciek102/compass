@@ -2,7 +2,7 @@ module Destroyable
   extend ActiveSupport::Concern
 
   included do
-    scope :active, ->{where(disabled: false)}
+    scope :active, ->{where(disabled: [false, nil])}
     scope :not_active, ->{where(disabled: true)}
     def active?
       !disabled?

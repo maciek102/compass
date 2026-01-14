@@ -1,6 +1,7 @@
 class CalculationRowsController < ApplicationController
   load_and_authorize_resource :calculation
   load_and_authorize_resource :calculation_row, through: :calculation
+  before_action :check_calculation_editable, only: %i[new create edit update destroy]
 
   def new
     @mode = params[:type]&.downcase || "custom"
@@ -69,6 +70,13 @@ class CalculationRowsController < ApplicationController
   end
 
   private
+
+  def check_calculation_editable
+    if @calculation.confirmed?
+      flash[:alert] = "Nie można edytować potwierdzonej kalkulacji."
+      redirect_to redirect_target
+    end
+  end
 
   def set_calculation
     @calculation = Calculation.where(organization_id: current_user.organization_id).find(params[:calculation_id])

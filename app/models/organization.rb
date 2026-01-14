@@ -23,8 +23,7 @@ class Organization < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   
   # === SCOPES ===
-  scope :active, -> { where(active: true) }
-  scope :launched, -> { where(launched: true) }
+  scope :launched, -> { active.where(launched: true) }
 
 
   # === METODY ===

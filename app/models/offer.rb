@@ -36,10 +36,14 @@ class Offer < ApplicationRecord
   after_create :set_offer_number
 
   # === SCOPES ===
-  scope :active, -> { where(disabled: false)}
   scope :for_client, ->(client_id) { where(client_id: client_id) }
   scope :by_number, ->(number) { where(number: number) }
   scope :recent, -> { order(created_at: :desc) }
+
+  def self.for_user(user)
+    all
+  end
+
 
   # === STATUSY ===
   include AASM
@@ -86,51 +90,49 @@ class Offer < ApplicationRecord
     end
   end
 
-  # === INSTANCE METHODS ===
-   
-  def self.for_user(user)
-    all
+  # zwraca event AASM dla danego statusu (mapowanie status -> event)
+  def self.event_for_status(status)
+    case status.to_sym
+    when :brand_new then :go_back_to_new
+    when :in_preparation then :prepare
+    when :sent then :send_to_client
+    when :accepted then :accept
+    when :not_accepted then :mark_as_not_accepted
+    when :converted_to_order then :convert_to_order
+    when :rejected then :reject
+    else nil
+    end
   end
 
-  # Zwraca aktualne obliczenie oferty (ostatnie stworzone)
+  # akcje dostępne dla aktualnego statusu oferty
+  def status_actions
+    case self.status.to_sym
+    when :brand_new, :in_preparation
+      [
+        { 
+          label: "Dodaj pozycje", 
+          path: Rails.application.routes.url_helpers.offer_path(self, tab: "calculations"),
+        }
+      ]
+    when :accepted
+      [
+        { 
+          label: "Utwórz zamówienie", 
+          path: Rails.application.routes.url_helpers.new_order_path(offer_id: self.id)
+        }
+      ]
+    else
+      []
+    end
+  end
+
+
+
+  # === METODY ===
+   
+  # aktualne obliczenie oferty
   def current_calculation
     calculations.where(is_current: true).order(created_at: :desc).first
-  end
-
-  # Tworzy nowe obliczenie (draft)
-  def create_calculation!(user: nil)
-    calculations.create!(
-      user_id: user&.id || self.user_id
-    )
-  end
-
-  # Klonuje ostatnie obliczenie i tworzy nowe na jego podstawie
-  def create_calculation_from_current!(user: nil)
-    current = current_calculation
-    return create_calculation!(user: user) unless current
-
-    new_calculation = calculations.build(
-      user_id: user&.id || self.user_id,
-      notes: current.notes,
-      valid_until: current.valid_until
-    )
-
-    new_calculation.save!
-
-    # Skopiuj wiersze z ostatniego obliczenia
-    current.calculation_rows.each do |row|
-      new_calculation.calculation_rows.create!(
-        variant_id: row.variant_id,
-        position: row.position,
-        name: row.name,
-        description: row.description,
-        quantity: row.quantity,
-        unit: row.unit,
-        unit_price: row.unit_price,
-      )
-    end
-
-    new_calculation
   end
 
   # Zwraca wszystkie wiersze z aktualnego obliczenia
@@ -198,8 +200,15 @@ class Offer < ApplicationRecord
     update_column(:number, "F-#{organization_id}-#{Time.current.year}-#{id_by_org}")
   end
 
-  private
+  def self.ransackable_attributes(auth_object = nil)
+    ["client_id", "created_at", "external_number", "id", "id_by_org", "number", "organization_id", "status", "updated_at", "user_id"]
+  end
 
+  def self.ransackable_associations(auth_object = nil)
+    ["calculations", "client", "logs", "organization", "user"]
+  end
+
+  private
 
   # Tworzy wstępne obliczenie draft
   def create_initial_calculation
@@ -207,14 +216,6 @@ class Offer < ApplicationRecord
       user_id: self.user_id || Current.user&.id,
       is_current: true
     )
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-    ["client_id", "created_at", "external_number", "id", "id_by_org", "number", "organization_id", "status", "updated_at", "user_id"]
-  end
-
-  def self.ransackable_associations(auth_object = nil)
-    ["calculations", "client", "logs", "organization", "user"]
   end
 
 end

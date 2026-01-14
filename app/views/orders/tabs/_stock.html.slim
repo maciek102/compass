@@ -1,0 +1,11 @@
+- if @current_calculation&.confirmed?
+  - if @stock_operations.any?
+    = render Tables::IndexTableComponent.new(list: @stock_operations, turbo_id: "stock-operations-table-body", custom_dir: "stock_operations/", no_pages: true)
+  - else
+    .empty-state
+      p Brak operacji magazynowych dla tej kalkulacji
+- else
+  .empty-state
+    p Kalkulacja nie została jeszcze potwierdzona. Potwierdź kalkulację aby utworzyć operacje magazynowe.
+    - if @current_calculation
+      = link_to "Przejdź do zakładki Calculations", order_path(@order, tab: "calculations"), class: "base-button"

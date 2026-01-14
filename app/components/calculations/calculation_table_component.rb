@@ -4,16 +4,15 @@ module Calculations
   #
   # locals:
   # list: lista obiektów
-  # custom_dir: opcjonalnie folder z partialami _row i _table_header (default: obecna lokalizacja)
-  # title: tytuł tabeli
-  # button: { text: "...", link: _path, class: "...", data_attrs: {...} }
+  # custom_dir: opcjonalnie folder z partialami _row i _table_header (default: calculations_rows/)
   # turbo_id: nazwa/id turbo_frame (opcjonalnie)
   
   class CalculationTableComponent < ViewComponent::Base
     
-    def initialize(calculation:, turbo_id: nil)
+    def initialize(calculation:, turbo_id: nil, custom_dir: nil)
       @calculation = calculation
       @turbo_id = turbo_id
+      @custom_dir = custom_dir
     end
 
   end

@@ -22,6 +22,13 @@ class OrdersController < ApplicationController
     if @tab == "calculations"
       @current_calculation = @order.current_calculation
       @rows = @current_calculation.rows
+    elsif @tab == "stock"
+      @current_calculation = @order.current_calculation
+      if @current_calculation&.confirmed?
+        @stock_operations = @current_calculation.stock_operations.includes(:variant, :stock_movements)
+      else
+        @stock_operations = []
+      end
     elsif @tab == "history"
       @search_url = order_path(@order, tab: "history")
       @search = @order.logs.ransack(params[:q])
@@ -35,7 +42,9 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order.client_id = params[:client_id] if params[:client_id].present?
+    @offer = Offer.find_by(id: params[:offer_id]) if params[:offer_id].present?
+    @order.offer_id = @offer.id if @offer
+    @order.client_id = @offer.client_id if @offer
   end
 
   def edit
@@ -72,34 +81,27 @@ class OrdersController < ApplicationController
     end
   end
 
+  def destroy
+    @order.destroy
+    redirect_to orders_path, notice: "Zamówienie zostało usunięte."
+  end
+
   def change_status
-    event_name = params.dig(:order, :event)
+    event_name = params.dig(:event)
 
     if event_name.blank?
-      return respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response("Błąd: Nie podano zdarzenia", :error) }
-      end
+      redirect_to request.referrer || orders_path, alert: "Błąd: Nie podano zdarzenia"
+      return
     end
 
     begin
       @order.aasm.fire!(event_name.to_sym)
       message = "Status zamówienia zmieniony na #{@order.status_label}"
-      respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response(message, :notice) }
-        format.html { redirect_to @order, notice: message }
-      end
+      redirect_to request.referrer || orders_path, notice: message
     rescue AASM::InvalidTransition => e
       message = "Nie można wykonać przejścia: #{e.message}"
-      respond_to do |format|
-        format.turbo_stream { render_turbo_stream_response(message, :error) }
-        format.html { redirect_to @order, alert: message }
-      end
+      redirect_to request.referrer || orders_path, alert: message
     end
-  end
-
-  def destroy
-    @order.destroy
-    redirect_to orders_path, notice: "Zamówienie zostało usunięte."
   end
 
   private

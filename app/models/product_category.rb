@@ -45,8 +45,7 @@ class ProductCategory < ApplicationRecord
   validates :code, uniqueness: { scope: :organization_id }
 
   # === SCOPE ===
-  scope :active, -> { where(disabled: false) } # niezarchiwizowane
-  scope :visible, -> { where(visible: true, disabled: false) }
+  scope :visible, -> { active.where(visible: true) }
 
   # === CALLBACKI ===
   before_validation :generate_slug, if: -> { name.present? }

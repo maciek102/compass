@@ -1,6 +1,6 @@
 class CalculationsController < ApplicationController
   before_action :set_calculable, only: :create
-  before_action :set_calculation, only: %i[copy set_current]
+  before_action :set_calculation, only: %i[copy set_current confirm unconfirm]
 
   ALLOWED_CALCULABLE_TYPES = %w[Offer Order Invoice].freeze
 
@@ -71,6 +71,50 @@ class CalculationsController < ApplicationController
       format.html { redirect_to redirect_target(calculable) }
     end
   rescue StandardError => e
+    flash[:alert] = "Błąd: #{e.message}"
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to redirect_target(@calculation.calculable), alert: flash[:alert] }
+    end
+  end
+
+  # Potwierdza kalkulację i tworzy operacje magazynowe
+  def confirm
+    authorize! :update, @calculation.calculable
+
+    Calculations::Confirm.call(
+      calculation: @calculation,
+      user: current_user
+    )
+
+    flash[:notice] = "Kalkulacja została potwierdzona. Utworzono operacje magazynowe."
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to redirect_target(@calculation.calculable) }
+    end
+  rescue Calculations::Confirm::Error => e
+    flash[:alert] = "Błąd: #{e.message}"
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to redirect_target(@calculation.calculable), alert: flash[:alert] }
+    end
+  end
+
+  # Cofa potwierdzenie kalkulacji i usuwa operacje magazynowe
+  def unconfirm
+    authorize! :update, @calculation.calculable
+
+    Calculations::Unconfirm.call(
+      calculation: @calculation,
+      user: current_user
+    )
+
+    flash[:notice] = "Cofnięto potwierdzenie kalkulacji."
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to redirect_target(@calculation.calculable) }
+    end
+  rescue Calculations::Unconfirm::Error => e
     flash[:alert] = "Błąd: #{e.message}"
     respond_to do |format|
       format.turbo_stream
