@@ -2,8 +2,8 @@ tr.table-row
   td = "#{el.position}."
   td = el.name 
   td = "#{el.quantity} #{t("units.#{el.unit}")}"
-  td = show_price(el.unit_price, unit: "PLN ", separator: ",", delimiter: " ")
-  td = show_price(el.total_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = show_price(el.unit_price)
+  td = show_price(el.total_price)
   td = render Stock::StockDisplayComponent.new(variant: el.variant, needed_quantity: el.quantity)
   td
     - unless el.calculation.confirmed?

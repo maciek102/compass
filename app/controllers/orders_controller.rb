@@ -20,8 +20,10 @@ class OrdersController < ApplicationController
     @tab = params[:tab] || "main"
 
     if @tab == "calculations"
+      @search_url = order_path(@order, tab: "calculations")
       @current_calculation = @order.current_calculation
-      @rows = @current_calculation.rows
+      @search = @current_calculation.rows.ransack(params[:q])
+      @list = @rows = @search.result
     elsif @tab == "stock"
       @current_calculation = @order.current_calculation
       if @current_calculation&.confirmed?
