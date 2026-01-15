@@ -10,8 +10,8 @@ tr.table-row
     - else
       = el.name 
   td = "#{el.quantity} #{t("units.#{el.unit}")}"
-  td = number_to_currency(el.unit_price, unit: "PLN ", separator: ",", delimiter: " ")
-  td = number_to_currency(el.total_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = show_price(el.unit_price, unit: "PLN ", separator: ",", delimiter: " ")
+  td = show_price(el.total_price, unit: "PLN ", separator: ",", delimiter: " ")
   td
     .actions 
       = link_to calculation_calculation_row_row_adjustments_path(calculation_id: el.calculation_id, calculation_row_id: el.id), class: "action-button blue", title: "Marża", data: { turbo_frame: "modal" } do

@@ -32,6 +32,9 @@ class StockOperation < ApplicationRecord
 
   # === SCOPE ===
   scope :recent, -> { order(created_at: :desc) }
+  scope :opened, -> { where(status: :open) }
+  scope :in_realization, -> { where(status: :in_progress) }
+  scope :completed, -> { where(status: :completed) }
 
   # === WALIDACJE ===
   validates :direction, presence: true

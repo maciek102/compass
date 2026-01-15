@@ -97,4 +97,17 @@ module ApplicationHelper
     content_tag(:span, text, class: "inline-slash-separator")
   end
 
+  def show_price(amount, currency: "PLN", decimal_places: 2, decimal_separator: ",", thousands_separator: " ")
+    return "-" if amount.blank?
+
+    formatted_number = number_with_precision(
+      amount,
+      precision: decimal_places,
+      separator: decimal_separator,
+      delimiter: thousands_separator
+    )
+
+    "#{formatted_number} #{currency}"
+  end
+
 end

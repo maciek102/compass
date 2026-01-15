@@ -1,1 +1,8 @@
-h5 Dashboard
+.dashboard 
+  - dashboard = Views::DashboardWidgetsPresenter.new(user: current_user).build
+  - dashboard.each do |section|
+    .section
+      .header = section[:title]
+      .widgets-cont
+        - section[:widgets].each do |widget|
+          = render widget.partial, widget: widget

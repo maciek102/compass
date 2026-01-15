@@ -50,7 +50,7 @@ class StockMovement < ApplicationRecord
   }
 
   # === SCOPE ===
-   
+  scope :recent, -> { order(created_at: :desc) }
 
   # === WALIDACJE ===
   validates :quantity, presence: true, numericality: { greater_than: 0 }

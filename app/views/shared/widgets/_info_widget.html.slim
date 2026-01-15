@@ -1,0 +1,4 @@
+.info-widget
+  .header = widget.title
+  - widget.rows.each do |row|
+    = render "shared/widgets/info_widget_value", label: row[:label], amount: row[:value], klass: row[:klass]

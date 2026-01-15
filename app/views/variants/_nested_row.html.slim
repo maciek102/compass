@@ -14,7 +14,4 @@ table.index-table
             strong = el.name
         td = "Stan: #{el.stock}"
         td = "Rezerwacje: #{el.reserved_count}"
-        td = "Cena: #{number_to_currency(el.price)}"
-        / td.actions
-        /   = resource_turbo_edit_link(el)
-        /   = resource_destroy_link(el)
+        td = "Cena: #{show_price(el.price)}"
