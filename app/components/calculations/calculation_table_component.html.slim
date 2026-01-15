@@ -1,6 +1,13 @@
 .index-table-cont#calculation-table-cont
   .header
-    .title = @calculation.title
+    .left 
+      .title = @calculation.title
+
+      .filters 
+        - if @custom_filters.present?
+          = render(@custom_filters[:partial], **custom_filters_locals)
+        - elsif @filters
+          = render(filters_partial_path)
     
     - if @calculation.confirmed?
       span = "Wersja potwierdzona #{@calculation.confirmed_at.strftime("%d.%m.%Y %H:%M")}. Edycja jest niemożliwa."

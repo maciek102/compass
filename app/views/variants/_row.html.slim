@@ -2,8 +2,10 @@
 tr.table-row data-url=variant_path(el, context: @left_menu_context)
   td = el.sku
   td 
-    = "#{el.product.name} / "
-    strong = el.name
+    = fast_link(product_path(el.product), text: el.product.name)
+    = inline_slash_separator
+    = fast_link(variant_path(el)) do 
+      strong = el.name
   td = el.stock
   td
     .actions

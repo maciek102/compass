@@ -17,6 +17,7 @@ class StockOperation < ApplicationRecord
 
   enum :status, {
     open: "open",
+    in_progress: "in_progress",
     completed: "completed",
     cancelled: "cancelled"
   }
@@ -30,7 +31,7 @@ class StockOperation < ApplicationRecord
   ].freeze
 
   # === SCOPE ===
-  
+  scope :recent, -> { order(created_at: :desc) }
 
   # === WALIDACJE ===
   validates :direction, presence: true
@@ -66,6 +67,8 @@ class StockOperation < ApplicationRecord
     color = case status
     when "open"
       "gray"
+    when "in_progress"
+      "orange"
     when "completed"
       "green"
     when "cancelled"
@@ -75,6 +78,10 @@ class StockOperation < ApplicationRecord
     end
 
     "background-color: #{color};"
+  end
+
+  def status_label
+    I18n.t("activerecord.attributes.stock_operation.statuses.#{status}")
   end
 
   def completed_quantity

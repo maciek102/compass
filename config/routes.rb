@@ -72,7 +72,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :toggle_items
+      get :toggle_stock_items
+      get :toggle_reserved_items
     end
   end
 

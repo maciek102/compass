@@ -1,4 +1,4 @@
-/ Tabela itemów wariantu renderowana nested pod wierszem wariantu
+/ Tabela itemów wariantu NA STANIE renderowana nested pod wierszem wariantu
 / locals: items - kolekcja wariantów do wyświetlenia
 
 table.index-table
@@ -7,6 +7,7 @@ table.index-table
       tr.table-row.nested-row data-url=item_path(el)
         td colspan=2
         td = el.serial_number
+        td = el.status.humanize
         / td
         /   = "#{el.product.name} / "
         /   strong = el.name

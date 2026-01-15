@@ -6,7 +6,7 @@ class VariantsController < ApplicationController
   def index
     @search_url = variants_path
 
-    @search = Variant.for_user(current_user).includes(:product).ransack(params[:q])
+    @search = Variant.for_user(current_user).includes(:product, :items).ransack(params[:q])
     @list = @variants = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -39,11 +39,16 @@ class VariantsController < ApplicationController
     when "main"
       
     when "items"
-      @items = @variant.items.page(params[:page])
+      # ustawienie trybów tabeli
+      @search_url = variant_path(@variant, tab: "items")
+
+      scoped = set_view_mode_scope_items_tab(@variant.items)
+      @search = scoped.ransack(params[:q])
+      @list = @items = scoped.page(params[:page])
     when "operations"
       @search_url = variant_path(@variant, tab: "operations")
-      @search = @variant.stock_movements.ransack(params[:q])
-      @list = @stock_movements = @search.result.page(params[:operations_page])
+      @search = @variant.stock_operations.recent.ransack(params[:q])
+      @list = @stock_operations = @search.result.page(params[:operations_page])
     when "history"
       @search_url = variant_path(@variant, tab: "history")
       @search = @variant.logs.ransack(params[:q])
@@ -86,8 +91,16 @@ class VariantsController < ApplicationController
     @left_menu_context = nil
   end
 
-  def toggle_items
-    @items = @variant.items
+  def toggle_stock_items
+    @items = @variant.items.available
+
+    respond_to do |f|
+      f.js
+    end
+  end
+
+  def toggle_reserved_items
+    @items = @variant.items.reserved
 
     respond_to do |f|
       f.js
@@ -137,12 +150,29 @@ class VariantsController < ApplicationController
       default: :list,
       modes: {
         list: { label: "Lista", scope: ->(scope) { scope } },
-        groups: { label: "Grupy", scope: ->(scope) { scope } }
+        stock: { label: "Stan", scope: ->(scope) { scope } },
+        reserved: { label: "Rezerwacje", scope: ->(scope) { scope } }
       }
     )
 
-    @expand_items = @view_modes.current?(:groups)
+    @expand_stock = @view_modes.current?(:stock)
+    @expand_reserved = @view_modes.current?(:reserved)
     
+    @view_modes.apply(model)
+  end
+
+  def set_view_mode_scope_items_tab(model)
+    @view_modes = Views::TableViewModePresenter.new(
+      params[:view],
+      default: :available,
+      modes: {
+        available: { label: "Dostępne", scope: ->(scope) { scope.available } },
+        reserved: { label: "Zarezerwowane", scope: ->(scope) { scope.reserved } },
+        sold: { label: "Wydane", scope: ->(scope) { scope.issued } },
+        all: { label: "Wszystkie", scope: ->(scope) { scope } }
+      }
+    )
+
     @view_modes.apply(model)
   end
 

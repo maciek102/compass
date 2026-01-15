@@ -145,6 +145,12 @@ pl:
         images: "Zdjęcia"
         created_at: "Data utworzenia"
         updated_at: "Data aktualizacji"
+        statuses:
+          in_stock: "W magazynie"
+          reserved: "Zarezerwowany"
+          issued: "Wydany"
+          returned: "Zwrócony"
+          damaged: "Uszkodzony"
       
       stock_operation:
         quantity: "Ilość"
@@ -161,6 +167,11 @@ pl:
         id_by_org: "ID organizacyjne"
         created_at: "Data utworzenia"
         updated_at: "Data aktualizacji"
+        statuses:
+          open: "Otwarta"
+          in_progress: "W trakcie"
+          completed: "Zakończona"
+          cancelled: "Anulowana"
       
       stock_movement:
         quantity: "Ilość"

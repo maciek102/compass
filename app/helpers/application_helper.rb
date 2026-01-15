@@ -81,4 +81,20 @@ module ApplicationHelper
     date.present? ? date.strftime("%d.%m.%Y") : "-"
   end
 
+  # szybki link z efektem hover do wykorzystania np w tabelach
+  # path: docelowy URL
+  # text: opcjonalny tekst (jeśli podany, ignoruje block)
+  # block: zawartość wyświetlana w linku (jeśli nie ma text)
+  # przykład: fast_link(path, text: "Klikaj") lub fast_link(path) { strong = "Klikaj" }
+  def fast_link(path, text: nil, &block)
+    link_to path, class: 'fast-link-style' do
+      text.present? ? text : capture(&block)
+    end
+  end
+
+  # " / " z klasą
+  def inline_slash_separator(text = " / ")
+    content_tag(:span, text, class: "inline-slash-separator")
+  end
+
 end

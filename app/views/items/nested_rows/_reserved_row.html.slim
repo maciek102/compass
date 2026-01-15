@@ -1,0 +1,18 @@
+/ Tabela itemów wariantu ZAREZERWOWANYCH renderowana nested pod wierszem wariantu
+/ locals: items - kolekcja wariantów do wyświetlenia
+
+table.index-table
+  tbody
+    - items.each do |el|
+      tr.table-row.nested-row data-url=item_path(el)
+        td colspan=2
+        td = el.serial_number
+        td = el.status.humanize
+        / td
+        /   = "#{el.product.name} / "
+        /   strong = el.name
+        /td = "Stan: #{el.stock}"
+        /td = "Cena: #{number_to_currency(el.price)}"
+        / td.actions
+        /   = resource_turbo_edit_link(el)
+        /   = resource_destroy_link(el)

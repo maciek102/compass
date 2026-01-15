@@ -51,6 +51,10 @@ class Item < ApplicationRecord
 
   # === SCOPE ===
   scope :available, -> { active.in_stock } # egzemplarze które można wydać 
+  scope :reserved, -> { where(status: Item.statuses[:reserved]) } # egzemplarze zarezerwowane
+  scope :issued, -> { where(status: Item.statuses[:issued]) } # egzemplarze wydane
+  scope :returned, -> { where(status: Item.statuses[:returned]) } # egzemplarze zwrócone
+  scope :damaged, -> { where(status: Item.statuses[:damaged]) } # egzemplarze uszkodzone
   scope :available_for_calculation, ->(calculation) { # egzemplarze dostępne dla danej kalkulacji (uwzględnia rezerwacje)
     if calculation.present?
       where("status = ? OR (status = ? AND reserved_stock_operation_id IN (?))", Item.statuses[:in_stock], Item.statuses[:reserved], calculation.stock_operations.select(:id))
@@ -143,6 +147,22 @@ class Item < ApplicationRecord
     end
 
     format("%s-%06d", base_sku, next_number)
+  end
+
+  def status_label
+    I18n.t("activerecord.attributes.item.statuses.#{status}")
+  end
+
+  def self.quick_search
+    :serial_number_cont
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "disabled", "id", "id_by_org", "location", "lot_number", "notes", "organization_id", "received_at", "reserved_stock_operation_id", "serial_number", "status", "updated_at", "variant_id"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["images_attachments", "images_blobs", "organization", "reserved_stock_operation", "stock_movement_items", "stock_movements", "variant"]
   end
 
   private

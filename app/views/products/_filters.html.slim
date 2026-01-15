@@ -1,7 +1,7 @@
 .flexbox.centered
   = search_form_for @search, { remote: true, html: { data: { controller: "instant-search" } }}.merge(not_standard_url(@search_url)) do |f|
     = hidden_field_tag :show_disabled, params[:show_disabled].present? && params[:show_disabled]
-    = f.search_field((@search.klass.try(:quick_search) || :name_cont), class: "form-control",placeholder: "🔍 Szukaj...", data: { action: "input->instant-search#submitWithDebounce" })
+    = f.search_field((@search.klass.try(:quick_search) || :name_cont), class: "filters-input",placeholder: "🔍 Szukaj...", data: { action: "input->instant-search#submitWithDebounce" })
 
   span.advanced-filters-btn data-action="click->toggle-hidden#toggle" role="button"
     = fa_icon("filter", text: "Filtry")

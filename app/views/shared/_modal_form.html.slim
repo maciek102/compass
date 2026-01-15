@@ -2,7 +2,7 @@
 - title = local_assigns.fetch(:title, I18n.t(:form))
 
 = turbo_frame_tag "modal" do
-  .modal-overlay data-controller="modals" data-action="click->modals#closeByOverlay"
+  .modal-overlay data-controller="modals"
     .modal-form-card
       .modal-form-header
         h4.page-title.mb-0 = title

@@ -1,0 +1,13 @@
+const $tr = $("#variant-<%= @variant.id %>-nested-items");
+const $btn = $("#toggle-stock-items-<%= @variant.id %>");
+const $icon = $btn.find("i");
+
+if ($tr.hasClass("hidden")) {
+  // Pokaż warianty
+  $tr.removeClass("hidden").html("<td colspan=6><%= j render partial: 'items/nested_rows/stock_row', locals: { items: @items } %></td>");
+  $icon.removeClass("fa-arrow-down").addClass("fa-arrow-up");
+} else {
+  // Schowaj warianty
+  $tr.addClass("hidden").empty().html("");
+  $icon.removeClass("fa-arrow-up").addClass("fa-arrow-down");
+}

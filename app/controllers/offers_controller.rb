@@ -20,8 +20,11 @@ class OffersController < ApplicationController
     @tab = params[:tab] || "main"
 
     if @tab == "calculations"
+      @search_url = offer_path(@offer, tab: "calculations")
       @current_calculation = @offer.current_calculation
-      @rows = @current_calculation.rows
+
+      @search = @current_calculation.rows.ransack(params[:q])
+      @list = @rows = @search.result
     elsif @tab == "history"
       @search_url = offer_path(@offer, tab: "history")
       @search = @offer.logs.ransack(params[:q])

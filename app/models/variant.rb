@@ -93,6 +93,10 @@ class Variant < ApplicationRecord
     !disabled && total_stock > 0
   end
 
+  def reserved_count
+    items.reserved.count
+  end
+
   def self.quick_search
     :name_or_sku_or_product_name_cont
   end

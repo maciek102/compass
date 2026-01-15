@@ -1,19 +1,27 @@
 / context - potrzebny żeby lewe menu wiedziało, który kontekst (produktowy/magazynowy) jest aktywny dla wariantów - DO EWENTUALNEJ POPRAWY, nie miałem lepszego pomysłu
 
-- expand_items = @expand_items || false
+- expand_stock = @expand_stock || false
+- expand_reserved = @expand_reserved || false
 - nested_row_classes = ["nested-row"]
-- nested_row_classes << "hidden" unless expand_items
-- toggle_icon = expand_items ? "arrow-up" : "arrow-down"
+- nested_row_classes << "hidden" unless expand_stock || expand_reserved
+- toggle_stock_icon = expand_stock ? "arrow-up" : "arrow-down"
+- toggle_reserved_icon = expand_reserved ? "arrow-up" : "arrow-down"
 
 tr.table-row id="variant-row-#{el.id}" data-url=variant_path(el, context: @left_menu_context)
   td = el.sku
   td 
-    strong = el.product.name
-    = " / #{el.name}"
+    = fast_link(product_path(product = el.product)) do
+      strong = product.name
+    = inline_slash_separator
+    = fast_link(variant_path(variant = el), text: el.name)
   td 
     = "#{el.stock} "
-    / przycisk do rozwijania/zamykania widoku itemów wariantu
-    = link_to fa_icon(toggle_icon), toggle_items_variant_path(el), remote: true, class: "action-button", id: "toggle-items-#{el.id}"
+    / przycisk do rozwijania/zamykania widoku itemów wariantu na stanie
+    = link_to fa_icon(toggle_stock_icon), toggle_stock_items_variant_path(el), remote: true, class: "action-button", id: "toggle-stock-items-#{el.id}"
+  td 
+    = "#{el.reserved_count} "
+    / przycisk do rozwijania/zamykania widoku zarezerwowanych itemów wariantu
+    = link_to fa_icon(toggle_reserved_icon), toggle_reserved_items_variant_path(el), remote: true, class: "action-button", id: "toggle-reserved-items-#{el.id}"
   td
     .actions
       = link_to fa_icon("plus", text: "Operacja"), new_stock_operation_path(variant_id: el.id), data: { turbo_frame: "modal" }, class: "action-button", title: "Operacja"
@@ -21,5 +29,9 @@ tr.table-row id="variant-row-#{el.id}" data-url=variant_path(el, context: @left_
 / renderowanie itemów wariantu w linii pod produktem
 tr class=nested_row_classes.join(" ") id="variant-#{el.id}-nested-items"
   td colspan=6
-    - if expand_items
-      = render partial: 'items/nested_row', locals: { items: el.items }
+    - if expand_stock
+      / itemy na stanie
+      = render partial: 'items/nested_rows/stock_row', locals: { items: el.items.available }
+    - if expand_reserved
+      / zarezerwowane itemy
+      = render partial: 'items/nested_rows/reserved_row', locals: { items: el.items.reserved }

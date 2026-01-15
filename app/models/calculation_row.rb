@@ -94,4 +94,16 @@ class CalculationRow < ApplicationRecord
   def display_name
     name.presence || variant&.name || "Wiersz niestandardowy"
   end
+
+  def self.quick_search
+    :name_or_position_cont
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["calculation_id", "created_at", "description", "id", "name", "organization_id", "position", "quantity", "subtotal", "total_gross", "total_net", "unit", "unit_price", "updated_at", "variant_id", "vat_percent"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["calculation", "variant"]
+  end
 end

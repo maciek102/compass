@@ -3,7 +3,8 @@ tr.table-row id="offer-row-#{el.id}" data-url=offer_path(el)
   td
     = status_label(t("activerecord.attributes.offer.statuses.#{el.status}"), style: "background-color: #{el.status_color};")
     .bold = el.number
-  td = el.client.name if el.client.present?
+  td = fast_link(client_path(el.client), text: el.client.name)
+  td = "#{number_to_currency(el.current_calculation.total_net)} / #{number_to_currency(el.current_calculation.total_gross)}" 
   td = l(el.created_at, format: :short)
   td
     .actions

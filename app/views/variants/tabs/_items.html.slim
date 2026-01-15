@@ -1,1 +1,4 @@
-= render Tables::IndexTableComponent.new(list: @items, custom_dir: "items/", title: "Egzemplarze")
+/ przełączanie widoków (scope) tabeli
+= render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes, base_params: params)
+
+= render Tables::IndexTableComponent.new(list: @items, custom_dir: "items/", title: "Egzemplarze", filters: true)

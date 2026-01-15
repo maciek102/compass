@@ -1,5 +1,5 @@
 .tabs 
   = render "shared/tab", text: "Informacje", icon: info_icon, path: variant_path(@variant, tab: "main"), active_tab: "main"
   = render "shared/tab", text: "Egzemplarze", icon: Item.icon, path: variant_path(@variant, tab: "items"), active_tab: "items"
-  = render "shared/tab", text: "Operacje", icon: StockMovement.icon, path: variant_path(@variant, tab: "operations"), active_tab: "operations"
+  = render "shared/tab", text: "Operacje", icon: StockOperation.icon, path: variant_path(@variant, tab: "operations"), active_tab: "operations"
   = render "shared/tab", text: "Historia", icon: history_icon, path: variant_path(@variant, tab: "history"), active_tab: "history"
