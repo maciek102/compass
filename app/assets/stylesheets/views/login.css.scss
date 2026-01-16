@@ -2,7 +2,7 @@
 
 .login-page {
   background-image: image-url('login_background.png');
-  background-size: 1366px auto;
+  background-size: 1200px auto;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
@@ -17,19 +17,19 @@
       font-family: 'Playfair Display', serif;
       font-weight: 500;
       line-height: 1.1em;
-      font-size: 4rem;
+      font-size: 3.5rem;
       span.strong{
-        font-size: 5rem;
+        font-size: 4.5rem;
         font-family: 'Playfair Display', serif;
         font-weight: 700;
       }
     }
     .signup-prompt{
-      margin-top: 5px;
+      margin-top: 10px;
       margin-left: 10px;
-      font-size: 14px;
+      font-size: 13px;
       .signup-link{
-        font-size: 15px;
+        font-size: 14px;
         color: $orange-400;
       }
     }

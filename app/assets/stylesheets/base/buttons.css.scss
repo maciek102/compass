@@ -4,11 +4,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px; /* Kształt pigułki */
-  font-weight: 300;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 9999px !important;; /* Kształt pigułki */
+  font-weight: 300 !important;
+  font-size: 0.8rem !important;
+  line-height: 1.25rem !important;
   cursor: pointer;
   border: none;
   text-decoration: none;
