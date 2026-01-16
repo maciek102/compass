@@ -4,7 +4,8 @@
 # components.
 # See https://github.com/heartcombo/simple_form#custom-components to know
 # more about custom components.
-# Dir[Rails.root.join('lib/components/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('lib/components/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('lib/simple_form/**/*.rb')].each { |f| require f }
 #
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
@@ -62,6 +63,21 @@ SimpleForm.setup do |config|
     # use the component :full_error, like:
     #
     # b.use :full_error, wrap_with: { tag: :span, class: :error }
+  end
+
+  config.wrappers :with_icons, class: :input, 
+    hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+    
+    b.use :html5
+    b.use :placeholder
+    b.use :label
+    b.wrapper tag: :div, class: 'input-container-relative' do |ba|
+      ba.use :icon              # IKONA PIERWSZA
+      ba.use :input, class: 'input-with-icon'
+    end
+
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: :error }
   end
 
   # The default wrapper to be used by the FormBuilder.

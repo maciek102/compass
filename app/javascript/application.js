@@ -8,4 +8,5 @@ import 'chosen-jquery'
 import "@popperjs/core"
 import 'select2'
 import "trix"
+import "iconify"
 import "@rails/actiontext"

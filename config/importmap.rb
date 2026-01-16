@@ -15,4 +15,5 @@ pin "@rails/actiontext", to: "actiontext.esm.js"
 pin "slim-select" # @2.9.0
 pin "@zxing/browser", to: "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.4/+esm"
 pin "@zxing/library", to: "https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/+esm"
+pin "iconify", to: "https://code.iconify.design/3/3.1.0/iconify.min.js"
 pin_all_from "app/javascript/controllers", under: "controllers"

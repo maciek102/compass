@@ -1,9 +1,9 @@
-= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), wrapper: :with_icons) do |f|
   = f.error_notification
   .form-inputs
-    = f.input :name, required: true, autofocus: true, input_html: { autocomplete: "name" }
-    = f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }
-    = f.input :password, required: true, input_html: { autocomplete: "new-password" }
-    = f.input :password_confirmation, required: true ,input_html: { autocomplete: "new-password" }
+    = f.input :name, icon: 'ic:baseline-person'
+    = f.input :email, icon: 'ic:outline-email'
+    = f.input :password, icon: 'ic:baseline-lock-open'
+    = f.input :password_confirmation, icon: 'ic:outline-lock'
   .form-actions
-    = f.button :submit, "Sign up", class: "btn btn-outline-secondary btn-sm"
+    = f.button :submit, t(:get_started), class: "base-button"

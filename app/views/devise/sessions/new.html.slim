@@ -1,6 +1,13 @@
-.login-section
+.login-page
   .login-card
-    h2 Log in
+    .header 
+      | Find Your
+      br
+      span.strong True Direction.
     .main-form
       = render "form"
-    = render "devise/shared/links"
+    .signup-prompt
+      | Nie masz jeszcze konta? 
+      = link_to "Dołącz do nas!", new_registration_path(resource_name), class: "signup-link"
+    .links
+      = render "devise/shared/links"

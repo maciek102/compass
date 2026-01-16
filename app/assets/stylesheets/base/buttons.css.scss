@@ -14,8 +14,8 @@
   text-decoration: none;
   transition: all 0.2s ease-in-out;
   font-family: inherit;
-  background-color: $orange-base;
-  color: #ffffff;
+  background-color: $orange-base !important;
+  color: #ffffff !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
               0 2px 4px -1px rgba(0, 0, 0, 0.06);
 

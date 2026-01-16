@@ -1,0 +1,43 @@
+@import "base/colors.css.scss";
+
+.login-page {
+  background-image: image-url('login_background.png');
+  background-size: 1366px auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  background-color: #FDFDFD;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15%;
+  .login-card{
+    padding: 20px;
+    .header{
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      line-height: 1.1em;
+      font-size: 4rem;
+      span.strong{
+        font-size: 5rem;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+      }
+    }
+    .signup-prompt{
+      margin-top: 5px;
+      margin-left: 10px;
+      font-size: 14px;
+      .signup-link{
+        font-size: 15px;
+        color: $orange-400;
+      }
+    }
+    .main-form{
+      margin-top: 25px;
+      margin-left: 10px;
+      width: 75%;
+    }
+  }
+
+}

@@ -1,5 +1,21 @@
 module ApplicationHelper
 
+  # name: identyfikator ikony z Iconify (np. "mdi:home"); options: hash atrybutów HTML (np. class: 'red', style: '...'), które zostaną dodane do wygenerowanego tagu <span>
+  def icon(name, options = {})
+    options[:class] = ['iconify', options[:class]].compact.join(' ')
+    options[:'data-icon'] = name
+    
+    size = options.delete(:size)
+    color = options.delete(:color)
+    
+    style_parts = []
+    style_parts << "font-size: #{size}px" if size
+    style_parts << "color: #{color}" if color
+    options[:style] = style_parts.join('; ') if style_parts.any?
+    
+    content_tag(:span, '', options)
+  end
+
   # url: gdzie link prowadzi; text: tekst linku; icon: nazwa ikony FA, np. "users"; active: true/false, klass: dodatkowa klasa opcjonalna, turbo_enabled: true/false (czy włączać turbo), submenu: true/false (czy to link submenu)
   def left_menu_link(url:, text:, icon:, active: false, klass: nil, turbo_enabled: true, submenu: false)
     link_classes = ["left-menu-link"]

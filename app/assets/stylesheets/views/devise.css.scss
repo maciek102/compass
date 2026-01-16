@@ -1,2 +1,16 @@
 @import "base/colors.css.scss";
 
+.links{
+  margin-left: 10px;
+  margin-top: 5px;
+  font-size: 14px;
+  .devise-link {
+    color: $gray-400;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: $gray-500;
+    }
+  }
+}
