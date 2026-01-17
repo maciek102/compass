@@ -10,9 +10,13 @@ tr.table-row id="product-row-#{el.id}" data-url=product_path(el)
   td = el.status.humanize
   td = el.category&.name
   td 
-    = "#{el.variants.count} "
-    / przycisk do rozwijania/zamykania widoku wariantów produktu
-    = link_to fa_icon(toggle_icon), toggle_variants_product_path(el), remote: true, class: "action-button", id: "toggle-variants-#{el.id}"
+    / warianty / domyślny wariant
+    - unless el.single_varianted?
+      = "#{el.variants.count} "
+      / przycisk do rozwijania/zamykania widoku wariantów produktu
+      = link_to fa_icon(toggle_icon), toggle_variants_product_path(el), remote: true, class: "action-button", id: "toggle-variants-#{el.id}"
+    - else
+      = el.variants.first.name
   td
     .actions
       = resource_turbo_edit_link(el)

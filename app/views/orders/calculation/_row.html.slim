@@ -1,6 +1,14 @@
 tr.table-row 
   td = "#{el.position}."
-  td = el.name 
+  td 
+    / linki do produktu i wariantu, jeżeli pozycja jest standardowa
+    - if el.standard?
+      = fast_link(product_path(product = el.variant.product)) do
+        strong = product.name
+      = inline_slash_separator
+      = fast_link(variant_path(el.variant), text: el.variant.name)
+    - else
+      = el.name 
   td = "#{el.quantity} #{t("units.#{el.unit}")}"
   td = show_price(el.unit_price)
   td = show_price(el.total_price)

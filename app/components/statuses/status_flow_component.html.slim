@@ -1,34 +1,34 @@
 .status-flow-container
-  .main-flow
-    - main_flow_items.each do |item|
-      .flow-item-wrapper
-        .buttons-group
-          / link lub wyświetlenie statusu
-          - if item[:available]
-            = link_to change_status_path(item[:event]), method: :patch, class: "flow-item current available", style: "background-color: #{item[:color]}" do
+  .timeline-wrapper
+    .timeline-line
+    .timeline-line-progress style="height: #{timeline_progress_percent}%;"
+    
+    - main_flow_items.each_with_index do |item, index|
+      - state = circle_state(item[:status], index)
+      - is_current = current?(item[:status])
+      
+      .timeline-item
+        / kółko z ikoną
+        .timeline-circle class=state
+          = helpers.icon(icon_for_state(state))
+        
+        / tekst
+        .timeline-content
+          = link_to change_status_path(item[:event]), method: :patch do
+            .timeline-title
               = status_label_i18n(item[:status])
-          - else
-            .flow-item.unavailable style="background-color: #{item[:color]}"
-              = helpers.fa_icon("check-circle") if current?(item[:status])
-              = status_label_i18n(item[:status])
-          
-          / przyciski akcji, należące do danego statusu
-          - if item[:actions]
+              - if is_current
+                .current-badge Aktualny
+          / akcje dla aktualnego statusu
+          - if item[:actions] && item[:actions].any?
             - item[:actions].each do |action|
               = link_to action[:label], action[:path], method: action[:method] || :get, class: "action-button"
 
-        - if item[:has_arrow]
-          = helpers.fa_icon("chevron-right", class: "flow-arrow")
-
+  
+  / statusy poza głównym flow
   - if alternative_items.any?
-    .alternative-statuses
-      .alternative-label Inne opcje:
+    .alternative-actions
       .alternative-buttons
         - alternative_items.each do |item|
-          - if item[:available]
-            = link_to change_status_path(item[:event]), method: :patch, class: "flow-item", style: "background-color: #{item[:color]}" do
-              = helpers.fa_icon("check-circle") if current?(item[:status])
-              = status_label_i18n(item[:status])
-          - else
-            .flow-item.unavailable style="background-color: #{item[:color]}"
-              = status_label_i18n(item[:status])
+          = link_to change_status_path(item[:event]), method: :patch, class: "alternative-btn", data: { turbo_method: :patch } do
+            = status_label_i18n(item[:status])

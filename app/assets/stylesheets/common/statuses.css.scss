@@ -7,113 +7,179 @@
   border-radius: 8px;
   padding: 25px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  width: fit-content;
 
-  .main-flow {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+  &.align-right {
+    margin-left: auto;
+    margin-right: 0;
   }
 
-  .flow-item-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 15px;
-  }
-
-  .buttons-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .flow-item {
-    padding: 6px 10px;
-    border: 2px solid transparent;
-    border-radius: 18px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
+  .timeline-wrapper {
     position: relative;
+    padding-left: 30px;
+  }
+
+  // pionowa linia bazowa (szara)
+  .timeline-line {
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: $main-line;
+    border-radius: 2px;
+  }
+
+  // pionowa linia progress (pomarańczowa)
+  .timeline-line-progress {
+    position: absolute;
+    left: 14px;
+    top: 0;
+    width: 3px;
+    background-color: $orange-base;
+    border-radius: 2px;
+    transition: height 0.3s ease;
+    z-index: 1;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 15px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    color: white;
-    text-decoration: none;
+    gap: 15px;
 
-    &.unavailable {
-      opacity: 0.5;
-      cursor: not-allowed;
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  // kółko z ikoną
+  .timeline-circle {
+    position: absolute;
+    left: -27px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid $main-line;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.3s ease;
+
+    svg{
+      color: $gray-400;
+      width: 21px;
+      height: 21px;
+    }
+
+    &.completed {
+      background-color: $orange-base;
+      border-color: $orange-base;
+
+      svg {
+        color: white;
+      }
     }
 
     &.current {
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      transform: scale(1.05);
+      background-color: white;
+      border-color: $orange-base;
+      border-width: 4px;
+      box-shadow: 0 0 0 4px rgba(255, 123, 0, 0.15);
+
+      svg {
+        color: $orange-base;
+      }
+    }
+
+    // kółko dla niedostępnych/przyszłych statusów
+    &.unavailable {
+      background-color: white;
+      opacity: 0.5;
     }
   }
 
-  .current-badge {
-    font-size: 0.625rem;
-    background: rgba(255, 255, 255, 0.3);
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
-    font-weight: 700;
-    color: white;
-  }
-
-  .flow-arrow {
-    font-size: 20px;
-    color: #d1d5db;
-  }
-
-  .alternative-statuses {
-    padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .alternative-label {
-    font-weight: 600;
-    color: #6b7280;
-    font-size: 0.875rem;
-  }
-
-  .alternative-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .alternative-btn {
-    padding: 0.5rem 0.875rem;
-    border: 2px solid transparent;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    font-size: 0.75rem;
+  // tekst po prawej
+  .timeline-content {
+    flex: 1;
     cursor: pointer;
-    transition: all 0.2s ease;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 
-    &.unavailable {
-      opacity: 0.5;
-      cursor: not-allowed;
+    a {
+      text-decoration: none;
     }
 
-    &.current {
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8);
+    &:hover {
+      background-color: $gray-50;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: $main-text-color;
+      margin-bottom: 4px;
+    }
+
+    .timeline-subtitle {
+      font-size: 13px;
+      color: $text-grey;
+    }
+
+    .current-badge {
+      display: inline-block;
+      font-size: 0.625rem;
+      background: $orange-base;
+      color: white;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+  }
+
+  // alternatywne statusy
+  .alternative-actions {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid $main-line;
+
+    .alternative-label {
+      font-weight: 600;
+      color: $gray-500;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+    }
+
+    .alternative-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      .alternative-btn {
+        padding: 0.5rem 0.875rem;
+        border: 2px solid $main-line;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: white;
+        color: $gray-700;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        &:hover {
+          border-color: $orange-base;
+          color: $orange-base;
+        }
+      }
     }
   }
 }

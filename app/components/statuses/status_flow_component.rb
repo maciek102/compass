@@ -56,9 +56,8 @@ module Statuses
         {
           status: status,
           event: @resource.class.event_for_status(status),
-          available: may_send?(status),
-          color: status_color(status),
-          has_arrow: index < main_flow.length - 1,
+          #available: may_send?(status),
+          #color: status_color(status),
           actions: current?(status) ? @resource.status_actions : []
         }
       end
@@ -70,8 +69,8 @@ module Statuses
         {
           status: status,
           event: @resource.class.event_for_status(status),
-          available: may_send?(status),
-          color: status_color(status),
+          #available: may_send?(status),
+          #color: status_color(status),
           actions: current?(status) ? @resource.status_actions : []
         }
       end
@@ -87,6 +86,39 @@ module Statuses
         helpers.change_status_offer_path(@resource, event: event)
       when "Order"
         helpers.change_status_order_path(@resource, event: event)
+      end
+    end
+
+    # procent progress line
+    def timeline_progress_percent
+      current_index = main_flow.index(@resource.aasm.current_state)
+      return 0 unless current_index
+      
+      ((current_index.to_f / (main_flow.length - 1)) * 100).round(1)
+    end
+
+    def circle_state(status, index)
+      current_index = main_flow.index(@resource.aasm.current_state)
+      return "incoming" unless current_index
+      
+      if index < current_index
+        "completed"
+      elsif index == current_index
+        "current"
+      else
+        "incoming"
+      end
+    end
+    
+    def icon_for_state(state)
+      case state
+      when "completed"
+        "ic:baseline-check-circle-outline"
+      when "current"
+        #"ic:baseline-mode-edit"
+        "ic:baseline-edit-note"
+      else
+        "ic:baseline-access-time"
       end
     end
   end

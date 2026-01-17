@@ -1,5 +1,6 @@
 tr.table-row data-url=stock_operation_path(el)
   td = el.short_title
+  td = direction_label(el.direction)
   td 
     = fast_link(product_path(product = el.variant.product)) do
       strong = product.name
@@ -8,7 +9,6 @@ tr.table-row data-url=stock_operation_path(el)
     div = el.variant.sku
     
   td = status_label(el.status_label, style: el.status_color)
-  td = direction_label(el.direction)
   td = el.quantity
   td = el.quantity_finished
   td = el.user.name if el.user.present?

@@ -22,16 +22,16 @@ module Views
         {
           title: "Zamówienia",
           widgets: [
-            DashboardWidgets::OrdersTodayWidget.new(user: user),
-            DashboardWidgets::OrdersThisWeekWidget.new(user: user),
-            DashboardWidgets::OrdersTotalWidget.new(user: user)
+            Dashboard::Widgets::OrdersTodayComponent.new(user: user),
+            Dashboard::Widgets::OrdersThisWeekComponent.new(user: user),
+            Dashboard::Widgets::OrdersTotalComponent.new(user: user)
           ]
         },
         {
           title: "Magazyn",
           widgets: [
-            DashboardWidgets::WarehouseOperationsWidget.new(user: user),
-            DashboardWidgets::WarehouseStockWidget.new(user: user)
+            Dashboard::Widgets::WarehouseOperationsComponent.new(user: user),
+            Dashboard::Widgets::WarehouseStockComponent.new(user: user)
           ]
         }
       ]

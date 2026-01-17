@@ -95,6 +95,11 @@ class Product < ApplicationRecord
     variants.sum { |v| v.stock.to_i }
   end
 
+  # produkt nieużywający wariantów (posiada jeden domyślny)
+  def single_varianted?
+    variants.count == 1
+  end
+
   # ransack
   def self.quick_search
     :name_or_sku_cont

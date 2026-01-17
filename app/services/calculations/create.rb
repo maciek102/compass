@@ -1,5 +1,5 @@
 module Calculations
-  # Serwis do tworzenia nowej wersji obliczenia dla dokumentu (Offer/Order/Invoice)
+  # Serwis do tworzenia nowej wersji obliczenia dla dokumentu (Offer/Order)
   # Automatycznie ustawia is_current na false dla poprzedniej wersji
   #
   # Przykład użycia:
@@ -20,7 +20,6 @@ module Calculations
       @user = user
       @rows_attributes = rows_attributes
       @notes = notes
-      @organization = calculable.organization
     end
 
     def call
@@ -34,12 +33,11 @@ module Calculations
 
     private
 
-    attr_reader :calculable, :user, :rows_attributes, :notes, :organization, :calculation
+    attr_reader :calculable, :user, :rows_attributes, :notes, :calculation
 
     def validate!
       raise Error, "Calculable is required" unless calculable
       raise Error, "User is required" unless user
-      raise Error, "Organization mismatch" if calculable.organization_id != user.organization_id
     end
 
     def deactivate_current_calculation!
@@ -48,7 +46,6 @@ module Calculations
 
     def create_calculation!
       @calculation = calculable.calculations.create!(
-        organization: organization,
         user: user,
         is_current: true,
         total_net: 0,
