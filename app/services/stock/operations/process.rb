@@ -12,7 +12,7 @@ module Stock
         action:, # :receive, :issue, :adjust
         quantity:,
         item_ids: [],
-        serial_numbers: {},
+        numbers: {},
         user: nil,
         note: nil
       )
@@ -22,7 +22,7 @@ module Stock
         @action = action.to_sym
         @user = user
         @note = note
-        @serial_numbers = serial_numbers
+        @numbers = numbers
       end
 
       def call
@@ -56,7 +56,7 @@ module Stock
 
       private
 
-      attr_reader :stock_operation, :quantity, :item_ids, :action, :user, :note, :picker, :serial_numbers
+      attr_reader :stock_operation, :quantity, :item_ids, :action, :user, :note, :picker, :numbers
 
       # wykonanie odpowiedniej akcji na magazynie
       def execute_action
@@ -74,7 +74,7 @@ module Stock
           item_ids: item_ids,
           user: user,
           note: note,
-          serial_numbers: serial_numbers
+          numbers: numbers
         )
       end
 

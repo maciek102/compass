@@ -6,5 +6,5 @@ table.index-table
     - items.each do |el|
       tr.table-row.nested-row data-url=item_path(el)
         td colspan=2
-        td = el.serial_number
+        td = el.number
         td = el.status.humanize

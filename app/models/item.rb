@@ -10,8 +10,9 @@
 #
 # Atrybuty:
 # - variant_id:bigint -> do którego wariantu należy
+# - number: string -> unikalny numer egzemplarza w organizacji
 # - serial_number:string -> numer seryjny (opcjonalny)
-# - batch:string -> numer partii (opcjonalny)
+# - lot_number:string -> numer partii (opcjonalny)
 # - expires_at:datetime -> data ważności (opcjonalnie)
 # - received_at:datetime -> WAŻNE!!! - data przyjęcia na magazyn, główne kryterium strategii wyboru produktów ItemPicker
 # - status:integer -> status itemu
@@ -46,7 +47,7 @@ class Item < ApplicationRecord
   }
 
   # === WALIDACJE ===
-  validates :serial_number, uniqueness: { scope: :organization_id, allow_blank: true }
+  validates :number, uniqueness: { scope: :organization_id, allow_blank: true }
   validates :status, presence: true
 
   # === SCOPE ===
@@ -67,7 +68,7 @@ class Item < ApplicationRecord
   # === CALLBACKI ===
   before_validation :set_default_status, if: -> { status.blank? }
   before_validation :set_default_received_at, if: -> { received_at.blank? }
-  before_save :generate_default_serial_number, if: -> { serial_number.blank? }
+  before_save :generate_default_number, if: -> { number.blank? }
   # o każdej zmianie przeliczamy stock wariantu
   after_commit :recalculate_variant_stock!, on: [:create, :update, :destroy]
 
@@ -108,9 +109,9 @@ class Item < ApplicationRecord
     update!(status: :in_stock, reserved_stock_operation: nil)
   end
 
-  # generacja domyślnego numeru seryjnego
-  def generate_default_serial_number
-    return if serial_number.present?
+  # generacja domyślnego numeru
+  def generate_default_number
+    return if number.present?
     raise "Variant missing" if variant.nil?
     raise "Variant SKU missing" if variant.sku.blank?
 
@@ -121,28 +122,28 @@ class Item < ApplicationRecord
     candidate = format("%s-%06d", base_sku, next_number)
 
     counter = 0
-    while Item.where(organization_id: organization_id).where(serial_number: candidate).exists?
+    while Item.where(organization_id: organization_id).where(number: candidate).exists?
       counter += 1
       candidate = format("%s-%06d", base_sku, next_number + counter)
     end
 
-    self.serial_number = candidate
+    self.number = candidate
   end
 
-  # generacja proponowanego numeru seryjnego, używana na nieutworzonych obiektach np przy receive
-  def generate_proposed_serial_number
+  # generacja proponowanego numeru, używana na nieutworzonych obiektach np przy receive
+  def generate_proposed_number
     return if variant.nil? || variant.sku.blank?
 
     base_sku = variant.sku
 
-    if respond_to?(:serial_number_base)
+    if respond_to?(:number_base)
       # użycie base i offset (ustawiane w kontrolerze, aby uniknąć n+1)
-      offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
-      next_number = serial_number_base + offset
+      offset = respond_to?(:number_offset) ? number_offset : 0
+      next_number = number_base + offset
     else
       # fallback – domyślne liczenie od nowa
       next_number = Item.where(organization_id: organization_id, variant_id: variant_id).count + 1
-      offset = respond_to?(:serial_number_offset) ? serial_number_offset : 0
+      offset = respond_to?(:number_offset) ? number_offset : 0
       next_number += offset
     end
 
@@ -158,7 +159,7 @@ class Item < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "disabled", "id", "id_by_org", "location", "lot_number", "notes", "organization_id", "received_at", "reserved_stock_operation_id", "serial_number", "status", "updated_at", "variant_id"]
+    ["created_at", "disabled", "id", "id_by_org", "location", "lot_number", "notes", "organization_id", "received_at", "reserved_stock_operation_id", "serial_number", "number", "status", "updated_at", "variant_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)

@@ -1,4 +1,4 @@
-= simple_form_for(@stock_movement, url: create_receive_stock_movements_path, html: { data: { turbo_frame: "modal" } }) do |f|
+= simple_form_for(@stock_movement, url: create_receive_stock_movements_path, data: { turbo: false }) do |f|
   
   .form-grid data-controller="receive-items" data-stock-operation-id=@stock_operation.id
     .form-section

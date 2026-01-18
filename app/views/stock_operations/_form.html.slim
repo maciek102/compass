@@ -1,4 +1,4 @@
-= simple_form_for(@stock_operation, html: { data: { turbo_frame: "modal" } }) do |f|
+= simple_form_for(@stock_operation, data: { turbo: false }) do |f|
   = f.error_notification
 
   .form-grid

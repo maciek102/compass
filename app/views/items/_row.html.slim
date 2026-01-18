@@ -1,5 +1,5 @@
 tr.table-row id="item-row-#{el.id}" data-url=item_path(el)
-  td = el.serial_number
+  td = el.number
   td
     = fast_link(product_path(product = el.variant.product)) do 
       strong = product.name

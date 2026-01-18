@@ -5,6 +5,14 @@ module Calculations
     #
     # Przykład użycia:
     # Calculations::Rows::Recalculate.call(row: calculation_row)
+    #
+    # znaczenie zmiennych:
+    # @subtotal        = unit_price * quantity (wartość bazowa bez korekt)
+    # @total_net       = subtotal - rabaty + marże (wartość netto po wszystkich korektach)
+    # @total_gross     = total_net + VAT (wartość brutto końcowa)
+    # @total_discounts = suma wszystkich rabatów zastosowanych do wiersza
+    # @total_margins   = suma wszystkich marż zastosowanych do wiersza
+    # @total_vat       = obliczona wartość VAT na podstawie total_net
     class Recalculate
       class Error < StandardError; end
 
@@ -40,10 +48,9 @@ module Calculations
       end
 
       def apply_adjustments!
-        # Rozpoczynamy od subtotal
         @total_net = @subtotal
 
-        # Obliczamy rabaty
+        # rabaty
         discounts = row.row_adjustments.discounts
         @total_discounts = discounts.sum do |adj|
           if adj.is_percentage
@@ -53,10 +60,10 @@ module Calculations
           end
         end
 
-        # Odejmujemy rabaty
+        # odjęcie rabatów
         @total_net -= @total_discounts
 
-        # Obliczamy marże
+        # marże
         margins = row.row_adjustments.margins
         @total_margins = margins.sum do |adj|
           if adj.is_percentage
@@ -66,10 +73,10 @@ module Calculations
           end
         end
 
-        # Dodajemy marże
+        # dodanie marży
         @total_net += @total_margins
 
-        # Upewnij się, że total_net nie jest ujemny
+        # sprawdzenie czy total_net nie jest ujemne
         @total_net = [@total_net, 0].max
       end
 

@@ -130,6 +130,7 @@ pl:
         updated_at: "Data aktualizacji"
       
       item:
+        number: "Numer"
         serial_number: "Numer seryjny"
         lot_number: "Numer partii"
         status: "Status"

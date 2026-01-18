@@ -1,6 +1,6 @@
 tr.table-row id="item-row-#{el.id}" data-url=item_path(el)
   td = check_box_tag "stock_movement[item_ids][]", el.id, @selected_ids.include?(el.id), id: dom_id(el)
-  td = el.serial_number
+  td = el.number
   td
     = link_to el.variant.product.name, product_path(el.variant.product)
     = " / "

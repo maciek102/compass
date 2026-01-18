@@ -43,10 +43,10 @@ class StockMovementsController < ApplicationController
   def create_receive
     @stock_movement = StockMovement.new(stock_movement_params)
 
-    # mapa numerów seryjnych z formularza
-    serial_numbers = params[:proposed_serial_numbers] || {}
+    # mapa numerów z formularza
+    numbers = params[:proposed_numbers] || {}
 
-    create_movement(:receive, serial_numbers: serial_numbers)
+    create_movement(:receive, numbers: numbers)
   end
 
   def issue
@@ -108,7 +108,7 @@ class StockMovementsController < ApplicationController
   private
 
   # uniwersalna metoda tworząca ruch magazynowy wg podanego typu i realizująca resztę logiki
-  def create_movement(type, item_ids: [], serial_numbers: {})
+  def create_movement(type, item_ids: [], numbers: {})
     @stock_operation = @stock_movement.stock_operation
     
     Stock::Operations::Process.call(
@@ -118,13 +118,13 @@ class StockMovementsController < ApplicationController
       item_ids: item_ids,
       user: current_user,
       note: stock_movement_params[:note],
-      serial_numbers: serial_numbers
+      numbers: numbers
     )
 
     flash[:notice] = flash_message(StockMovement, :created)
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to variant_path(@variant), notice: flash[:notice] }
+      format.html { redirect_to stock_operation_path(@stock_operation), notice: flash[:notice] }
     end
   rescue Stock::Operations::Process::Error => e
     flash.now[:alert] = e.message
@@ -159,8 +159,8 @@ class StockMovementsController < ApplicationController
         organization: current_user.organization
       )
       # Dodanie wirtualnych atrybutów dla generacji numeru
-      item.define_singleton_method(:serial_number_offset) { index }
-      item.define_singleton_method(:serial_number_base) { base_number }
+      item.define_singleton_method(:number_offset) { index }
+      item.define_singleton_method(:number_base) { base_number }
       item
     end
   end
