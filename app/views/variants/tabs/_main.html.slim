@@ -1,18 +1,31 @@
-.show-container
-  .title
-    = @variant.name
+.row 
+  .col-lg-6
+    .show-container
+      .title
+        = @variant.name
 
-  .info
-    = category_info_row("Stan magazynowy", @variant.current_stock)
-    = category_info_row("SKU", @variant.sku)
-    = category_info_row("EAN", @variant.ean || "Brak")
-    = category_info_row("Produkt", link_to(@variant.product.name, product_path(@variant.product), class: "link"))
-    = category_info_row("Kategoria", (@variant.product.category ? link_to(@variant.product.category.name, product_category_path(@variant.product.category), class: "link") : "Brak"))
-    
+      .info
+        = category_info_row("Stan magazynowy", @variant.current_stock)
+        = category_info_row("SKU", @variant.sku)
+        = category_info_row("EAN", @variant.ean || "Brak")
+        = category_info_row("Produkt", link_to(@variant.product.name, product_path(@variant.product), class: "link"))
+        = category_info_row("Kategoria", (@variant.product.category ? link_to(@variant.product.category.name, product_category_path(@variant.product.category), class: "link") : "Brak"))
+        
 
-  .actions
-    = resource_turbo_edit_link(@variant, "Edytuj")
-    = resource_destroy_link(@variant, "Usuń")
+      .actions
+        = resource_turbo_edit_link(@variant, "Edytuj")
+        = resource_destroy_link(@variant, "Usuń")
+      
+    .show-container 
+      .title Kody 
+      .info
+        = image_tag(@variant.barcode_image, alt: "Barcode", width: 200) if @variant.barcode_image.attached?
+        = image_tag(@variant.qr_code_image, alt: "QR Code", width: 200) if @variant.qr_code_image.attached?
   
-  = image_tag @variant.barcode_image if @variant.barcode_image.attached?
-  = image_tag @variant.qr_code_image if @variant.qr_code_image.attached?
+  .col-lg-6 
+    .show-container
+      .title Ceny 
+      .info
+        = category_info_row("Cena sprzedaży", number_to_currency(@variant.price))
+        = category_info_row("Cena zakupu", number_to_currency(@variant.purchase_price))
+        = category_info_row("Zysk %", @variant.show_profit)

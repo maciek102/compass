@@ -10,10 +10,9 @@
         = f.input :sku, label: "SKU (generowane automatycznie)"
 
       .form-section
-        .title Ceny i magazyn
-        = f.input :price, label: "Cena", input_html: { step: 0.01 }
-        = f.input :stock, label: "Stan magazynowy"
-        = f.input :weight, label: "Waga (kg)", input_html: { step: 0.01 }
+        .title Ceny
+        = f.input :purchase_price, label: "Cena zakupu", input_html: { step: 0.01 }
+        = f.input :price, label: "Cena sprzedaży", input_html: { step: 0.01 }
 
       .form-section
         .title Dodatkowe

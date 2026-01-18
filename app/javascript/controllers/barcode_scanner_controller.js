@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = [
     "input",
     "result",
-    "format",
     "error",
     "status",
     "videoContainer",
@@ -142,15 +141,56 @@ export default class extends Controller {
 
   clearMessages() {
     this.resultTarget.textContent = ""
-    this.formatTarget.textContent = ""
     this.errorTarget.textContent = ""
     this.statusTarget.textContent = ""
   }
 
-  showResult(text, format) {
+  async showResult(text, format) {
     this.resultTarget.textContent = text
-    this.formatTarget.textContent = format
     this.statusTarget.textContent = "Odczyt zakończony powodzeniem ✔"
+    
+    await this.submitBarcodeResult(text, format)
+  }
+
+  async submitBarcodeResult(barcode, format) {
+    try {
+      const url = new URL(this.getFormAction(), window.location.origin)
+      url.searchParams.append("format", "js")
+      
+      const response = await fetch(url.toString(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": this.getCsrfToken(),
+          "Accept": "application/javascript",
+        },
+        body: JSON.stringify({
+          barcode: barcode,
+          format: format,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error("scanner-result: server error", response.status)
+        this.showError("Błąd podczas wysyłania danych.")
+        return
+      }
+
+      const js = await response.text()
+      eval(js)
+    } catch (error) {
+      console.error("scanner-result: fetch error", error)
+      this.showError("Błąd połączenia z serwerem.")
+    }
+  }
+
+  getFormAction() {
+    return this.element.dataset.scannerResultPath || "/variants/scanner_result"
+  }
+
+  getCsrfToken() {
+    const token = document.querySelector('meta[name="csrf-token"]')
+    return token ? token.getAttribute("content") : ""
   }
 
   showError(message) {

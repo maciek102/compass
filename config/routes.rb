@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     collection do
       get :stock_index
       get :scanner
+      post :scanner_result
       get :search
     end
 

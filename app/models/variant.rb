@@ -97,6 +97,24 @@ class Variant < ApplicationRecord
     items.reserved.count
   end
 
+  # zysk wartościowy
+  def margin_value
+    return "-" if price.nil? || purchase_price.nil?
+    (price.to_f - purchase_price.to_f).round(2)
+  end
+
+  # zysk procentowy
+  def margin_percentage
+    return "-" if price.nil? || purchase_price.nil? || purchase_price.zero?
+    ((margin_value / purchase_price.to_f) * 100).round(2)
+  end
+
+  # wyświetlanie zysku
+  def show_profit
+    return "-" if price.nil? || purchase_price.nil? || purchase_price.zero?
+    "#{margin_percentage}% (#{margin_value.round(2)})"
+  end
+
   def self.quick_search
     :name_or_sku_or_product_name_cont
   end

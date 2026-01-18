@@ -70,7 +70,7 @@ class VariantsController < ApplicationController
   def create
     @variant = @product.variants.new(variant_params)
     if @variant.save
-      redirect_to product_path(@product), notice: "Wariant został utworzony."
+      redirect_to @variant, notice: "Wariant został utworzony."
     else
       render :new, status: :unprocessable_entity
     end
@@ -78,7 +78,7 @@ class VariantsController < ApplicationController
 
   def update
     if @variant.update(variant_params)
-      redirect_to product_path(@product), notice: "Wariant został zaktualizowany."
+      redirect_to @variant, notice: "Wariant został zaktualizowany."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -89,6 +89,27 @@ class VariantsController < ApplicationController
 
   def scanner
     @left_menu_context = nil
+  end
+
+  def scanner_result
+    barcode = params[:barcode].to_s.strip
+
+    if barcode.blank?
+      render :scanner, alert: "Błąd: pusty kod"
+      return
+    end
+
+    @variant = Variant.for_user(current_user).find_by(ean: barcode)
+
+    if @variant.nil?
+      @error_message = "Nie znaleziono wariantu z kodem: #{barcode}"
+      render :scanner
+      return
+    end
+
+    respond_to do |f|
+      f.js
+    end
   end
 
   def toggle_stock_items
@@ -184,7 +205,7 @@ class VariantsController < ApplicationController
     params[:variant][:custom_attributes] = custom_attrs.presence || {}
 
     params.require(:variant).permit(
-      :name, :sku, :price, :stock, :weight, :ean, :location, :note,
+      :name, :sku, :price, :purchase_price, :weight, :ean, :location, :note,
       custom_attributes: {}
     )
   end
