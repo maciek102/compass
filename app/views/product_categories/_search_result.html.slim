@@ -1,0 +1,7 @@
+.result-item
+  .text-container
+    .title = product_category.name
+    .desc
+      - if product_category.parent.present?
+        = product_category.parent.full_name
+

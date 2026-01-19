@@ -1,6 +1,7 @@
 class CalculationRowsController < ApplicationController
-  load_and_authorize_resource :calculation
-  load_and_authorize_resource :calculation_row, through: :calculation
+  load_and_authorize_resource :calculation, except: [:edit, :update, :destroy, :advanced_info]
+  load_and_authorize_resource :calculation_row, through: :calculation, shallow: true
+  before_action :set_calculation, only: [:edit, :update, :destroy, :advanced_info]
   before_action :check_calculation_editable, only: %i[new create edit update destroy]
 
   def new
@@ -52,7 +53,7 @@ class CalculationRowsController < ApplicationController
 
   # DELETE /calculations/:calculation_id/calculation_rows/:id
   def destroy
-    authorize! :update, @calculation.calculable
+    authorize! :update, @calculation.calculable if @calculation.calculable
 
     Calculations::Rows::Destroy.call(row: @calculation_row)
 
@@ -69,21 +70,23 @@ class CalculationRowsController < ApplicationController
     end
   end
 
+  def advanced_info
+    @variant = @calculation_row.variant
+    @metrics = Prices::RowMetricsQuery.new(row: @calculation_row).call
+  end
+
   private
+
+  def set_calculation
+    @calculation = @calculation_row.calculation
+    authorize! :read, @calculation
+  end
 
   def check_calculation_editable
     if @calculation.confirmed?
       flash[:alert] = "Nie można edytować potwierdzonej kalkulacji."
       redirect_to redirect_target
     end
-  end
-
-  def set_calculation
-    @calculation = Calculation.where(organization_id: current_user.organization_id).find(params[:calculation_id])
-  end
-
-  def set_calculation_row
-    @calculation_row = @calculation.calculation_rows.find(params[:id])
   end
 
   def redirect_target

@@ -7,7 +7,10 @@ class StockOperationsController < ApplicationController
   def index
     @search_url = stock_operations_path
 
-    @search = StockOperation.for_user(current_user).order(created_at: :desc).ransack(params[:q])
+    # ustawienie trybów tabeli
+    scoped = set_view_mode_scope(StockOperation.for_user(current_user))
+
+    @search = scoped.order(created_at: :desc).ransack(params[:q])
     @list = @stock_operations = @search.result(distinct: true).page(params[:page])
 
     respond_to do |f|
@@ -78,5 +81,20 @@ class StockOperationsController < ApplicationController
 
   def set_filters
     @filters_service = Views::FiltersPresenter.new(StockOperation, params)
+  end
+
+  def set_view_mode_scope(model)
+    @view_modes = Views::TableViewModePresenter.new(
+      params[:view],
+      default: :all,
+      modes: {
+        all: { label: "Wszystkie", scope: ->(scope) { scope } },
+        open: { label: "Otwarte", scope: ->(scope) { scope.opened } },
+        in_progress: { label: "W realizacji", scope: ->(scope) { scope.in_realization } },
+        completed: { label: "Zakończone", scope: ->(scope) { scope.completed } }
+      }
+    )
+
+    @view_modes.apply(model)
   end
 end

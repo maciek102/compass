@@ -1,4 +1,4 @@
 tr.table-row id="row_adjustment_#{el.id}"
   td = el.value_display
   td
-    = link_to fa_icon("trash"), calculation_calculation_row_row_adjustment_path(calculation_id: el.calculation_row.calculation.id, calculation_row_id: el.calculation_row.id, id: el.id), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć?" }, class: "action-button red", title: "Usuń"
+    = link_to fa_icon("trash"), row_adjustment_path(el), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć?" }, class: "action-button red", title: "Usuń"

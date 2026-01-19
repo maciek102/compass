@@ -1,7 +1,7 @@
 /tr.table-row id="client-row-#{el.id}" data-url=client_path(el)
 - unless calculation.confirmed?
   tr.table-row
-    td colspan="6"
+    td colspan="7"
       = link_to fa_icon("shopping-bag", text: "Dodaj produkt"), new_calculation_calculation_row_path(calculation_id: calculation.id, type: "product"), class: "action-button", data: { turbo_frame: "modal" }
 
       div style="display: inline-block; width: 10px;"

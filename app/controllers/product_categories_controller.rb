@@ -78,6 +78,34 @@ class ProductCategoriesController < ApplicationController
     redirect_to product_categories_path, notice: "Kategoria została usunięta."
   end
 
+  def search
+    authorize! :index, ProductCategory
+    
+    query = params[:q].to_s.strip
+    search_params = query.present? ? { name_cont: query } : {}
+    search = ProductCategory.for_user(current_user).ransack(search_params)
+    
+    @product_categories = search.result(distinct: true).limit(30)
+    
+    respond_to do |format|
+      format.json do
+        render json: {
+          results: @product_categories.map { |product_category| 
+            {
+              id: product_category.id,
+              text: product_category.name,
+              html: render_to_string(
+                partial: 'product_categories/search_result',
+                locals: { product_category: product_category },
+                formats: [:html]
+              )
+            }
+          }
+        }
+      end
+    end
+  end
+
   private
 
   def set_left_menu_context

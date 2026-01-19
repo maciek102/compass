@@ -2,7 +2,9 @@
 
 tr.table-row 
   td
-  td = "Suma rabatów: #{show_price(calculation.total_discounts)}"
-  td = "Suma marży: #{show_price(calculation.total_margins)}"
+  td = "Rabaty: #{show_price(calculation.total_discounts)}"
+  td = "Marże: #{show_price(calculation.total_margins)}"
   td = "Netto: #{show_price(calculation.total_net)}"
   td = "Brutto: #{show_price(calculation.total_gross)}"
+  td
+  td

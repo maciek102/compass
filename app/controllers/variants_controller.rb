@@ -205,7 +205,7 @@ class VariantsController < ApplicationController
     params[:variant][:custom_attributes] = custom_attrs.presence || {}
 
     params.require(:variant).permit(
-      :name, :sku, :price, :purchase_price, :weight, :ean, :location, :note,
+      :name, :sku, :price, :weight, :ean, :location, :note,
       custom_attributes: {}
     )
   end

@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
 
   def new
     @product.product_category_id = params[:product_category_id] if params[:product_category_id].present?
+    @product.variants.build
   end
 
   def edit
@@ -121,7 +122,12 @@ class ProductsController < ApplicationController
       :code,
       gallery: [],
       private_images: [],
-      main_description: []
+      main_description: [],
+      variants_attributes: [
+        :id,
+        :name,
+        :price
+      ]
     )
   end
 end

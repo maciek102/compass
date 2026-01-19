@@ -48,6 +48,12 @@ pl:
       log:
         one: "Log"
         other: "Logi"
+      offer:
+        one: "Oferta"
+        other: "Oferty"
+      order:
+        one: "Zamówienie"
+        other: "Zamówienia"
 
     attributes:
       user:
@@ -335,6 +341,10 @@ pl:
     in: Przyjęcie
     out: Wydanie
     unknown: Nieznany
+
+  operation_types:
+    receive: Przyjęcie
+    issue: Wydanie
 
   date:
     abbr_day_names:

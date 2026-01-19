@@ -63,6 +63,8 @@ class StockMovement < ApplicationRecord
   # === CALLBACKI ===
   after_create_commit :update_variant_stock! # aktualizacja stanu magazynowego
 
+  # === VIRTUAL ATTRIBUTES ===
+  attr_accessor :general_cost_price # wspólna cena zakupu dla wielu itemów (do formularzy)
 
 
   # === METODY ===

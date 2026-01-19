@@ -6,6 +6,7 @@
       = f.input :quantity, label: 'Ilość do przyjęcia', input_html: { value: @stock_operation.remaining_quantity, min: 1, max: @stock_operation.remaining_quantity, data: { receive_items_target: "quantity", action: "change->receive-items#update" }  }
       = f.input :note, label: 'Notatka', as: :text
       = f.input :documents, as: :file, label: 'Dokumenty', input_html: { multiple: true }
+      = f.input :general_cost_price, label: 'Cena zakupu', as: :decimal, input_html: { step: 0.01, placeholder: "Cena dla wszystkich egzemplarzy" }
 
     .form-section 
       .title Nowe egzemplarze

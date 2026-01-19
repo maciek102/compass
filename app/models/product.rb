@@ -38,6 +38,7 @@ class Product < ApplicationRecord
 
   # warianty produktu
   has_many :variants, dependent: :destroy
+  accepts_nested_attributes_for :variants
 
   has_one_attached :main_image # główne zdjęcie
   has_many_attached :gallery # dodatkowe zdjęcia

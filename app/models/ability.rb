@@ -17,6 +17,7 @@ class Ability
       can :manage, Offer
       can :manage, Calculation
       can :manage, CalculationRow
+      can :manage, RowAdjustment
       can :manage, ProductCategory
       can :manage, Product
       can :manage, Variant
@@ -31,6 +32,7 @@ class Ability
       can :read, Offer
       can :read, Calculation
       can :read, CalculationRow
+      can :read, RowAdjustment
       can :read, ProductCategory
       can :read, Product
       can :read, Variant

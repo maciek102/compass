@@ -27,5 +27,5 @@
       .title Ceny 
       .info
         = category_info_row("Cena sprzedaży", number_to_currency(@variant.price))
-        = category_info_row("Cena zakupu", number_to_currency(@variant.purchase_price))
+        = category_info_row("Średnia cena zakupu", number_to_currency(@variant.average_cost_price))
         = category_info_row("Zysk %", @variant.show_profit)

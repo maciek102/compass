@@ -3,6 +3,8 @@ tr.table-row
     - number = el.generate_proposed_number
     = text_field_tag "proposed_numbers[#{el.number_offset}]", nil, class: "form-control", placeholder: number
   td
+    = number_field_tag "cost_prices[#{el.number_offset}]", nil, class: "form-control", placeholder: "Indywidualna cena", step: 0.01, min: 0
+  td
     strong = el.variant.product.name
     = " / "
     = el.variant.name

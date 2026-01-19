@@ -2,4 +2,7 @@
 
 = render "stock_operations/advanced_filters"
 
+/ przełączanie widoków (scope) tabeli
+= render Tables::ViewModeSwitcherComponent.new(view_modes: @view_modes, base_params: params)
+
 = render Tables::IndexTableComponent.new(list: @stock_operations, turbo_id: "stock-operations-table-body")

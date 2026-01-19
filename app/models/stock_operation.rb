@@ -116,10 +116,13 @@ class StockOperation < ApplicationRecord
     update!(status: :cancelled)
   end
 
-  # Guard logic – do użycia w serwisach
   def validate_movement!(quantity)
     raise Error, "Operation already completed" if completed?
     raise Error, "Quantity exceeds required amount" if quantity > remaining_quantity
+  end
+
+  def related_order
+    calculation&.calculable || nil
   end
 
   def self.quick_search

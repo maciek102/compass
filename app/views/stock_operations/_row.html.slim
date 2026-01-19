@@ -11,7 +11,12 @@ tr.table-row data-url=stock_operation_path(el)
   td = status_label(el.status_label, style: el.status_color)
   td = el.quantity
   td = el.quantity_finished
-  td = el.user.name if el.user.present?
+  td 
+    - if related_order = el.related_order
+      = fast_link(order_path(related_order), text: related_order.number) 
+    - else 
+      = "-"
+    
   td = show_datetime(el.created_at)
   td
     - if el.open?

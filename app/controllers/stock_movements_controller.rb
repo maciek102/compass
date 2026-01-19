@@ -45,8 +45,10 @@ class StockMovementsController < ApplicationController
 
     # mapa numerów z formularza
     numbers = params[:proposed_numbers] || {}
+    # mapa cen z formularza
+    cost_prices = params[:cost_prices] || {}
 
-    create_movement(:receive, numbers: numbers)
+    create_movement(:receive, numbers: numbers, cost_prices: cost_prices)
   end
 
   def issue
@@ -108,8 +110,16 @@ class StockMovementsController < ApplicationController
   private
 
   # uniwersalna metoda tworząca ruch magazynowy wg podanego typu i realizująca resztę logiki
-  def create_movement(type, item_ids: [], numbers: {})
+  def create_movement(type, item_ids: [], numbers: {}, cost_prices: {})
     @stock_operation = @stock_movement.stock_operation
+    
+    general_cost_price = nil
+    final_cost_prices = cost_prices
+    
+    if type == :receive
+      general_cost_price = stock_movement_params[:general_cost_price]
+      # cost_prices z formularza są już zbierane z create_receive
+    end
     
     Stock::Operations::Process.call(
       action: type,
@@ -118,7 +128,9 @@ class StockMovementsController < ApplicationController
       item_ids: item_ids,
       user: current_user,
       note: stock_movement_params[:note],
-      numbers: numbers
+      numbers: numbers,
+      cost_prices: final_cost_prices,
+      general_cost_price: general_cost_price
     )
 
     flash[:notice] = flash_message(StockMovement, :created)
@@ -166,7 +178,7 @@ class StockMovementsController < ApplicationController
   end
 
   def stock_movement_params
-    params.require(:stock_movement).permit(:quantity, :note, :stock_operation_id, attachments: [], item_ids: [])
+    params.require(:stock_movement).permit(:quantity, :note, :stock_operation_id, :general_cost_price, attachments: [], item_ids: [])
   end
 
   def set_left_menu_context

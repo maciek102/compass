@@ -1,0 +1,7 @@
+.show-container
+  .title
+    = @item.number
+
+  .info
+    = category_info_row("SKU", @item.variant.sku)
+    = category_info_row("Produkt", "#{@item.variant.product.name} / #{@item.variant.name}")

@@ -1,0 +1,4 @@
+.tabs 
+  = render "shared/tab", text: "Informacje", icon: info_icon, path: item_path(@item, tab: "main"), active_tab: "main"
+  = render "shared/tab", text: "Ruchy magazynowe", icon: Item.icon, path: item_path(@item, tab: "movements"), active_tab: "movements"
+  = render "shared/tab", text: "Historia", icon: history_icon, path: item_path(@item, tab: "history"), active_tab: "history"

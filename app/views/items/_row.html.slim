@@ -6,4 +6,5 @@ tr.table-row id="item-row-#{el.id}" data-url=item_path(el)
     = inline_slash_separator
     = fast_link(variant_path(el.variant), text: el.variant.name)
   td = el.status_label
+  td = show_price(el.cost_price)
   td = resource_turbo_edit_link(el)

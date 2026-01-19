@@ -43,7 +43,11 @@ Rails.application.routes.draw do
       delete :unconfirm
     end
 
-    resources :calculation_rows, only: %i[new create edit update destroy] do
+    resources :calculation_rows, only: %i[new create edit update destroy], shallow: true do
+      member do
+        get :advanced_info
+      end
+      
       resources :row_adjustments, only: %i[index create destroy]
     end
   end
@@ -54,7 +58,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :product_categories
+  resources :product_categories do
+    collection do
+      get :search
+    end
+  end
 
   resources :products, shallow: true do
     resources :variants, only: %i[ new create ]

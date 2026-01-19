@@ -1,2 +1,7 @@
-h1 Items#show
-p Find me in app/views/items/show.html.slim
+= render "items/page_headers/show"
+
+#tabs
+  = render "items/tabs"
+
+#tabs-content 
+  = render "items/tabs/#{@tab}"

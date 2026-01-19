@@ -1,0 +1,106 @@
+= turbo_frame_tag "modal" do
+  .modal-overlay data-controller="modals" data-action="click->modals#closeByOverlay"
+    .modal-form-card
+      .modal-form-header
+        h4.page-title.mb-0 
+          | Informacje handlowe - pozycja
+        = link_to fa_icon('times'), "#", class: "close-link", data: { controller: "modals", action: "modals#close" }
+
+      .form-section
+        - if @calculation_row.standard? && @variant && @metrics.any?
+          table.table
+            tbody
+              tr
+                td
+                  strong Produkt:
+                td 
+                  = @variant.product.name
+                  |  / 
+                  = @variant.name
+
+              tr
+                td
+                  strong Ilość:
+                td 
+                  = "#{@metrics[:quantity]} #{t("units.#{@calculation_row.unit}")}"
+
+              tr.divider
+                td colspan="2"
+                  hr
+
+              tr
+                td
+                  strong Cena zakupu (jednostkowa):
+                  br
+                  small.text-muted (średnia z itemów)
+                td.text-right
+                  = show_price(@metrics[:cost_price])
+
+              tr
+                td
+                  strong Cena sprzedaży (jednostkowa):
+                td.text-right
+                  = show_price(@metrics[:selling_price])
+
+              tr
+                td
+                  strong Zysk jednostkowy:
+                td.text-right class=(@metrics[:unit_profit] >= 0 ? "text-green" : "text-red")
+                  = show_price(@metrics[:unit_profit])
+
+              tr.divider
+                td colspan="2"
+                  hr
+
+              tr
+                td
+                  strong Wartość zakupu (całość):
+                td.text-right
+                  = show_price(@metrics[:total_cost])
+
+              tr
+                td
+                  strong Wartość sprzedaży (całość):
+                td.text-right
+                  = show_price(@metrics[:total_selling_value])
+
+              tr
+                td
+                  strong 
+                    | Zysk całkowity:
+                td.text-right class=(@metrics[:total_profit] >= 0 ? "text-green" : "text-red")
+                  strong = show_price(@metrics[:total_profit])
+
+              tr.divider
+                td colspan="2"
+                  hr
+
+              tr
+                td
+                  strong Marża %:
+                  br
+                  small.text-muted = "(zysk/cena sprzedaży)"
+                td.text-right class=(@metrics[:margin_percent] >= 0 ? "text-green" : "text-red")
+                  = number_to_percentage(@metrics[:margin_percent], precision: 2)
+
+              tr
+                td
+                  strong Narzut %:
+                  br
+                  small.text-muted = "(zysk/cena zakupu)"
+                td.text-right class=(@metrics[:markup_percent] >= 0 ? "text-green" : "text-red")
+                  = number_to_percentage(@metrics[:markup_percent], precision: 2)
+
+        - else
+          .alert.alert-info
+            | Informacje handlowe dostępne tylko dla standardowych pozycji z przypisanym produktem i ceną zakupu.
+                td.text-right class=(@metrics[:margin_percent] >= 0 ? "text-green" : "text-red")
+                  = number_to_percentage(@metrics[:margin_percent], precision: 2)
+
+              tr
+                td
+                  strong Narzut %:
+                  br
+                  small.text-muted = "(zysk/cena zakupu)"
+                td.text-right class=(@metrics[:markup_percent] >= 0 ? "text-green" : "text-red")
+                  = number_to_percentage(@metrics[:markup_percent], precision: 2)

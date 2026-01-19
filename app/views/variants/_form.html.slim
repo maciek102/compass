@@ -7,18 +7,17 @@
       .form-section
         .title Dane podstawowe
         = f.input :name, label: "Nazwa wariantu"
-        = f.input :sku, label: "SKU (generowane automatycznie)"
+        /= f.input :sku, label: "SKU (generowane automatycznie)"
 
       .form-section
         .title Ceny
-        = f.input :purchase_price, label: "Cena zakupu", input_html: { step: 0.01 }
         = f.input :price, label: "Cena sprzedaży", input_html: { step: 0.01 }
 
       .form-section
         .title Dodatkowe
         = f.input :ean, label: "EAN"
         = f.input :location, label: "Lokalizacja magazynu"
-        = f.input :note, as: :text, label: "Notatki wewnętrzne", input_html: { rows: 3 }
+        /= f.input :note, as: :text, label: "Notatki wewnętrzne", input_html: { rows: 3 }
 
       .form-section
         .title Niestandardowe atrybuty

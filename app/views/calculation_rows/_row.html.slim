@@ -12,16 +12,21 @@ tr.table-row
   td = "#{el.quantity} #{t("units.#{el.unit}")}"
   td = show_price(el.unit_price)
   td = show_price(el.total_price)
+  td = render Stock::StockDisplayComponent.new(variant: el.variant, needed_quantity: el.quantity)
   td
-    .actions 
-      = link_to calculation_calculation_row_row_adjustments_path(calculation_id: el.calculation_id, calculation_row_id: el.id), class: "action-button blue", title: "Marża", data: { turbo_frame: "modal" } do
-        = fa_icon("percent")
-
-      = link_to calculation_calculation_row_row_adjustments_path(calculation_id: el.calculation_id, calculation_row_id: el.id, type: "discount"), class: "action-button orange", title: "Rabat", data: { turbo_frame: "modal" } do
-        = fa_icon("tag")
+    - unless el.calculation.confirmed?
+      .actions 
+        = link_to advanced_info_calculation_row_path(el), class: "action-button purple", title: "Informacje handlowe", data: { turbo_frame: "modal" } do
+          = fa_icon("info-circle")
         
-      = link_to edit_calculation_calculation_row_path(el.calculation, el), class: "action-button yellow", title: "Edytuj pozycję", data: { turbo_frame: "modal" } do
-        = fa_icon("edit")
+        = link_to calculation_row_row_adjustments_path(el), class: "action-button blue", title: "Marża", data: { turbo_frame: "modal" } do
+          = fa_icon("percent")
 
-      = link_to calculation_calculation_row_path(el.calculation, el), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę pozycję?" }, class: "action-button red", title: "Usuń pozycję" do
-        = fa_icon("trash")
+        = link_to calculation_row_row_adjustments_path(el, type: "discount"), class: "action-button orange", title: "Rabat", data: { turbo_frame: "modal" } do
+          = fa_icon("tag")
+        
+        = link_to edit_calculation_row_path(el), class: "action-button yellow", title: "Edytuj pozycję", data: { turbo_frame: "modal" } do
+          = fa_icon("edit")
+
+        = link_to calculation_row_path(el), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę pozycję?" }, class: "action-button red", title: "Usuń pozycję" do
+          = fa_icon("trash")

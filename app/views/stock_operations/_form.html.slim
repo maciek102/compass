@@ -7,7 +7,7 @@
 
       = f.input :quantity
 
-      = render Forms::TileSelectComponent.new(form: f, field: :direction, label: "Kierunek", options: StockOperation.directions.keys.map { |d| [d.humanize, d] })
+      = render Forms::TileSelectComponent.new(form: f, field: :direction, label: "Kierunek", options: StockOperation.directions.keys.map { |d| [t("operation_types.#{d}"), d] })
 
       = f.input :variant_id, collection: Variant.for_user(current_user).map { |v| ["#{v.product.name} / #{v.name} (#{v.sku})", v.id] }
   

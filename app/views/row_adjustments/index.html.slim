@@ -1,5 +1,5 @@
 = turbo_frame_tag "modal" do
-  .modal-overlay data-controller="modals" data-action="click->modals#closeByOverlay"
+  .modal-overlay data-controller="modals"
     .modal-form-card
       .modal-form-header
         h4.page-title.mb-0 
@@ -15,5 +15,5 @@
       hr
 
       .form-section
-        = render "row_adjustments/form", calculation: @calculation, calculation_row: @calculation_row, adjustment_type: @adjustment_type
+        = render "row_adjustments/form", calculation_row: @calculation_row, adjustment_type: @adjustment_type
 

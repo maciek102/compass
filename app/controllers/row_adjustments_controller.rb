@@ -1,7 +1,9 @@
 class RowAdjustmentsController < ApplicationController
-  load_and_authorize_resource :calculation
-  load_and_authorize_resource :calculation_row, through: :calculation
-  load_and_authorize_resource :row_adjustment, through: :calculation_row, except: [:index, :create]
+  load_and_authorize_resource :calculation_row, only: [:index, :create]
+  load_and_authorize_resource :row_adjustment, through: :calculation_row, only: [:create]
+  load_and_authorize_resource :row_adjustment, only: [:destroy]
+  before_action :set_calculation_row, only: [:destroy]
+  before_action :set_calculation
 
   before_action :set_adjustment_type, only: [:index, :create]
 
@@ -39,9 +41,8 @@ class RowAdjustmentsController < ApplicationController
     end
   end
 
-  # DELETE /calculations/:calculation_id/calculation_rows/:calculation_row_id/row_adjustments/:id
+  # DELETE /row_adjustments/:id
   def destroy
-    @row_adjustment = RowAdjustment.find(params[:id])
     adjustment_type = @row_adjustment.adjustment_type
 
     Calculations::Rows::Adjustments::Remove.call(adjustment: @row_adjustment)
@@ -64,6 +65,15 @@ class RowAdjustmentsController < ApplicationController
   end
 
   private
+
+  def set_calculation_row
+    @calculation_row = @row_adjustment.calculation_row
+  end
+
+  def set_calculation
+    @calculation = @calculation_row.calculation
+    authorize! :read, @calculation
+  end
 
   def set_adjustment_type
     @adjustment_type = params[:type] == "discount" ? "discount" : "margin"

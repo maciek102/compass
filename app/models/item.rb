@@ -25,6 +25,7 @@ class Item < ApplicationRecord
   include Tenantable
   include Destroyable
   include OrganizationScoped
+  include Loggable
 
   # === RELACJE ===
   belongs_to :organization # wieloorganizacyjność
@@ -71,6 +72,8 @@ class Item < ApplicationRecord
   before_save :generate_default_number, if: -> { number.blank? }
   # o każdej zmianie przeliczamy stock wariantu
   after_commit :recalculate_variant_stock!, on: [:create, :update, :destroy]
+  # aktualizacja uśrednionej ceny zakupu wariantu gdy zmienia się cost_price
+  after_commit :update_variant_average_cost_price!, on: [:create, :update]
 
 
 
@@ -97,6 +100,13 @@ class Item < ApplicationRecord
   # przelicza stan magazynowy powiązanego wariantu
   def recalculate_variant_stock!
     variant.recalculate_stock!
+  end
+
+  # aktualizacja uśrednionej ceny zakupu wariantu
+  def update_variant_average_cost_price!
+    return unless cost_price.present?
+    
+    variant.calculate_and_update_average_cost_price!
   end
 
   # rezerwacja egzemplarza pod daną operację magazynową

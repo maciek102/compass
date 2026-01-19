@@ -88,6 +88,16 @@ class Variant < ApplicationRecord
     update_column(:stock, total_in_stock)
   end
 
+  # aktualizacja uśrednionej ceny zakupu z wszystkich itemów NA STANIE
+  def calculate_and_update_average_cost_price!
+    items_with_cost = items.in_stock.where.not(cost_price: nil)
+    
+    if items_with_cost.any?
+      average = items_with_cost.average(:cost_price).to_f
+      update_column(:average_cost_price, average)
+    end
+  end
+
   # czy można kupić?
   def can_be_sold?
     !disabled && total_stock > 0
@@ -99,19 +109,19 @@ class Variant < ApplicationRecord
 
   # zysk wartościowy
   def margin_value
-    return "-" if price.nil? || purchase_price.nil?
-    (price.to_f - purchase_price.to_f).round(2)
+    return "-" if price.nil? || average_cost_price.nil?
+    (price.to_f - average_cost_price.to_f).round(2)
   end
 
   # zysk procentowy
   def margin_percentage
-    return "-" if price.nil? || purchase_price.nil? || purchase_price.zero?
-    ((margin_value / purchase_price.to_f) * 100).round(2)
+    return "-" if price.nil? || average_cost_price.nil? || average_cost_price.zero?
+    ((margin_value / average_cost_price.to_f) * 100).round(2)
   end
 
   # wyświetlanie zysku
   def show_profit
-    return "-" if price.nil? || purchase_price.nil? || purchase_price.zero?
+    return "-" if price.nil? || average_cost_price.nil? || average_cost_price.zero?
     "#{margin_percentage}% (#{margin_value.round(2)})"
   end
 
