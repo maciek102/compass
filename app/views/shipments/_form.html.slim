@@ -1,0 +1,31 @@
+= simple_form_for([@order || @shipment.order, @shipment].compact, html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-grid
+    .form-section
+      .title Typ dostawy
+
+      = f.input :provider, collection: Shipment.providers.keys, label: "Kurier", disabled: @shipment.persisted?
+      = f.input :delivery_type, collection: [['Paczkomat', 'locker'], ['Kurier', 'courier']], label: "Typ dostawy", input_html: { data: { action: "change->delivery#toggleAddress" } }
+      = f.input :locker_code, label: "Kod paczkomatu", hint: "np. KRA128", wrapper_html: { data: { delivery_target: "lockerField" } }
+
+    .form-section
+      .title Dane odbiorcy
+
+      = f.input :recipient_name, label: "Imię i nazwisko"
+      = f.input :recipient_email, label: "Email", input_html: { type: "email" }
+      = f.input :recipient_phone, label: "Telefon"
+
+    .form-section data-delivery-target="addressSection"
+      .title Adres dostawy
+
+      = f.input :address_street, label: "Ulica"
+      = f.input :address_house, label: "Numer budynku"
+      = f.input :address_apartment, label: "Numer mieszkania"
+      = f.input :address_postcode, label: "Kod pocztowy"
+      = f.input :address_city, label: "Miejscowość"
+      = f.input :address_country, label: "Kod kraju", input_html: { value: f.object.address_country || 'PL' }
+
+  .form-actions
+    = f.submit @shipment.persisted? ? "Aktualizuj dane" : "Zapisz dane dostawy", class: "btn btn--primary"
+    = link_to "Anuluj", order_path(@order || @shipment.order, tab: 'delivery'), class: "btn btn--secondary"

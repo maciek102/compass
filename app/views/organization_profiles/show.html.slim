@@ -1,0 +1,17 @@
+.show-container 
+  .title = @organization_profile.organization.name
+  .info 
+    = category_info_row("Nazwa organizacji", @organization_profile.organization.name)
+    = category_info_row("NIP", @organization_profile.tax_id)
+    = category_info_row("Numer rejestracyjny", @organization_profile.registration_number)
+    = category_info_row("Email kontaktowy", @organization_profile.contact_email)
+    = category_info_row("Telefon kontaktowy", @organization_profile.contact_phone)
+    = category_info_row("Adres", [@organization_profile.address_street,
+      @organization_profile.address_building,
+      @organization_profile.address_apartment,
+      @organization_profile.address_postcode,
+      @organization_profile.address_city,
+      @organization_profile.address_country].compact.join(", "))
+    = category_info_row("InPost ID organizacji", @organization_profile.inpost_organization_id)
+    = category_info_row("InPost API Key", @organization_profile.inpost_api_key)
+  = link_to "Edytuj profil", edit_organization_profile_path(@organization_profile), class: "btn btn-primary mt-4"

@@ -52,7 +52,26 @@ class Client < ApplicationRecord
 
   # Zwraca pełny adres
   def full_address
-    address
+    [
+      street,
+      building_number,
+      apartment_number,
+      city,
+      postcode,
+      country_code
+    ].compact.join(', ')
+  end
+  
+  # Sprawdza czy dane do wysyłki są kompletne
+  def shipping_data_complete?
+    name.present? &&
+    email.present? &&
+    phone.present? &&
+    street.present? &&
+    building_number.present? &&
+    city.present? &&
+    postcode.present? &&
+    country_code.present?
   end
 
   # Status klienta dla wyświetlania

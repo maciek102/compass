@@ -5,7 +5,7 @@
   .info
     = category_info_row("Email", @client.email)
     = category_info_row("Telefon", @client.phone || "Brak")
-    = category_info_row("Adres", @client.address)
+    = category_info_row("Adres", @client.full_address)
     = category_info_row("NIP / Tax ID", @client.tax_id || "Brak")
     = category_info_row("REGON", @client.registration_number || "Brak") if @client.registration_number.present?
     = category_info_row("Status", (@client.disabled? ? content_tag(:span, "Wyłączony", class: "badge badge--danger") : content_tag(:span, "Aktywny", class: "badge badge--success")))

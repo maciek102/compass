@@ -25,6 +25,7 @@ class Order < ApplicationRecord
   belongs_to :user, optional: true
 
   has_many :calculations, as: :calculable, dependent: :destroy
+  has_one :shipment, dependent: :destroy
 
   # === WALIDACJE ===
   validates :client, presence: true

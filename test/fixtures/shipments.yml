@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organization: one
+  order: one
+  provider: MyString
+  status: 1
+  tracking_number: MyString
+  external_id: 
+  delivery_type: 
+  locker_code: MyString
+  recipient_name: MyString
+  recipient_phone: MyString
+  recipient_email: MyString
+
+two:
+  organization: two
+  order: two
+  provider: MyString
+  status: 1
+  tracking_number: MyString
+  external_id: 
+  delivery_type: 
+  locker_code: MyString
+  recipient_name: MyString
+  recipient_phone: MyString
+  recipient_email: MyString

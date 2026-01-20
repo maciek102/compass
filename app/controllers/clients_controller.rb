@@ -117,7 +117,13 @@ class ClientsController < ApplicationController
       :name,
       :email,
       :phone,
-      :address,
+      :street,
+      :city,
+      :postcode,
+      :country_code,
+      :building_number,
+      :apartment_number,
+      :company_name,
       :tax_id,
       :registration_number
     )

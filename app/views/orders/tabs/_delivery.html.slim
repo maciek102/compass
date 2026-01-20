@@ -1,1 +1,11 @@
-h1 Dostawa
+- if @order.shipment.present?
+
+  .row 
+    .col-lg-6
+      = render "orders/shipment/info", shipment: @order.shipment
+    .col-lg-6
+      = render Statuses::ShipmentFlowComponent.new(@order.shipment)
+  
+      
+- else
+  = render "orders/shipment/empty"

@@ -60,29 +60,29 @@ module Views
 
       # domyślne menu superadmina
       [
-        { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
-        { text: "Organizacje", url: Rails.application.routes.url_helpers.organizations_path, icon: Organization.icon },
-        { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon }
+        { text: "Dashboard", url: routes.dashboard_user_path(user), icon: dashboard_icon },
+        { text: "Organizacje", url: routes.organizations_path, icon: Organization.icon },
+        { text: "Użytkownicy", url: routes.users_path, icon: User.icon }
       ]
     end
 
     def admin_menu
       [
-        { text: "Dashboard", url: Rails.application.routes.url_helpers.dashboard_user_path(user), icon: dashboard_icon },
+        { text: "Dashboard", url: routes.dashboard_user_path(user), icon: dashboard_icon },
         { text: "Magazyn", url: warehouse_context.first[:url], icon: StockOperation.icon, context: :warehouse },
         { text: "Produkty", url: products_context.first[:url], icon: Product.icon, context: :products },
-        { text: "Oferty", url: Rails.application.routes.url_helpers.offers_path, icon: Offer.icon },
-        { text: "Zamówienia", url: Rails.application.routes.url_helpers.orders_path, icon: Order.icon },
-        { text: "Klienci", url: Rails.application.routes.url_helpers.clients_path, icon: Client.icon },
-        { text: "Użytkownicy", url: Rails.application.routes.url_helpers.users_path, icon: User.icon },
-        { text: "Skaner", url: Rails.application.routes.url_helpers.scanner_variants_path, icon: "barcode" },
-        { text: "Ustawienia", url: Rails.application.routes.url_helpers.dashboard_organizations_path, icon: "cog" }
+        { text: "Oferty", url: routes.offers_path, icon: Offer.icon },
+        { text: "Zamówienia", url: routes.orders_path, icon: Order.icon },
+        { text: "Klienci", url: routes.clients_path, icon: Client.icon },
+        { text: "Użytkownicy", url: routes.users_path, icon: User.icon },
+        { text: "Skaner", url: routes.scanner_variants_path, icon: "barcode" },
+        { text: "Ustawienia", url: routes.dashboard_organizations_path, icon: "cog" }
       ]
     end
 
     def user_menu
       [
-        { text: "Moje konto", url: Rails.application.routes.url_helpers.edit_user_path(user), icon: User.icon }
+        { text: "Moje konto", url: routes.edit_user_path(user), icon: User.icon }
       ]
     end
 
@@ -100,19 +100,23 @@ module Views
     # menu produktowe
     def products_context
       [
-        { text: "Produkty", url: Rails.application.routes.url_helpers.products_path, icon: Product.icon },
-        { text: "Warianty", url: Rails.application.routes.url_helpers.variants_path, icon: Variant.icon },
-        { text: "Kategorie", url: Rails.application.routes.url_helpers.product_categories_path, icon: ProductCategory.icon }
+        { text: "Produkty", url: routes.products_path, icon: Product.icon },
+        { text: "Warianty", url: routes.variants_path, icon: Variant.icon },
+        { text: "Kategorie", url: routes.product_categories_path, icon: ProductCategory.icon }
       ]
     end
 
     # menu magazynowe
     def warehouse_context
       [
-        { text: "Stan", url: Rails.application.routes.url_helpers.stock_index_variants_path, icon: Variant.icon },
-        { text: "Operacje", url: Rails.application.routes.url_helpers.stock_operations_path, icon: StockOperation.icon },
-        { text: "Ruchy magazynowe", url: Rails.application.routes.url_helpers.stock_movements_path, icon: StockMovement.icon }
+        { text: "Stan", url: routes.stock_index_variants_path, icon: Variant.icon },
+        { text: "Operacje", url: routes.stock_operations_path, icon: StockOperation.icon },
+        { text: "Ruchy magazynowe", url: routes.stock_movements_path, icon: StockMovement.icon }
       ]
+    end
+
+    def routes
+      Rails.application.routes.url_helpers
     end
     
   end

@@ -7,9 +7,19 @@
       .title Dane podstawowe
 
       = f.input :name, label: "Nazwa klienta / Firmy"
+      = f.input :company_name, label: "Nazwa firmy (opcjonalnie)"
       = f.input :email, label: "Email", input_html: { type: "email" }
       = f.input :phone, label: "Telefon", placeholder: "+48 123 456 789"
-      = f.input :address, as: :text, label: "Adres", input_html: { rows: 3 }
+
+    .form-section
+      .title Adres
+
+      = f.input :street, label: "Ulica"
+      = f.input :building_number, label: "Numer budynku"
+      = f.input :apartment_number, label: "Numer mieszkania"
+      = f.input :postcode, label: "Kod pocztowy"
+      = f.input :city, label: "Miejscowość"
+      = f.input :country_code, label: "Kod kraju", input_html: { value: f.object.country_code || 'PL' }
 
     .form-section
       .title Dane biznesowe (opcjonalnie)

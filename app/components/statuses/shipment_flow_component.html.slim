@@ -1,0 +1,34 @@
+.status-flow-container
+  .timeline-wrapper
+    .timeline-line
+    .timeline-line-progress style="height: #{timeline_progress_percent}%;"
+    
+    - main_flow_items.each_with_index do |item, index|
+      - state = circle_state(item[:status], index)
+      - is_current = current?(item[:status])
+      
+      .timeline-item
+        / kółko z ikoną
+        .timeline-circle class=state
+          = helpers.icon(icon_for_state(state))
+        
+        / tekst - tylko wyświetlamy, bez linków do zmiany statusu
+        .timeline-content
+          .timeline-title
+            = status_label_i18n(item[:status])
+            - if is_current
+              .current-badge Aktualny
+          
+          / akcje dla aktualnego statusu (przyciski API)
+          - if item[:actions] && item[:actions].any?
+            - item[:actions].each do |action|
+              = link_to action[:label], action[:path], method: action[:method] || :get, class: "action-button"
+
+  
+  / statusy alternatywne (failed, cancelled) - tylko do wyświetlenia
+  - if alternative_items.any?
+    .alternative-statuses
+      - alternative_items.each do |item|
+        - if current?(item[:status])
+          .alternative-status-badge.current
+            = status_label_i18n(item[:status])

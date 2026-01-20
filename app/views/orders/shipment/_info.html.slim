@@ -1,0 +1,23 @@
+.show-container 
+  .title Szczegóły dostawy
+  .info 
+    - if shipment.label.attached?
+      = category_info_row("Etykieta", link_to("Pobierz etykietę", rails_blob_path(shipment.label, disposition: "inline"), target: "_blank", class: "action-button"))
+    = category_info_row("Status przesyłki", shipment.status_label)
+    = category_info_row("Kurier", shipment.provider.upcase)
+    = category_info_row("Numer przesyłki", shipment.tracking_number)
+    = category_info_row("Zewnętrzne ID", shipment.external_id)
+    = category_info_row("Typ dostawy", shipment.delivery_type == 'locker' ? 'Paczkomat' : 'Kurier')
+    - if shipment.delivery_type_locker?
+      = category_info_row("Paczkomat", shipment.locker_code)
+    = category_info_row("Odbiorca", shipment.recipient_name)
+    = category_info_row("Email", shipment.recipient_email)
+    = category_info_row("Telefon", shipment.recipient_phone)
+    - if shipment.delivery_type_courier?
+      = category_info_row("Adres", shipment.full_address)
+    - if shipment.error_message.present?
+      = category_info_row("Błąd", shipment.error_message)
+  
+  .actions 
+    = link_to "Edytuj dane", edit_shipment_path(shipment), data: { turbo_frame: "modal" }, class: "action-button"
+    = link_to "Usuń", shipment_path(shipment), method: :delete, class: "action-button danger", data: { confirm: "Czy na pewno chcesz usunąć dane dostawy?" }

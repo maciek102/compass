@@ -89,3 +89,19 @@
   }
 }
 
+// "pusta" zakładka, taka która nie ma jeszcze zawartości, np dostawa przed jej utworzeniem
+.empty-tab {
+  padding: 20px;
+  text-align: center;
+  
+  .text {
+    font-size: 18px;
+    margin-bottom: 12px;
+
+    .subtext {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+  }
+}

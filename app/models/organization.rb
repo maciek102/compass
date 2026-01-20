@@ -18,12 +18,16 @@ class Organization < ApplicationRecord
 
   # === RELACJE ===
   has_many :users, dependent: :destroy
+  has_one :organization_profile, dependent: :destroy
   
   # === WALIDACJE ===
   validates :name, presence: true, uniqueness: true
   
   # === SCOPES ===
   scope :launched, -> { active.where(launched: true) }
+
+  # === CALLBACKI ===
+  after_create :create_default_resources
 
 
   # === METODY ===
@@ -34,6 +38,11 @@ class Organization < ApplicationRecord
 
   def usable?
     active && launched
+  end
+  
+  def create_default_resources
+    return if organization_profile
+    create_organization_profile!(company_name: name)
   end
   
   def self.ransackable_attributes(auth_object = nil)

@@ -5,7 +5,9 @@
     .empty-state
       p Brak operacji magazynowych dla tej kalkulacji
 - else
-  .empty-state
-    p Kalkulacja nie została jeszcze potwierdzona. Potwierdź kalkulację aby utworzyć operacje magazynowe.
+  .empty-tab
+    .text 
+      = "Kalkulacja nie została jeszcze potwierdzona."
+      .subtext = "Potwierdź kalkulację aby utworzyć operacje magazynowe."
     - if @current_calculation
-      = link_to "Przejdź do zakładki Calculations", order_path(@order, tab: "calculations"), class: "base-button"
+      = link_to "Pozycje", order_path(@order, tab: "calculations"), class: "base-button"

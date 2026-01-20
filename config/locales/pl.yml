@@ -54,6 +54,9 @@ pl:
       order:
         one: "Zamówienie"
         other: "Zamówienia"
+      shipment:
+        one: "Dostawa"
+        other: "Dostawy"
 
     attributes:
       user:
@@ -263,6 +266,28 @@ pl:
           cancelled: "Anulowane"
           on_hold: "Wstrzymane"
           complaint: "Reklamacja"
+
+      shipment:
+        provider: "Dostawca"
+        delivery_type: "Typ dostawy"
+        status: "Status"
+        tracking_number: "Numer śledzenia"
+        recipient_name: "Nazwa odbiorcy"
+        recipient_address: "Adres odbiorcy"
+        recipient_phone: "Telefon odbiorcy"
+        recipient_email: "Email odbiorcy"
+        order: "Zamówienie"
+        order_id: "Zamówienie"
+        created_at: "Data utworzenia"
+        updated_at: "Data aktualizacji"
+        statuses:
+          draft: "Wersja robocza"
+          created: "Utworzona przesyłka"
+          dispatched: "Zamówiony kurier"
+          sent: "Wysłana"
+          delivered: "Dostarczona"
+          failed: "Niepowodzenie"
+          cancelled: "Anulowana"
 
   log_in: Zaloguj się
   form: Formularz

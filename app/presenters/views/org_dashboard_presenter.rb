@@ -31,7 +31,8 @@ module Views
 
     def admin_menu
       [
-        { text: "Importy", url: Rails.application.routes.url_helpers.import_runs_path, icon: ImportRun.icon }
+        { text: "Profil organizacji", url: routes.organization_profile_path(user.organization.organization_profile), icon: Organization.icon },
+        { text: "Importy", url: routes.import_runs_path, icon: ImportRun.icon }
       ]
     end
 
@@ -39,6 +40,10 @@ module Views
       [
         
       ]
+    end
+
+    def routes
+      Rails.application.routes.url_helpers
     end
     
   end

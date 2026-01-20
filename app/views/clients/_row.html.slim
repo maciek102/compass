@@ -8,7 +8,7 @@ tr.table-row id="client-row-#{el.id}" data-url=client_path(el)
         small = el.email
 
   td = el.phone || "—"
-  td = el.address || "—"
+  td = el.full_address || "—"
 
   td
     - if el.tax_id.present?

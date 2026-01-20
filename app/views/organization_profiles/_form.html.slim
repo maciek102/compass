@@ -1,0 +1,26 @@
+= simple_form_for(@organization_profile, html: { data: { turbo_frame: "modal" } }) do |f|
+  = f.error_notification
+
+  .form-grid
+
+    .form-section
+      .title Dane podstawowe
+
+      = f.input :tax_id, label: "NIP"
+      = f.input :registration_number, label: "Numer rejestracyjny"
+      = f.input :contact_email, label: "Email kontaktowy"
+      = f.input :contact_phone, label: "Telefon kontaktowy"
+      = f.input :address_street, label: "Ulica"
+      = f.input :address_building, label: "Numer budynku"
+      = f.input :address_apartment, label: "Numer mieszkania"
+      = f.input :address_postcode, label: "Kod pocztowy"
+      = f.input :address_city, label: "Miasto"
+      = f.input :address_country, label: "Kraj"
+
+    .form-section
+      .title Dane InPost
+      = f.input :inpost_organization_id, label: "InPost ID organizacji"
+      = f.input :inpost_api_key, label: "InPost API Key"
+      
+  .form-actions
+    = f.submit "Zapisz", class: "base-button"

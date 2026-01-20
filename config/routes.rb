@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :organization_profiles, only: %i[show edit update]
+
   resources :users do
     member do
       get :dashboard
@@ -32,6 +34,16 @@ Rails.application.routes.draw do
   resources :orders do
     member do
       patch :change_status
+    end
+    
+    resources :shipments, only: %i[new create edit update destroy], shallow: true do
+      member do
+        post :create_parcel
+        post :cancel_parcel
+        get :track
+        get :get_status
+        post :create_dispatch
+      end
     end
   end
 
